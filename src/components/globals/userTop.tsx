@@ -1,62 +1,60 @@
-import { useNavigate } from 'react-router-dom';
-import React, { useCallback, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import authAtom, { authDefaultState } from 'atoms/auth';
-import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, message, Modal, Popover, Space, Typography } from 'antd';
+import { useNavigate } from 'react-router-dom'
+import React, { useCallback, useState } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import authAtom, { authDefaultState } from 'atoms/auth'
+import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
+import { Button, Form, Input, message, Modal, Popover, Space, Typography } from 'antd'
 
-import configAtom from 'atoms/config';
-import { instance } from 'api/instance';
+import configAtom from 'atoms/config'
+import { instance } from 'api/instance'
 
-interface IProps {}
-
-const UserTop: React.FC<IProps> = () => {
-	const [auth, setAuth] = useRecoilState(authAtom);
-	const config = useRecoilValue(configAtom);
-	const [authModalVisible, setAuthModalVisible] = useState(false);
-	const navigate = useNavigate();
+const UserTop = () => {
+	const [auth, setAuth] = useRecoilState(authAtom)
+	const config = useRecoilValue(configAtom)
+	const [authModalVisible, setAuthModalVisible] = useState(false)
+	const navigate = useNavigate()
 
 	const loginFailed = () => {
 		message.error({
-			content: `${config.otherStringMap['login'] || 'login'} Failed`,
+			content: `${config.otherStringMap.login || 'login'} Failed`,
 			key: 'auth/login',
-		});
-	};
+		})
+	}
 
 	const handleLogin = async (values: any) => {
 		try {
-			message.loading({ content: 'Loading...', key: 'auth/login' });
+			message.loading({ content: 'Loading...', key: 'auth/login' })
 			const { data } = await instance.post('/auth/login', {
 				email: values.email.trim(),
 				password: values.password.trim(),
-			});
+			})
 
-			instance.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
-			setAuth((prev) => ({ ...prev, isLoggedIn: true, user: data.user, token: data.token }));
+			instance.defaults.headers.common.Authorization = `Bearer ${data.token}`
+			setAuth(prev => ({ ...prev, isLoggedIn: true, user: data.user, token: data.token }))
 
-			localStorage.setItem('refresh_token', data.refreshToken);
+			localStorage.setItem('refresh_token', data.refreshToken)
 			// socket.io.opts.auth.token = data.token;
 			// socket.disconnect().connect();
 
 			message.success({
-				content: `${config.otherStringMap['login'] || 'login'} Successful`,
+				content: `${config.otherStringMap.login || 'login'} Successful`,
 				key: 'auth/login',
-			});
-			setAuthModalVisible(false);
+			})
+			setAuthModalVisible(false)
 		} catch (error) {
-			loginFailed();
+			loginFailed()
 		}
-	};
+	}
 
 	const handleLogout = useCallback(() => {
-		localStorage.removeItem('refresh_token');
-		navigate('/');
+		localStorage.removeItem('refresh_token')
+		navigate('/')
 
 		// socket.disconnect();
-		setAuth(authDefaultState);
-	}, [navigate, setAuth]);
+		setAuth(authDefaultState)
+	}, [navigate, setAuth])
 
-	const closeModal = () => setAuthModalVisible(false);
+	const closeModal = () => setAuthModalVisible(false)
 
 	if (auth.isLoggedIn) {
 		return (
@@ -70,63 +68,63 @@ const UserTop: React.FC<IProps> = () => {
 							<Typography.Text disabled>ROLE : {auth.user?.profile?.role}</Typography.Text>
 						</>
 					}
-					placement="leftBottom"
+					placement='leftBottom'
 					style={{
 						background: config.appDarkColor,
 					}}
 				>
 					<UserOutlined />
 				</Popover>
-				<Button type="primary" onClick={() => setAuthModalVisible(true)} icon={<LogoutOutlined />}>
-					{config.otherStringMap['logout'] || 'Logout'}
+				<Button type='primary' onClick={() => setAuthModalVisible(true)} icon={<LogoutOutlined />}>
+					{config.otherStringMap.logout || 'Logout'}
 				</Button>
 				<Modal
-					title="Logout"
-					okText="Logout"
+					title='Logout'
+					okText='Logout'
 					open={authModalVisible}
 					onOk={handleLogout}
 					onCancel={closeModal}
 				>
-					Are you sure, you want to {config.otherStringMap['logout'] || 'Logout'} ?
+					Are you sure, you want to {config.otherStringMap.logout || 'Logout'} ?
 				</Modal>
 			</Space>
-		);
+		)
 	}
 
 	return (
 		<>
 			<Button onClick={() => setAuthModalVisible(true)}>
-				{config.otherStringMap['login'] || 'Login'}
+				{config.otherStringMap.login || 'Login'}
 			</Button>
 			<Modal
-				title={config.otherStringMap['login'] || 'Login'}
+				title={config.otherStringMap.login || 'Login'}
 				footer={null}
 				open={authModalVisible}
 				onOk={handleLogin}
 				onCancel={closeModal}
 			>
 				<Form
-					name="login"
+					name='login'
 					onFinish={handleLogin}
 					initialValues={{ remember: true }}
 					onFinishFailed={loginFailed}
-					layout="horizontal"
+					layout='horizontal'
 					labelCol={{ span: 7 }}
 					wrapperCol={{ span: 14 }}
 				>
 					<Form.Item
 						rules={[{ required: true, message: 'Please enter your username!' }]}
-						name="email"
-						label="Email"
+						name='email'
+						label='Email'
 					>
-						<Input placeholder="Email" />
+						<Input placeholder='Email' />
 					</Form.Item>
 					<Form.Item
-						name="password"
-						label="Password"
+						name='password'
+						label='Password'
 						rules={[{ required: true, message: 'Please enter your password!' }]}
 					>
-						<Input placeholder="Password" type="password" />
+						<Input placeholder='Password' type='password' />
 					</Form.Item>
 					<div
 						style={{
@@ -137,17 +135,17 @@ const UserTop: React.FC<IProps> = () => {
 							padding: '10px 24px 0 24px',
 						}}
 					>
-						<Button className="mr-[10px]" onClick={closeModal}>
+						<Button className='mr-[10px]' onClick={closeModal}>
 							Cancel
 						</Button>
-						<Button type="primary" htmlType="submit">
-							{config.otherStringMap['login'] || 'Login'}
+						<Button type='primary' htmlType='submit'>
+							{config.otherStringMap.login || 'Login'}
 						</Button>
 					</div>
 				</Form>
 			</Modal>
 		</>
-	);
-};
+	)
+}
 
-export default UserTop;
+export default UserTop

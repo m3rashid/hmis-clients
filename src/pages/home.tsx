@@ -1,13 +1,5 @@
-import React from 'react';
+import React from 'react'
 
-interface IProps {}
+const Home = () => <div>Home</div>
 
-const Home: React.FC<IProps> = () => {
-	return (
-		<>
-			<div>Home</div>
-		</>
-	);
-};
-
-export default Home;
+export default Home

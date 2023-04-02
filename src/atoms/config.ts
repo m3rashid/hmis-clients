@@ -1,28 +1,28 @@
-import { atom } from 'recoil';
+import { atom } from 'recoil'
 
-type KvPairs = { [key: string]: string };
-interface Developers {
-	name: string;
-	github: string;
-	linkedIn: string;
-	website: string;
-	image: string;
+type KvPairs = { [key: string]: string }
+type Developers = {
+	name: string
+	github: string
+	linkedIn: string
+	website: string
+	image: string
 }
 
-export interface IConfig {
-	appThemeColor: string;
-	appDarkColor: string;
-	appLightForeground: string;
-	appLightBackground: string;
-	appSidebarColor: string;
-	appHeaderColor: string;
-	appName: string;
-	appFullName: string;
-	appVersion: string;
-	appLogo?: string;
-	sidebarStringMap: KvPairs;
-	otherStringMap: KvPairs;
-	developers: Array<Developers>;
+export type IConfig = {
+	appThemeColor: string
+	appDarkColor: string
+	appLightForeground: string
+	appLightBackground: string
+	appSidebarColor: string
+	appHeaderColor: string
+	appName: string
+	appFullName: string
+	appVersion: string
+	appLogo?: string
+	sidebarStringMap: KvPairs
+	otherStringMap: KvPairs
+	developers: Array<Developers>
 }
 
 export const configDefaultState: IConfig = {
@@ -49,11 +49,11 @@ export const configDefaultState: IConfig = {
 		logout: 'Logout',
 	},
 	developers: [],
-};
+}
 
 const configAtom = atom<IConfig>({
 	key: 'config',
 	default: configDefaultState,
-});
+})
 
-export default configAtom;
+export default configAtom

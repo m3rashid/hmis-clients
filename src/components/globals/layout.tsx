@@ -1,27 +1,27 @@
-import enUs from 'antd/locale/en_US';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import React, { PropsWithChildren, useState } from 'react';
-import { ConfigProvider, Layout, Menu, MenuProps, Typography } from 'antd';
+import enUs from 'antd/locale/en_US'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import React, { PropsWithChildren, useState } from 'react'
+import { ConfigProvider, Layout, Menu, MenuProps, Typography } from 'antd'
 
-import configAtom from 'atoms/config';
-import routes from 'components/globals/routes';
-import uiAtom from 'atoms/ui';
-import { useNavigate } from 'react-router-dom';
-import UserTop from 'components/globals/userTop';
+import uiAtom from 'atoms/ui'
+import configAtom from 'atoms/config'
+import routes from 'components/globals/routes'
+import { useNavigate } from 'react-router-dom'
+import UserTop from 'components/globals/userTop'
 
 const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
-	const navigate = useNavigate();
-	const config = useRecoilValue(configAtom);
-	const [ui, setUi] = useRecoilState(uiAtom);
-	const [currentMenuItem, setCurrentMenuItem] = useState('');
+	const navigate = useNavigate()
+	const config = useRecoilValue(configAtom)
+	const [ui, setUi] = useRecoilState(uiAtom)
+	const [currentMenuItem, setCurrentMenuItem] = useState('')
 
 	const handleMenuChange = ({ key }: { key: string }) => {
-		setCurrentMenuItem(key);
-		navigate(key);
-	};
+		setCurrentMenuItem(key)
+		navigate(key)
+	}
 
 	const sidebarRoutes: MenuProps['items'] = routes.reduce((acc: any, route) => {
-		if (route.showInNav === false) return [...acc];
+		if (route.showInNav === false) return [...acc]
 		return [
 			...acc,
 			...[
@@ -36,7 +36,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 						}),
 					},
 					...(!!route.nestedLinks && {
-						children: route.nestedLinks?.map((nestedRoute) => ({
+						children: route.nestedLinks?.map(nestedRoute => ({
 							label: config.sidebarStringMap[nestedRoute.label] || nestedRoute.label,
 							key: `${route.link}${nestedRoute.link}`,
 							icon: nestedRoute.icon,
@@ -63,14 +63,14 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 					  ]
 					: []),
 			],
-		];
-	}, []);
+		]
+	}, [])
 
 	const defaultOpenKeys = routes.reduce((acc: any, route) => {
-		if (route.initiallyOpened) return [...acc, route.link];
-		if (!route.nestedLinks || !route.showInNav) return [...acc];
-		return [...acc];
-	}, []);
+		if (route.initiallyOpened) return [...acc, route.link]
+		if (!route.nestedLinks || !route.showInNav) return [...acc]
+		return [...acc]
+	}, [])
 
 	return (
 		<ConfigProvider
@@ -85,18 +85,18 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 			}}
 			locale={enUs}
 		>
-			<Layout className="h-screen overflow-y-hidden">
+			<Layout className='h-screen overflow-y-hidden'>
 				{/* TODO: open like drawer on mobile instead of supressing the right container  */}
 				<Layout.Sider
-					breakpoint="lg"
-					collapsedWidth="0"
-					onBreakpoint={(broken) => {
+					breakpoint='lg'
+					collapsedWidth='0'
+					onBreakpoint={broken => {
 						// console.log({broken});
-						setUi((prev) => ({ ...prev, isMobile: broken }));
+						setUi(prev => ({ ...prev, isMobile: broken }))
 					}}
 					onCollapse={(collapsed, type) => {
 						// console.log({collapsed, type});
-						setUi((prev) => ({ ...prev, sidebarCollapsed: collapsed }));
+						setUi(prev => ({ ...prev, sidebarCollapsed: collapsed }))
 					}}
 					zeroWidthTriggerStyle={{
 						background: config.appSidebarColor,
@@ -113,7 +113,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 						}),
 					}}
 				>
-					<div className="h-[64px]">
+					<div className='h-[64px]'>
 						<Typography.Title
 							level={3}
 							style={{ color: 'white' }}
@@ -124,7 +124,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 					</div>
 
 					<Menu
-						mode="inline"
+						mode='inline'
 						defaultOpenKeys={defaultOpenKeys}
 						style={{ background: config.appDarkColor }}
 						items={sidebarRoutes}
@@ -133,23 +133,23 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 				</Layout.Sider>
 				<Layout style={{ backgroundColor: config.appLightBackground }}>
 					<Layout.Header
-						className="p-0"
+						className='p-0'
 						style={{
 							background: config.appHeaderColor,
 							...(!(ui.isMobile || ui.sidebarCollapsed) ? { paddingRight: '20px' } : {}),
 						}}
 					>
-						<div className="h-[64px] flex items-center justify-center gap-5 flex-row px-2 m-0">
+						<div className='h-[64px] flex items-center justify-center gap-5 flex-row px-2 m-0'>
 							{ui.isMobile || ui.sidebarCollapsed ? (
 								<>
-									<Typography.Title level={3} style={{ color: 'white' }} className="flex-1 mt-3">
+									<Typography.Title level={3} style={{ color: 'white' }} className='flex-1 mt-3'>
 										{config.appName}
 									</Typography.Title>
 									<div>hello world</div>
 								</>
 							) : (
 								<>
-									<div className="flex-1" />
+									<div className='flex-1' />
 									<UserTop />
 								</>
 							)}
@@ -167,14 +167,14 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 					</Layout.Content>
 					<Layout.Footer
 						style={{ backgroundColor: config.appLightBackground }}
-						className="text-center py-3"
+						className='text-center py-3'
 					>
 						{config.appName} &copy; {new Date().getFullYear()} - All Rights Reserved
 					</Layout.Footer>
 				</Layout>
 			</Layout>
 		</ConfigProvider>
-	);
-};
+	)
+}
 
-export default AppLayout;
+export default AppLayout

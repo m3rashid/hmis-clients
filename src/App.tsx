@@ -1,24 +1,23 @@
-import 'antd/dist/reset.css';
-import 'index.css';
-import React, { Fragment } from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import authAtom from 'atoms/auth';
+import 'antd/dist/reset.css'
+import 'index.css'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useRecoilState } from 'recoil'
+import authAtom from 'atoms/auth'
 // import configAtom from 'atoms/config';
-import { instance } from 'api/instance';
-import Loading from 'components/globals/loading';
-import { Route, Routes } from 'react-router-dom';
-import routes from 'components/globals/routes';
+import { instance } from 'api/instance'
+import Loading from 'components/globals/loading'
+import { Route, Routes } from 'react-router-dom'
+import routes from 'components/globals/routes'
 
-const App = () => {
-	const [auth, setAuth] = useRecoilState(authAtom);
+function App() {
+	const [auth, setAuth] = useRecoilState(authAtom)
 	// const [config, setConfig] = useRecoilState(configAtom);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(false)
 
 	// set App Config
 	const getAppConfig = useCallback(async () => {
 		// getConfig().then((config) => setConfig(config));
-	}, []);
+	}, [])
 
 	// revalidate JWTs
 	const revalidate = useCallback(async () => {
@@ -30,42 +29,38 @@ const App = () => {
 			// 	})
 			// 	.catch(console.log)
 			// 	.finally(() => setIsLoading(false));
-		}, 1000);
-	}, []);
+		}, 1000)
+	}, [])
 
 	useEffect(() => {
-		revalidate();
-		getAppConfig();
-	}, [revalidate, getAppConfig]);
+		revalidate()
+		getAppConfig()
+	}, [revalidate, getAppConfig])
 
 	useEffect(() => {
 		if (auth.isLoggedIn) {
-			instance.defaults.headers.common['Authorization'] = `Bearer ${auth.token}`;
+			instance.defaults.headers.common.Authorization = `Bearer ${auth.token}`
 		}
-	}, [auth]);
+	}, [auth])
 
-	if (isLoading) return <Loading />;
+	if (isLoading) return <Loading />
 
 	return (
 		<Routes>
-			{routes.map((route) => {
-				return (
-					<Fragment>
-						<Route path={route.link} element={<route.Component {...route.props} />} />;
-						{route.nestedLinks?.map((nestedRoute) => {
-							return (
-								<Route
-									key={nestedRoute.link}
-									path={route.link + nestedRoute.link}
-									element={<nestedRoute.Component />}
-								/>
-							);
-						})}
-					</Fragment>
-				);
-			})}
+			{routes.map(route => (
+				<>
+					<Route path={route.link} element={<route.Component {...route.props} />} />;
+					{route.nestedLinks?.map(nestedRoute => (
+						<Route
+							key={nestedRoute.link}
+							path={route.link + nestedRoute.link}
+							element={<nestedRoute.Component />}
+						/>
+					))}
+				</>
+			))}
 		</Routes>
-	);
-};
+	)
+}
 
-export default App;
+export default App

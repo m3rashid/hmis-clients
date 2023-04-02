@@ -1,40 +1,40 @@
-import React from 'react';
-import { BookOutlined, HomeOutlined, InfoCircleOutlined, ReadOutlined } from '@ant-design/icons';
+import React from 'react'
+import { BookOutlined, HomeOutlined, InfoCircleOutlined, ReadOutlined } from '@ant-design/icons'
 
-import { IAuth } from 'atoms/auth';
-import Home from 'pages/home';
-import About from 'pages/about';
-import Learn from 'pages/learn';
-import ErrorPage from 'pages/404';
-import Modules from 'pages/learn/modules';
+import { IAuth } from 'atoms/auth'
+import Home from 'pages/home'
+import About from 'pages/about'
+import Learn from 'pages/learn'
+import ErrorPage from 'pages/404'
+import Modules from 'pages/learn/modules'
 
-export interface IRoute {
-	label: string;
-	link: string;
-	Component: React.FC;
-	permissions: Array<string>;
-	icon: React.ReactNode;
+export type IRoute = {
+	label: string
+	link: string
+	Component: React.FC
+	permissions: Array<string>
+	icon: React.ReactNode
 
-	props?: any;
-	showInNav?: boolean;
-	role?: Array<string>;
+	props?: any
+	showInNav?: boolean
+	role?: Array<string>
 	nestedLinks?: Array<{
-		label: string;
-		link: string;
-		Component: React.FC;
-		icon: React.ReactNode;
-	}>;
-	initiallyOpened?: boolean; // sidebar dropdown state
-	dividerBottom?: boolean;
+		label: string
+		link: string
+		Component: React.FC
+		icon: React.ReactNode
+	}>
+	initiallyOpened?: boolean // sidebar dropdown state
+	dividerBottom?: boolean
 }
 
 export const checkAccess = (auth: IAuth, route: IRoute) => {
-	if (!auth.isLoggedIn) return false;
-	if (!route.role || route.role.includes('*')) return true;
-	if (auth.user?.userRole === 'ADMIN') return true;
-	const contains = route.role.some((role) => auth.user?.permissions.includes(role));
-	return contains;
-};
+	if (!auth.isLoggedIn) return false
+	if (!route.role || route.role.includes('*')) return true
+	if (auth.user?.userRole === 'ADMIN') return true
+	const contains = route.role.some(role => auth.user?.permissions.includes(role))
+	return contains
+}
 
 const routes: Array<IRoute> = [
 	{
@@ -81,6 +81,6 @@ const routes: Array<IRoute> = [
 			},
 		],
 	},
-];
+]
 
-export default routes;
+export default routes

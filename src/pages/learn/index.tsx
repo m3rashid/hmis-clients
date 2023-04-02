@@ -1,13 +1,5 @@
-import React from 'react';
+import React from 'react'
 
-interface IProps {}
+const Learn = () => <div>Learn</div>
 
-const Learn: React.FC<IProps> = () => {
-	return (
-		<>
-			<div>Learn</div>
-		</>
-	);
-};
-
-export default Learn;
+export default Learn
