@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import authAtom from 'atoms/auth'
 // import configAtom from 'atoms/config';
-import { instance } from 'api/instance'
 import Loading from 'components/globals/loading'
 import { Route, Routes } from 'react-router-dom'
 import routes from 'components/globals/routes'
@@ -39,7 +38,7 @@ function App() {
 
 	useEffect(() => {
 		if (auth.isLoggedIn) {
-			instance.defaults.headers.common.Authorization = `Bearer ${auth.token}`
+			// instance.defaults.headers.common.Authorization = `Bearer ${auth.token}`
 		}
 	}, [auth])
 

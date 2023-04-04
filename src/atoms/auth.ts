@@ -1,5 +1,6 @@
 import { atom } from 'recoil'
 
+// TODO: implement the new permission management
 export const supportedUserRoles = [
 	'DOCTOR',
 	'ADMIN',

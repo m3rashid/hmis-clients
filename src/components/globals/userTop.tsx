@@ -6,7 +6,6 @@ import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message, Modal, Popover, Space, Typography } from 'antd'
 
 import configAtom from 'atoms/config'
-import { instance } from 'api/instance'
 
 const UserTop = () => {
 	const [auth, setAuth] = useRecoilState(authAtom)
@@ -23,16 +22,17 @@ const UserTop = () => {
 
 	const handleLogin = async (values: any) => {
 		try {
-			message.loading({ content: 'Loading...', key: 'auth/login' })
-			const { data } = await instance.post('/auth/login', {
-				email: values.email.trim(),
-				password: values.password.trim(),
-			})
+			console.log(values)
+			// 	message.loading({ content: 'Loading...', key: 'auth/login' })
+			// 	const { data } = await instance.post('/auth/login', {
+			// 		email: values.email.trim(),
+			// 		password: values.password.trim(),
+			// 	})
 
-			instance.defaults.headers.common.Authorization = `Bearer ${data.token}`
-			setAuth(prev => ({ ...prev, isLoggedIn: true, user: data.user, token: data.token }))
+			// 	instance.defaults.headers.common.Authorization = `Bearer ${data.token}`
+			// 	setAuth(prev => ({ ...prev, isLoggedIn: true, user: data.user, token: data.token }))
 
-			localStorage.setItem('refresh_token', data.refreshToken)
+			// 	localStorage.setItem('refresh_token', data.refreshToken)
 			// socket.io.opts.auth.token = data.token;
 			// socket.disconnect().connect();
 
@@ -40,7 +40,7 @@ const UserTop = () => {
 				content: `${config.otherStringMap.login || 'login'} Successful`,
 				key: 'auth/login',
 			})
-			setAuthModalVisible(false)
+			// 	setAuthModalVisible(false)
 		} catch (error) {
 			loginFailed()
 		}

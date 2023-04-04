@@ -7,6 +7,7 @@ import About from 'pages/about'
 import Learn from 'pages/learn'
 import ErrorPage from 'pages/404'
 import Modules from 'pages/learn/modules'
+import Metrics from 'pages/dev/metrics'
 
 export type IRoute = {
 	label: string
@@ -50,6 +51,13 @@ const routes: Array<IRoute> = [
 		label: 'about',
 		link: '/about',
 		Component: About,
+		permissions: [],
+	},
+	{
+		icon: <InfoCircleOutlined />,
+		label: 'Server Metrics',
+		link: '/metrics',
+		Component: Metrics,
 		permissions: [],
 	},
 	{
