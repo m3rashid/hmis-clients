@@ -1,5 +1,5 @@
 import { serverRootUrl } from 'api/network'
-import authAtom from 'atoms/auth'
+import authAtom from 'recoilAtoms/auth'
 import axios, { AxiosRequestConfig } from 'axios'
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'

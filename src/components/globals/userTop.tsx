@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import React, { useCallback, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import authAtom, { authDefaultState } from 'atoms/auth'
+import authAtom, { authDefaultState } from 'recoilAtoms/auth'
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message, Modal, Popover, Space, Typography } from 'antd'
 
-import configAtom from 'atoms/config'
+import configAtom from 'recoilAtoms/config'
 
 const UserTop = () => {
 	const [auth, setAuth] = useRecoilState(authAtom)

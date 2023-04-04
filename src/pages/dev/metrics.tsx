@@ -16,7 +16,13 @@ const Metrics: React.FC<IProps> = () => {
 	})
 
 	useEffect(() => {
-		checkMetricsEndpoint()
+		const interval = setInterval(() => {
+			checkMetricsEndpoint()
+			// check every 10 seconds if server is alive
+		}, 10000)
+		return () => {
+			clearInterval(interval)
+		}
 	}, [])
 
 	return (
@@ -25,7 +31,7 @@ const Metrics: React.FC<IProps> = () => {
 			{metricsRef.current ? (
 				<iframe src={metricsUrl} className='outline-none w-full h-[99%] border-0' />
 			) : (
-				<ErrorPage message='Could not connect to the server' />
+				<ErrorPage message='Could not get Server metrics' />
 			)}
 		</div>
 	)

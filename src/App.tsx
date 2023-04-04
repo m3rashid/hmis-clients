@@ -2,7 +2,7 @@ import 'antd/dist/reset.css'
 import 'index.css'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import authAtom from 'atoms/auth'
+import authAtom from 'recoilAtoms/auth'
 // import configAtom from 'atoms/config';
 import Loading from 'components/globals/loading'
 import { Route, Routes } from 'react-router-dom'

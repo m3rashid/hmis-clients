@@ -1,7 +1,7 @@
 import React from 'react'
 import { BookOutlined, HomeOutlined, InfoCircleOutlined, ReadOutlined } from '@ant-design/icons'
 
-import { IAuth } from 'atoms/auth'
+import { IAuth } from 'recoilAtoms/auth'
 import Home from 'pages/home'
 import About from 'pages/about'
 import Learn from 'pages/learn'
