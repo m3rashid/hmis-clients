@@ -10,14 +10,26 @@ type Developers = {
 }
 
 export type IConfig = {
-	appThemeColor: string
-	appDarkColor: string
-	appLightForeground: string
-	appLightBackground: string
-	appSidebarColor: string
-	appHeaderColor: string
+	// appThemeColor: string
+	// appDarkColor: string
+	// appLightForeground: string
+	// appLightBackground: string
+	// appSidebarColor: string
+	// appHeaderColor: string
 	appName: string
 	appFullName: string
+	colors: {
+		primary: string
+		secondary: string
+		lightFg: string
+		lightBg: string
+		darkFg: string
+		darkBg: string
+		success: string
+		warning: string
+		danger: string
+		info: string
+	}
 	appVersion: string
 	appLogo?: string
 	sidebarStringMap: KvPairs
@@ -25,16 +37,24 @@ export type IConfig = {
 	developers: Array<Developers>
 }
 
+export type IConfigExposedState = Pick<IConfig, 'colors' | 'sidebarStringMap' | 'otherStringMap'>
+
 export const configDefaultState: IConfig = {
 	appName: 'HMIS',
 	appVersion: '1.0.0',
-	appThemeColor: '#00BDC1',
-	appDarkColor: '#484C56',
-	appHeaderColor: '#484C56',
-	appSidebarColor: '#484C56',
-	appLightForeground: '#F9F9F9',
-	appLightBackground: '#F1F1F1',
 	appFullName: 'Health Management and Informatics System',
+	colors: {
+		primary: '#00BDC1',
+		secondary: '#484C56',
+		lightFg: '#F9F9F9',
+		lightBg: '#F1F1F1',
+		darkFg: '#484C56',
+		darkBg: '#484C56',
+		success: '#22C55E',
+		warning: '#F59E0B',
+		danger: '#F43F5E',
+		info: '#0EA5E9',
+	},
 	sidebarStringMap: {
 		home: 'Home',
 		about: 'About',

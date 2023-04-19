@@ -1,5 +1,11 @@
 import React from 'react'
-import { BookOutlined, HomeOutlined, InfoCircleOutlined, ReadOutlined } from '@ant-design/icons'
+import {
+	BookOutlined,
+	HomeOutlined,
+	InfoCircleOutlined,
+	ReadOutlined,
+	TagsOutlined,
+} from '@ant-design/icons'
 
 import { IAuth } from 'recoilAtoms/auth'
 import Home from 'pages/home'
@@ -8,6 +14,8 @@ import Learn from 'pages/learn'
 import ErrorPage from 'pages/404'
 import Modules from 'pages/learn/modules'
 import Metrics from 'pages/dev/metrics'
+import TicketingSystem from 'components/ticketingSystem'
+import AdminConfig from 'pages/config'
 
 export type IRoute = {
 	label: string
@@ -45,6 +53,20 @@ const routes: Array<IRoute> = [
 		Component: Home,
 		permissions: [],
 		dividerBottom: true,
+	},
+	{
+		icon: <TagsOutlined />,
+		label: 'Ticketing System',
+		link: '/ticket',
+		permissions: [],
+		Component: TicketingSystem,
+	},
+	{
+		icon: <TagsOutlined />,
+		label: 'Config',
+		link: '/admin-config',
+		permissions: [],
+		Component: AdminConfig,
 	},
 	{
 		icon: <InfoCircleOutlined />,

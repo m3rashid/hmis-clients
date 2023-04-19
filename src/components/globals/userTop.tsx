@@ -70,7 +70,7 @@ const UserTop = () => {
 					}
 					placement='leftBottom'
 					style={{
-						background: config.appDarkColor,
+						background: config.colors.darkBg,
 					}}
 				>
 					<UserOutlined />
@@ -130,7 +130,7 @@ const UserTop = () => {
 						style={{
 							display: 'flex',
 							justifyContent: 'flex-end',
-							borderTop: `1px solid ${config.appLightBackground}`,
+							borderTop: `1px solid ${config.colors.lightBg}`,
 							margin: '24px -24px -10px -24px',
 							padding: '10px 24px 0 24px',
 						}}

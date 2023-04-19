@@ -1,7 +1,7 @@
 import enUs from 'antd/locale/en_US'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import React, { PropsWithChildren, useState } from 'react'
-import { ConfigProvider, Layout, Menu, MenuProps, Typography } from 'antd'
+import { ConfigProvider, Image, Layout, Menu, MenuProps, Typography } from 'antd'
 
 import uiAtom from 'recoilAtoms/ui'
 import configAtom from 'recoilAtoms/config'
@@ -30,9 +30,9 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 					icon: route.icon,
 					label: config.sidebarStringMap[route.label] || route.label,
 					style: {
-						color: config.appLightForeground,
+						color: config.colors.lightFg,
 						...(currentMenuItem === route.link && {
-							background: config.appThemeColor,
+							background: config.colors.primary,
 						}),
 					},
 					...(!!route.nestedLinks && {
@@ -41,9 +41,9 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 							key: `${route.link}${nestedRoute.link}`,
 							icon: nestedRoute.icon,
 							style: {
-								color: config.appLightForeground,
+								color: config.colors.lightFg,
 								...(currentMenuItem === `${route.link}${nestedRoute.link}` && {
-									background: config.appThemeColor,
+									background: config.colors.primary,
 								}),
 							},
 						})),
@@ -54,7 +54,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 							{
 								type: 'divider',
 								style: {
-									background: config.appLightForeground,
+									background: config.colors.lightFg,
 									opacity: 0.3,
 									width: '90%',
 									margin: '0 auto',
@@ -77,16 +77,16 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 			theme={{
 				token: {
 					fontFamily: 'Poppins, sans-serif',
-					colorPrimary: config.appThemeColor,
-					colorBgTextHover: config.appThemeColor,
-					colorFill: config.appThemeColor,
+					colorPrimary: config.colors.primary,
+					colorBgTextHover: config.colors.primary,
+					colorFill: config.colors.primary,
 					controlOutline: 'none',
 				},
 			}}
 			locale={enUs}
 		>
 			<Layout className='h-screen overflow-y-hidden'>
-				{/* TODO: open like drawer on mobile instead of supressing the right container  */}
+				{/* TODO: open like drawer on mobile instead of suppressing the right container  */}
 				<Layout.Sider
 					breakpoint='lg'
 					collapsedWidth='0'
@@ -99,12 +99,12 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 						setUi(prev => ({ ...prev, sidebarCollapsed: collapsed }))
 					}}
 					zeroWidthTriggerStyle={{
-						background: config.appSidebarColor,
+						background: config.colors.darkBg,
 						opacity: 1,
 						marginTop: '64px',
 					}}
 					style={{
-						background: config.appSidebarColor,
+						background: config.colors.darkBg,
 						...(ui.isMobile && {
 							position: 'fixed',
 							zIndex: 5,
@@ -113,7 +113,8 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 						}),
 					}}
 				>
-					<div className='h-[64px]'>
+					<div className='h-[64px] flex justify-center'>
+						<Image className='h-[54px] w-[54px]' src='' preview={false} />
 						<Typography.Title
 							level={3}
 							style={{ color: 'white' }}
@@ -126,16 +127,16 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 					<Menu
 						mode='inline'
 						defaultOpenKeys={defaultOpenKeys}
-						style={{ background: config.appDarkColor }}
+						style={{ background: config.colors.darkBg }}
 						items={sidebarRoutes}
 						onClick={handleMenuChange}
 					/>
 				</Layout.Sider>
-				<Layout style={{ backgroundColor: config.appLightBackground }}>
+				<Layout style={{ backgroundColor: config.colors.lightBg }}>
 					<Layout.Header
 						className='p-0'
 						style={{
-							background: config.appHeaderColor,
+							background: config.colors.darkBg,
 							...(!(ui.isMobile || ui.sidebarCollapsed) ? { paddingRight: '20px' } : {}),
 						}}
 					>
@@ -160,13 +161,13 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 							className={`${
 								ui.isMobile ? 'p-[8px]' : 'p-[12px]'
 							} min-h-[360px] h-full overflow-auto`}
-							style={{ background: config.appLightForeground }}
+							style={{ background: config.colors.lightFg }}
 						>
 							{children}
 						</div>
 					</Layout.Content>
 					<Layout.Footer
-						style={{ backgroundColor: config.appLightBackground }}
+						style={{ backgroundColor: config.colors.lightBg }}
 						className='text-center py-3'
 					>
 						{config.appName} &copy; {new Date().getFullYear()} - All Rights Reserved

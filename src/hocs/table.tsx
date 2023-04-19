@@ -6,18 +6,15 @@ import {
 	Table,
 	Typography,
 	Button,
-	// Form,
 	FormProps,
 	AutoComplete,
 	Input,
-	Alert,
 } from 'antd'
 import React, { ReactNode, useEffect } from 'react'
-import Form from '@rjsf/antd'
-import validator from '@rjsf/validator-ajv8'
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
 
 import useTable from 'hooks/useTable'
+import Form from 'components/atoms/form'
 // import FormBuilder from '../formBuilder'
 // import { IMeta } from '../formBuilder/FormBuilder'
 
@@ -26,7 +23,7 @@ export const constants = {
 	defaultPageNumber: 1,
 }
 
-export interface IProps {
+export interface TableHocProps {
 	tableProps: TableProps<any>
 	modalProps?: ModalProps
 	title: string
@@ -40,7 +37,7 @@ export interface IProps {
 	formSchema?: RJSFSchema
 }
 
-const TableHoc: React.FC<IProps> = ({
+const TableHoc: React.FC<TableHocProps> = ({
 	tableProps,
 	modalProps,
 	title,
@@ -48,7 +45,7 @@ const TableHoc: React.FC<IProps> = ({
 	openModalButton,
 	baseRouteForData,
 	formProps,
-	showTitle = true,
+	showTitle = false,
 	addButtonLabel = `Add ${title}`,
 	formSchema,
 	formUiSchema,
@@ -75,45 +72,14 @@ const TableHoc: React.FC<IProps> = ({
 				style={{ ...modalProps?.style }}
 				footer={null}
 			>
-				{formSchema && (
-					<Form
-						focusOnFirstError
-						schema={formSchema}
-						uiSchema={{
-							'ui:ErrorListTemplate': props => {
-								const { errors } = props
-								return (
-									<div className='mb-6 flex flex-col gap-2'>
-										{errors.map((e, i) => {
-											return (
-												<Alert message={e.stack as string} key={i} type='error' showIcon closable />
-											)
-										})}
-									</div>
-								)
-							},
-							...formUiSchema,
-						}}
-						validator={validator}
-						onSubmit={onFinishFormValues}
-						formContext={{
-							descriptionLocation: 'tooltip',
-							layout: 'horizontal',
-							size: 'middle',
-							labelAlign: 'left',
-							labelCol: { xs: { span: 24 }, sm: { span: 6 } },
-							wrapperCol: { xs: { span: 24 }, sm: { span: 18 } },
-							...formProps,
-						}}
-					>
-						<div className='w-full flex flex-row items-center justify-end gap-3'>
-							<Button>Cancel</Button>
-							<Button type='primary' htmlType='submit'>
-								Do not Submit
-							</Button>
-						</div>
-					</Form>
-				)}
+				<Form
+					{...{
+						formProps,
+						formSchema,
+						formUiSchema,
+						onFinishFormValues,
+					}}
+				/>
 			</Modal>
 
 			{showTitle && (
@@ -154,8 +120,9 @@ const TableHoc: React.FC<IProps> = ({
 						...tableProps.pagination,
 					}}
 					style={{
-						...tableProps.style,
 						height: '100%',
+						minHeight: '500px',
+						...tableProps.style,
 					}}
 				/>
 			</div>

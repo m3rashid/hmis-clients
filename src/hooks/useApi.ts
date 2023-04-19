@@ -1,8 +1,15 @@
 import { serverRootUrl } from 'api/network'
 import authAtom from 'recoilAtoms/auth'
 import axios, { AxiosRequestConfig } from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import { useNetwork } from '@mantine/hooks'
+import { notification } from 'antd'
+
+/**
+ * TODO: Use the Browser IndexedDB to persist failed network requests
+ * https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB
+ */
 
 interface IUseApi {
 	endpoint: string
@@ -24,23 +31,38 @@ const useApi = ({
 	onSuccess = () => {},
 	onError = () => {},
 	onFinal = () => {},
-	abortTime = 5000, // 5 seconds
+	abortTime = 10_000, // 10 seconds
 	isApi = true,
 }: IUseApi) => {
 	const [loading, setLoading] = useState(false)
 	const [auth, setAuth] = useRecoilState(authAtom)
+	const network = useNetwork()
 
 	const abortSignal = () => {
 		const abortController = new AbortController()
-		setTimeout(() => abortController.abort(), abortTime)
+		setTimeout(() => {
+			abortController.abort()
+			//
+		}, abortTime)
 		return abortController.signal
 	}
 
 	const handleApiCall = async () => {
+		console.log({ network })
+		if (!network.online) {
+			// TODO: push the request in queue
+
+			notification.info({
+				message: 'Network Error',
+				description:
+					'Your Local network seems not working, Do not panic. We have received your request. It will be done once your network comes online again',
+			})
+			return
+		}
+
 		try {
 			setLoading(true)
 
-			// TODO: setup network call with abort controller
 			const res = await axios({
 				method,
 				url: `${serverRootUrl}${isApi ? '/api' : ''}${endpoint}`,

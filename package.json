@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"@ant-design/icons": "^5.0.1",
+		"@mantine/hooks": "^6.0.8",
 		"@rjsf/antd": "^5.4.0",
 		"@rjsf/core": "^5.4.0",
 		"@rjsf/utils": "^5.5.0",
