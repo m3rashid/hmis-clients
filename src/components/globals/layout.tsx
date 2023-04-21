@@ -40,7 +40,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 					isMobile ? 'px-[10px]' : 'px-[20px]'
 				}`}
 			>
-				<Brand inline onlyLogo={isMobile} />
+				<Brand onlyLogo={isMobile} />
 				<div className='flex-1 all-center'>
 					<NavigationMenu />
 					<GlobalSearch />

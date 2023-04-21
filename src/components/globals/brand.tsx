@@ -1,74 +1,32 @@
-import { Image, Typography } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Image, Typography } from 'antd'
 
 interface IProps {
-	inline?: boolean
 	onlyLogo?: boolean
-	url?: string
 }
 
-const Brand: React.FC<IProps> = ({ inline = false, onlyLogo = false }) => {
+const Brand: React.FC<IProps> = ({ onlyLogo = false }) => {
 	const title = 'HMIS'
 	const subTitle = ''
-	const logo = ''
-
-	if (!inline) {
-		return (
-			<div className='text-center my-4'>
-				{logo && (
-					<Link to='/'>
-						<Image
-							preview={false}
-							height={64}
-							width={64}
-							src={logo}
-							alt={`${title} Logo`}
-							className='mr-2 cursor-pointer'
-						/>
-					</Link>
-				)}
-
-				{!onlyLogo && (
-					<>
-						<Typography.Title level={3} style={{ margin: 0 }}>
-							{title}
-						</Typography.Title>
-
-						{subTitle && (
-							<Typography.Title level={5} type='secondary' style={{ margin: 0 }}>
-								{subTitle}
-							</Typography.Title>
-						)}
-					</>
-				)}
-			</div>
-		)
-	}
+	const logo = '/images/logo.png'
 
 	return (
 		<div className='flex gap-x-2'>
-			{logo && (
-				<Link to='/' className='all-center'>
-					<Image
-						preview={false}
-						height={40}
-						width={40}
-						src={logo}
-						alt={`${title} Logo`}
-						className='mr-2 cursor-pointer'
-					/>
-				</Link>
-			)}
+			<Link to='/' className='all-center'>
+				<Image
+					preview={false}
+					height={40}
+					width={40}
+					src={logo}
+					alt={`${title} Logo`}
+					className='mr-2 cursor-pointer'
+				/>
+			</Link>
 			{!onlyLogo && (
-				<div>
+				<div className='flex flex-col justify-center'>
 					<Typography.Text strong>{title}</Typography.Text>
-					{subTitle && (
-						<>
-							<br />
-							<Typography.Text type='secondary'>{subTitle}</Typography.Text>
-						</>
-					)}
+					{subTitle && <Typography.Text type='secondary'>{subTitle}</Typography.Text>}
 				</div>
 			)}
 		</div>
