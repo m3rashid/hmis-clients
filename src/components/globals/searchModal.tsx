@@ -34,7 +34,7 @@ interface IProps {
 }
 
 const ActionSearchModal: React.FC<IProps> = ({ close, isOpen }) => {
-	const [options, setOptions] = useState<IOption[]>([])
+	const [options, setOptions] = useState<IOption[]>([{ title: 'Pages', data: flattenedRoutes }])
 	const navigate = useNavigate()
 	const ref = useRef<any>()
 
