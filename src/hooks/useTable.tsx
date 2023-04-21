@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Form } from 'antd'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 interface IProps<T> {
 	baseRoute: string
@@ -57,14 +57,18 @@ const useTable = <RecordType,>({ baseRoute }: IProps<RecordType>) => {
 		}
 	}
 
-	const handleOkOnModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-		// TODO: axios call to create the entry
-		hideModal()
-	}
+	const handleOkOnModal = () =>
+		// e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+		{
+			// TODO: axios call to create the entry
+			hideModal()
+		}
 
-	const handleCancelOnModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-		hideModal()
-	}
+	const handleCancelOnModal = () =>
+		// e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+		{
+			hideModal()
+		}
 
 	const onFinishFormValues = (values: any) => {
 		console.log({ values })

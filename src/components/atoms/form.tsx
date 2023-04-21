@@ -9,15 +9,18 @@ interface IProps {
 	formUiSchema?: UiSchema
 	formSchema?: RJSFSchema
 	onFinishFormValues?: (formValues: any) => void
+	cancelText?: string
+	submitText?: string
+	onCancel?: () => void
 }
 
-const Form: React.FC<IProps> = ({ formProps, formSchema, formUiSchema, onFinishFormValues }) => {
-	if (!formSchema) return null
+const Form: React.FC<IProps> = props => {
+	if (!props.formSchema) return null
 
 	return (
 		<RJSFForm
 			focusOnFirstError
-			schema={formSchema}
+			schema={props.formSchema}
 			uiSchema={{
 				'ui:ErrorListTemplate': props => {
 					const { errors } = props
@@ -29,10 +32,10 @@ const Form: React.FC<IProps> = ({ formProps, formSchema, formUiSchema, onFinishF
 						</div>
 					)
 				},
-				...formUiSchema,
+				...props.formUiSchema,
 			}}
 			validator={validator}
-			onSubmit={onFinishFormValues}
+			onSubmit={props.onFinishFormValues}
 			formContext={{
 				descriptionLocation: 'tooltip',
 				layout: 'horizontal',
@@ -40,13 +43,13 @@ const Form: React.FC<IProps> = ({ formProps, formSchema, formUiSchema, onFinishF
 				labelAlign: 'left',
 				labelCol: { xs: { span: 24 }, sm: { span: 6 } },
 				wrapperCol: { xs: { span: 24 }, sm: { span: 18 } },
-				...formProps,
+				...props.formProps,
 			}}
 		>
 			<div className='w-full flex flex-row items-center justify-end gap-3'>
-				<Button>Cancel</Button>
+				<Button onClick={props.onCancel}>{props.cancelText ?? 'Cancel'}</Button>
 				<Button type='primary' htmlType='submit'>
-					Submit
+					{props.submitText ?? 'Submit'}
 				</Button>
 			</div>
 		</RJSFForm>

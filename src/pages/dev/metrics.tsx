@@ -1,13 +1,11 @@
-import React, { useEffect, useRef } from 'react'
-import { serverRootUrl } from 'api/network'
-import useApi from 'hooks/useApi'
 import ErrorPage from 'pages/404'
+import useApi from 'hooks/useApi'
+import { serverRootUrl } from 'api/network'
+import React, { useEffect, useRef } from 'react'
 
-interface IProps {}
-
-const Metrics: React.FC<IProps> = () => {
+const Metrics = () => {
 	const metricsUrl = serverRootUrl + '/metrics'
-	const metricsRef = useRef(false)
+	const metricsRef = useRef<any>(false)
 	const { apiCall: checkMetricsEndpoint } = useApi({
 		endpoint: '/metrics',
 		onSuccess: () => (metricsRef.current = true),
@@ -26,7 +24,6 @@ const Metrics: React.FC<IProps> = () => {
 	}, [])
 
 	return (
-		// @ts-ignore
 		<div ref={metricsRef} className='w-full h-[99%]'>
 			{metricsRef.current ? (
 				<iframe src={metricsUrl} className='outline-none w-full h-[99%] border-0' />

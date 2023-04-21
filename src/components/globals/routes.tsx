@@ -23,7 +23,6 @@ export type IRoute = {
 	Component: React.FC
 	permissions: Array<string>
 	icon: React.ReactNode
-
 	props?: any
 	showInNav?: boolean
 	role?: Array<string>
@@ -33,8 +32,6 @@ export type IRoute = {
 		Component: React.FC
 		icon: React.ReactNode
 	}>
-	initiallyOpened?: boolean // sidebar dropdown state
-	dividerBottom?: boolean
 }
 
 export const checkAccess = (auth: IAuth, route: IRoute) => {
@@ -52,7 +49,6 @@ const routes: Array<IRoute> = [
 		link: '/',
 		Component: Home,
 		permissions: [],
-		dividerBottom: true,
 	},
 	{
 		icon: <TagsOutlined />,

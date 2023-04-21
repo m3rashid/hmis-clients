@@ -7,6 +7,10 @@ body {
 	padding: 0;
 }
 
+.all-center {
+  @apply flex justify-center items-center;
+}
+
 * {
 	-webkit-user-select: none;
 	-ms-user-select: none;
