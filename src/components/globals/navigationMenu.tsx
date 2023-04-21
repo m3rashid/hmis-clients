@@ -5,12 +5,14 @@ import routes from 'components/globals/routes'
 import { AppstoreOutlined } from '@ant-design/icons'
 
 import { Menu, MenuProps, Popover, Typography } from 'antd'
+import { useNavigate } from 'react-router-dom'
 interface IProps {
 	collapsed?: boolean
 }
 
 const NavigationMenu: React.FC<IProps> = () => {
 	const config = useRecoilValue(configAtom)
+	const navigate = useNavigate()
 
 	const sidebarRoutes: MenuProps['items'] = routes.reduce((acc: any, route) => {
 		if (route.showInNav === false) return [...acc]
@@ -21,11 +23,13 @@ const NavigationMenu: React.FC<IProps> = () => {
 					key: route.link,
 					icon: route.icon,
 					label: config.sidebarStringMap[route.label] || route.label,
+					onClick: () => navigate(route.link),
 					...(!!route.nestedLinks && {
 						children: route.nestedLinks?.map(nestedRoute => ({
 							label: config.sidebarStringMap[nestedRoute.label] || nestedRoute.label,
 							key: `${route.link}${nestedRoute.link}`,
 							icon: nestedRoute.icon,
+							onClick: () => navigate(route.link + nestedRoute.link),
 						})),
 					}),
 				},
