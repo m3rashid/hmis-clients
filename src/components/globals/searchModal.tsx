@@ -45,7 +45,11 @@ const ActionSearchModal: React.FC<IProps> = ({ close, isOpen }) => {
 		 */
 
 		const searchText = ref.current?.input.value.toLowerCase()
-		if (!searchText) return
+		if (!searchText) {
+			setOptions([{ title: 'Pages', data: flattenedRoutes }])
+			return
+		}
+
 		const routeResults = flattenedRoutes.reduce<IOption['data']>((acc, curr) => {
 			if (!RegExp(searchText).test(curr.name.toLowerCase())) return acc
 			return [...acc, { link: curr.link, name: curr.name }]
