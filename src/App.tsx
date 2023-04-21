@@ -51,8 +51,8 @@ function App() {
 					<Route path={route.link} element={<route.Component {...route.props} />} />;
 					{route.nestedLinks?.map(nestedRoute => (
 						<Route
-							key={route.link + nestedRoute.link}
-							path={route.link + nestedRoute.link}
+							key={nestedRoute.link}
+							path={nestedRoute.link}
 							element={<nestedRoute.Component />}
 						/>
 					))}

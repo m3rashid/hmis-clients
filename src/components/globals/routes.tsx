@@ -94,13 +94,13 @@ const routes: Array<IRoute> = [
 		permissions: [],
 		nestedLinks: [
 			{
-				link: '/home',
+				link: '/learn/home',
 				label: 'Home',
 				Component: Learn,
 				icon: <ReadOutlined />,
 			},
 			{
-				link: '/modules',
+				link: '/learn/modules',
 				label: 'Modules',
 				Component: Modules,
 				icon: <BookOutlined />,

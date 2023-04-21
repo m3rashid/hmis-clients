@@ -23,7 +23,7 @@ const NavigationMenu: React.FC<IProps> = () => {
 					...(!!route.nestedLinks && {
 						children: route.nestedLinks?.map(nestedRoute => ({
 							label: nestedRoute.label,
-							key: `${route.link}${nestedRoute.link}`,
+							key: nestedRoute.link,
 							icon: nestedRoute.icon,
 						})),
 					}),
