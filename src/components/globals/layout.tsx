@@ -5,17 +5,17 @@ import configAtom from 'recoilAtoms/config'
 import Brand from 'components/globals/brand'
 import AuthActions from 'components/globals/authActions'
 import NavigationMenu from 'components/globals/navigationMenu'
-import ApplicationSearch from 'components/globals/applicationSearch'
+import GlobalSearch from 'components/globals/globalSearch'
 import React, { PropsWithChildren, useLayoutEffect, useState } from 'react'
 
 const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 	const config = useRecoilValue(configAtom)
-	const [width, setWidth] = useState(0)
+	const [isMobile, setIsMobile] = useState(true)
 
 	useLayoutEffect(() => {
 		const setWindowWidth = () => {
 			const windowWidth = window.innerWidth
-			setWidth(windowWidth)
+			if (windowWidth > 576) setIsMobile(false)
 		}
 		setWindowWidth()
 		window.addEventListener('resize', setWindowWidth)
@@ -27,24 +27,35 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 			theme={{
 				token: {
 					fontFamily: 'Poppins, sans-serif',
-					colorPrimary: config.colors.primary,
-					colorBgTextHover: config.colors.primary,
-					colorFill: config.colors.primary,
+					colorPrimary: config.appColors.primary,
+					colorBgTextHover: config.appColors.primaryHover,
+					colorFill: config.appColors.primary,
 					controlOutline: 'none',
 				},
 			}}
 			locale={enUs}
 		>
-			<div className='p-[10px] h-[60px] gap-x-10 all-center fixed w-screen top-0 z-50 bg-gray-100'>
-				<Brand inline onlyLogo={width < 576} />
+			<div
+				className={`h-[60px] gap-x-10 all-center fixed w-screen top-0 z-50 bg-gray-100 py-[10px] ${
+					isMobile ? 'px-[10px]' : 'px-[20px]'
+				}`}
+			>
+				<Brand inline onlyLogo={isMobile} />
 				<div className='flex-1 all-center'>
 					<NavigationMenu />
-					<ApplicationSearch />
+					<GlobalSearch />
 				</div>
-
-				<AuthActions {...{ width }} />
+				<AuthActions {...{ isMobile }} />
 			</div>
-			<div className='h-app overflow-auto p-[10px] min-h-screen pt-[70px] -z-10'>{children}</div>
+
+			<div
+				style={{ minHeight: 'calc(100vh-60px)' }}
+				className={`h-app overflow-y-auto overflow-x-hidden max-w-screen -z-10 mt-[60px] scroll-mt-[60px] ${
+					isMobile ? 'p-[10px]' : 'p-[20px]'
+				}`}
+			>
+				{children}
+			</div>
 		</ConfigProvider>
 	)
 }

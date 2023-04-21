@@ -1,17 +1,14 @@
 import React from 'react'
-import { useRecoilValue } from 'recoil'
-import configAtom from 'recoilAtoms/config'
 import routes from 'components/globals/routes'
-import { AppstoreOutlined } from '@ant-design/icons'
-
-import { Menu, MenuProps, Popover, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import { AppstoreOutlined } from '@ant-design/icons'
+import { Menu, MenuProps, Popover, Typography } from 'antd'
+
 interface IProps {
 	collapsed?: boolean
 }
 
 const NavigationMenu: React.FC<IProps> = () => {
-	const config = useRecoilValue(configAtom)
 	const navigate = useNavigate()
 
 	const sidebarRoutes: MenuProps['items'] = routes.reduce((acc: any, route) => {
@@ -22,14 +19,12 @@ const NavigationMenu: React.FC<IProps> = () => {
 				{
 					key: route.link,
 					icon: route.icon,
-					label: config.sidebarStringMap[route.label] || route.label,
-					onClick: () => navigate(route.link),
+					label: route.label,
 					...(!!route.nestedLinks && {
 						children: route.nestedLinks?.map(nestedRoute => ({
-							label: config.sidebarStringMap[nestedRoute.label] || nestedRoute.label,
+							label: nestedRoute.label,
 							key: `${route.link}${nestedRoute.link}`,
 							icon: nestedRoute.icon,
-							onClick: () => navigate(route.link + nestedRoute.link),
 						})),
 					}),
 				},
@@ -44,12 +39,14 @@ const NavigationMenu: React.FC<IProps> = () => {
 				<Menu
 					items={sidebarRoutes}
 					mode='inline'
+					theme='light'
 					className='bg-transparent border-0 p-0 m-0 w-64 md:w-96'
 					multiple={false}
+					onClick={({ key }) => navigate(key)}
 				/>
 			}
 		>
-			<Typography.Text type='secondary'>
+			<Typography.Text type='secondary' className='cursor-pointer'>
 				<AppstoreOutlined className='text-2xl' />
 			</Typography.Text>
 		</Popover>

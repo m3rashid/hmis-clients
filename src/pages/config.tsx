@@ -5,7 +5,7 @@ import configAtom, { IConfigExposedState } from 'recoilAtoms/config'
 import { Typography, message } from 'antd'
 import Form from 'components/atoms/form'
 
-const convertToFormSchema = (config: any, widgetType: string): RJSFSchema => {
+const convertToFormSchema = (config: any, widgetType?: string): RJSFSchema => {
 	const properties: RJSFSchema['properties'] = Object.entries(config).reduce(
 		(acc, [key, value], index) => {
 			return {
@@ -17,7 +17,7 @@ const convertToFormSchema = (config: any, widgetType: string): RJSFSchema => {
 						.map(w => w[0].toUpperCase() + w.substring(1).toLowerCase())
 						.join(' '),
 					default: value,
-					format: widgetType,
+					...(widgetType ? { format: widgetType } : {}),
 					key: `${index}-${key}`,
 				},
 			}
@@ -37,8 +37,7 @@ const AdminConfig = () => {
 
 	const configsToShow: IConfigExposedState = {
 		colors: config.colors,
-		otherStringMap: config.otherStringMap,
-		sidebarStringMap: config.sidebarStringMap,
+		appColors: config.appColors,
 	}
 
 	const handleSave = (entryName: keyof IConfigExposedState) => (values: any) => {
@@ -57,8 +56,8 @@ const AdminConfig = () => {
 					Application Colors Config
 				</Typography.Title>
 				<Form
-					formSchema={convertToFormSchema(configsToShow['colors'], 'color')}
-					onFinishFormValues={handleSave('colors')}
+					formSchema={convertToFormSchema(configsToShow['appColors'], 'color')}
+					onFinishFormValues={handleSave('appColors')}
 					formProps={{
 						layout: 'inline',
 						className: 'grid grid-cols-3',
@@ -66,23 +65,17 @@ const AdminConfig = () => {
 				/>
 			</div>
 
-			<div>
+			<div className=''>
 				<Typography.Title level={4} className='text-center mb-10'>
-					Sidebar Strings Config
+					Other Colors Config
 				</Typography.Title>
 				<Form
-					formSchema={convertToFormSchema(configsToShow['sidebarStringMap'], 'string')}
-					onFinishFormValues={handleSave('sidebarStringMap')}
-				/>
-			</div>
-
-			<div>
-				<Typography.Title level={4} className='text-center mb-10'>
-					Other Strings Config
-				</Typography.Title>
-				<Form
-					formSchema={convertToFormSchema(configsToShow['otherStringMap'], 'string')}
-					onFinishFormValues={handleSave('otherStringMap')}
+					formSchema={convertToFormSchema(configsToShow['colors'], 'color')}
+					onFinishFormValues={handleSave('colors')}
+					formProps={{
+						layout: 'inline',
+						className: 'grid grid-cols-3',
+					}}
 				/>
 			</div>
 		</div>

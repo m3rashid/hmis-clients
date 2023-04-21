@@ -45,7 +45,7 @@ export const checkAccess = (auth: IAuth, route: IRoute) => {
 const routes: Array<IRoute> = [
 	{
 		icon: <HomeOutlined />,
-		label: 'home',
+		label: 'Home',
 		link: '/',
 		Component: Home,
 		permissions: [],
@@ -66,7 +66,7 @@ const routes: Array<IRoute> = [
 	},
 	{
 		icon: <InfoCircleOutlined />,
-		label: 'about',
+		label: 'About',
 		link: '/about',
 		Component: About,
 		permissions: [],
@@ -88,20 +88,20 @@ const routes: Array<IRoute> = [
 	},
 	{
 		icon: <ReadOutlined />,
-		label: 'learn',
+		label: 'Learn',
 		link: '/learn',
 		Component: Learn,
 		permissions: [],
 		nestedLinks: [
 			{
 				link: '/home',
-				label: 'learn-home',
+				label: 'Home',
 				Component: Learn,
 				icon: <ReadOutlined />,
 			},
 			{
 				link: '/modules',
-				label: 'learn-modules',
+				label: 'Modules',
 				Component: Modules,
 				icon: <BookOutlined />,
 			},

@@ -1,48 +1,32 @@
-import React, { useEffect, useRef } from 'react'
+import debounce from 'lodash.debounce'
+import { useNavigate } from 'react-router-dom'
+import routes from 'components/globals/routes'
+import React, { useEffect, useRef, useState } from 'react'
 import { AutoComplete, Input, Modal, Tooltip } from 'antd'
-import { CloseCircleOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons'
+import { CloseCircleOutlined, SearchOutlined } from '@ant-design/icons'
 
-const renderTitle = (title: string) => (
-	<span>
-		{title}
-		<a
-			style={{ float: 'right' }}
-			href='https://www.google.com/search?q=antd'
-			target='_blank'
-			rel='noopener noreferrer'
-		>
-			more
-		</a>
-	</span>
-)
+interface IOption {
+	title: string
+	data: Array<{ name: string; link: string }>
+}
 
-const renderItem = (title: string, count: number) => ({
-	value: title,
-	label: (
-		<div className='flex justify-between'>
-			{title}
-			<span>
-				<UserOutlined />
-				{count}
-			</span>
-		</div>
-	),
-})
-
-const options = [
-	{
-		label: renderTitle('Libraries'),
-		options: [renderItem('AntDesign', 10000), renderItem('AntDesign UI', 10600)],
-	},
-	{
-		label: renderTitle('Solutions'),
-		options: [renderItem('AntDesign UI FAQ', 60100), renderItem('AntDesign FAQ', 30010)],
-	},
-	{
-		label: renderTitle('Articles'),
-		options: [renderItem('AntDesign design language', 100000)],
-	},
-]
+const flattenedRoutes = routes.reduce<IOption['data']>((acc, curr) => {
+	const notShowRoutes = ['*', '/metrics']
+	if (curr.showInNav === false || notShowRoutes.includes(curr.link)) return [...acc]
+	if (!curr.nestedLinks) {
+		return [...acc, { name: curr.label, link: curr.link }]
+	}
+	return [
+		...acc,
+		...curr.nestedLinks.reduce<IOption['data']>(
+			(nestAcc, nestCurr) => [
+				...nestAcc,
+				{ name: `${curr.label} - ${nestCurr.label}`, link: nestCurr.link },
+			],
+			[]
+		),
+	]
+}, [])
 
 interface IProps {
 	isOpen: boolean
@@ -50,7 +34,34 @@ interface IProps {
 }
 
 const ActionSearchModal: React.FC<IProps> = ({ close, isOpen }) => {
+	const [options, setOptions] = useState<IOption[]>([])
+	const navigate = useNavigate()
 	const ref = useRef<any>()
+
+	const getSearchOptions = () => {
+		/**
+		 * get data from routes
+		 * TODO: get data from everywhere
+		 */
+
+		const searchText = ref.current?.input.value
+		if (!searchText) return
+
+		const routeResults = flattenedRoutes.reduce<IOption['data']>((acc, curr) => {
+			return [...acc, { link: curr.link, name: curr.name }]
+		}, [])
+
+		console.log({ routeResults })
+		setOptions([{ title: 'Pages', data: routeResults }])
+	}
+
+	const handleSearch = debounce(getSearchOptions, 500)
+
+	const onSelect = (key: string) => {
+		ref.current.input.value = ''
+		navigate(key)
+		close()
+	}
 
 	useEffect(() => {
 		if (isOpen) {
@@ -59,29 +70,29 @@ const ActionSearchModal: React.FC<IProps> = ({ close, isOpen }) => {
 	}, [isOpen])
 
 	return (
-		<Modal
-			footer={null}
-			destroyOnClose
-			closable={false}
-			open={isOpen}
-			centered={false}
-			onCancel={close}
-			focusTriggerAfterClose={false}
-			bodyStyle={{ padding: 0 }}
-		>
+		<Modal footer={null} destroyOnClose closable={false} open={isOpen} onCancel={close}>
 			<AutoComplete
-				size='large'
 				autoFocus
-				options={options}
-				style={{ width: '100%' }}
-				dropdownMatchSelectWidth={500}
-				popupClassName='certain-category-search-dropdown'
+				size='large'
+				onSelect={onSelect}
+				className='w-full'
+				options={options.map(option => ({
+					label: <span>{option.title}</span>,
+					options: option.data.map(data => ({
+						value: data.link,
+						label: (
+							<div className='flex justify-between' onClick={() => navigate(data.link)}>
+								{data.name}
+							</div>
+						),
+					})),
+				}))}
 			>
 				<Input
 					ref={ref}
-					size='large'
 					autoFocus
-					placeholder='Search...'
+					placeholder='Search . . .'
+					onChange={handleSearch}
 					className='border-none shadow-none text-[18px]'
 					prefix={<SearchOutlined className='text-[24px] mr-3' />}
 					suffix={

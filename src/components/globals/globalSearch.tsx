@@ -11,7 +11,7 @@ interface IProps {
 const META_KEY = 'shift'
 const META_KEY_SYMBOL = <>&#x21E7;</>
 
-const ApplicationSearch: React.FC<IProps> = ({ iconOnly }) => {
+const GlobalSearch: React.FC<IProps> = ({ iconOnly }) => {
 	const [isOpen, setOpen] = useState(false)
 	const close = () => setOpen(false)
 	const open = () => setOpen(true)
@@ -73,4 +73,4 @@ const ApplicationSearch: React.FC<IProps> = ({ iconOnly }) => {
 	)
 }
 
-export default ApplicationSearch
+export default GlobalSearch

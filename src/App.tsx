@@ -1,10 +1,10 @@
 import 'antd/dist/reset.css'
 import 'index.css'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import authAtom from 'recoilAtoms/auth'
 // import configAtom from 'atoms/config';
-import Loading from 'components/globals/loading'
+import Loading from 'components/atoms/loading'
 import { Route, Routes } from 'react-router-dom'
 import routes from 'components/globals/routes'
 
@@ -18,7 +18,7 @@ function App() {
 		// getConfig().then((config) => setConfig(config));
 	}, [])
 
-	// revalidate JWTs
+	// revalidate JWT
 	const revalidate = useCallback(async () => {
 		setTimeout(() => {
 			// revalidateJWT(setAuth)
@@ -47,16 +47,16 @@ function App() {
 	return (
 		<Routes>
 			{routes.map(route => (
-				<>
+				<Fragment key={route.link}>
 					<Route path={route.link} element={<route.Component {...route.props} />} />;
 					{route.nestedLinks?.map(nestedRoute => (
 						<Route
-							key={nestedRoute.link}
+							key={route.link + nestedRoute.link}
 							path={route.link + nestedRoute.link}
 							element={<nestedRoute.Component />}
 						/>
 					))}
-				</>
+				</Fragment>
 			))}
 		</Routes>
 	)

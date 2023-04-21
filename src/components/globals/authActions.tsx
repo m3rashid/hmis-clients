@@ -8,10 +8,10 @@ import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Button, Dropdown, message, Modal } from 'antd'
 
 interface IProps {
-	width: number
+	isMobile: boolean
 }
 
-const AuthActions: React.FC<IProps> = ({ width }) => {
+const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 	const [auth, setAuth] = useRecoilState(authAtom)
 	const config = useRecoilValue(configAtom)
 	const [authModalVisible, setAuthModalVisible] = useState(false)
@@ -22,7 +22,7 @@ const AuthActions: React.FC<IProps> = ({ width }) => {
 
 	const loginFailed = () => {
 		message.error({
-			content: `${config.otherStringMap.login || 'login'} Failed`,
+			content: 'login Failed',
 			key: 'auth/login',
 		})
 	}
@@ -31,7 +31,7 @@ const AuthActions: React.FC<IProps> = ({ width }) => {
 		try {
 			console.log(values)
 			message.success({
-				content: `${config.otherStringMap.login || 'login'} Successful`,
+				content: 'login Successful',
 				key: 'auth/login',
 			})
 			setAuthModalVisible(false)
@@ -52,10 +52,10 @@ const AuthActions: React.FC<IProps> = ({ width }) => {
 		return (
 			<>
 				<Button type='primary' className='all-center' icon={<UserOutlined />} onClick={openModal}>
-					{width > 576 ? 'Login' : ''}
+					{!isMobile ? 'Login' : ''}
 				</Button>
 				<Modal
-					title={config.otherStringMap.login || 'Login'}
+					title='Login'
 					footer={null}
 					open={authModalVisible}
 					onOk={handleLogin}
@@ -71,7 +71,7 @@ const AuthActions: React.FC<IProps> = ({ width }) => {
 							},
 						}}
 						onFinishFormValues={handleLogin}
-						submitText={config.otherStringMap.login || 'Login'}
+						submitText='Login'
 						onCancel={closeModal}
 					/>
 				</Modal>
@@ -101,16 +101,16 @@ const AuthActions: React.FC<IProps> = ({ width }) => {
 		>
 			<Button
 				type='text'
-				className={`all-center ${width < 576 ? 'rounded-full' : 'gap-2'}`}
+				className={`all-center ${isMobile ? 'rounded-full' : 'gap-2'}`}
 				icon={
 					<Avatar
 						size='small'
 						src={`https://api.dicebear.com/5.x/pixel-art/svg?seed=${auth.user?.name}`}
-						className={width < 576 ? 'mx-1' : ''}
+						className={isMobile ? 'mx-1' : ''}
 					/>
 				}
 			>
-				{(width >= 576 && auth.user?.name) ?? ''}
+				{(!isMobile && auth.user?.name) ?? ''}
 			</Button>
 		</Dropdown>
 	)
