@@ -10,17 +10,13 @@ const Metrics = () => {
 		endpoint: '/metrics',
 		onSuccess: () => (metricsRef.current = true),
 		onError: () => (metricsRef.current = false),
-		isApi: false,
 	})
 
 	useEffect(() => {
 		const interval = setInterval(() => {
 			checkMetricsEndpoint()
-			// check every 10 seconds if server is alive
-		}, 10000)
-		return () => {
-			clearInterval(interval)
-		}
+		}, 5000)
+		return () => clearInterval(interval)
 	}, [])
 
 	return (

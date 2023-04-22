@@ -10,8 +10,11 @@ type Developers = {
 }
 
 export type IConfig = {
-	appName: string
-	appFullName: string
+	app: {
+		name: string
+		version: string
+		fullName: string
+	}
 	appColors: {
 		primary: string
 		primaryHover: string
@@ -23,17 +26,17 @@ export type IConfig = {
 		danger: string
 		info: string
 	}
-	appVersion: string
-	appLogo?: string
 	developers: Array<Developers>
 }
 
 export type IConfigExposedState = Pick<IConfig, 'colors' | 'appColors'>
 
 export const configDefaultState: IConfig = {
-	appName: 'HMIS',
-	appVersion: '1.0.0',
-	appFullName: 'Health Management and Informatics System',
+	app: {
+		name: 'HMIS',
+		version: '1.0.0',
+		fullName: 'Health Management and Informatics System',
+	},
 	appColors: {
 		primary: '#00BDC1',
 		primaryHover: '#E6FFFB',

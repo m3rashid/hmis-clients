@@ -1,52 +1,36 @@
 import 'antd/dist/reset.css'
 import 'index.css'
-import React, { Fragment, useCallback, useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
-import authAtom from 'recoilAtoms/auth'
-// import configAtom from 'atoms/config';
+import useApi from 'hooks/useApi'
+import { useSetRecoilState } from 'recoil'
+import configAtom from 'recoilAtoms/config'
+import routes from 'components/globals/routes'
 import Loading from 'components/atoms/loading'
 import { Route, Routes } from 'react-router-dom'
-import routes from 'components/globals/routes'
+import React, { Fragment, useCallback, useEffect } from 'react'
 
-function App() {
-	const [auth, setAuth] = useRecoilState(authAtom)
-	// const [config, setConfig] = useRecoilState(configAtom);
-	const [isLoading, setIsLoading] = useState(false)
+const App = () => {
+	const setConfig = useSetRecoilState(configAtom)
 
-	// set App Config
-	const getAppConfig = useCallback(async () => {
-		// getConfig().then((config) => setConfig(config));
-	}, [])
+	const { apiCall, loading: configLoading } = useApi({
+		endpoint: '/config',
+		onSuccess: data => setConfig(data),
+		onError: console.log,
+	})
 
-	// revalidate JWT
-	const revalidate = useCallback(async () => {
-		setTimeout(() => {
-			// revalidateJWT(setAuth)
-			// 	.then((res) => {
-			// 		socket.io.opts.auth.token = res.token;
-			// 		socket.disconnect().connect();
-			// 	})
-			// 	.catch(console.log)
-			// 	.finally(() => setIsLoading(false));
-		}, 1000)
-	}, [])
+	const getAppConfig = useCallback(apiCall, [])
+
+	// TODO: check user logged in
 
 	useEffect(() => {
-		revalidate()
 		getAppConfig()
-	}, [revalidate, getAppConfig])
+	}, [getAppConfig])
 
-	useEffect(() => {
-		if (auth.isLoggedIn) {
-			// instance.defaults.headers.common.Authorization = `Bearer ${auth.token}`
-		}
-	}, [auth])
-
-	if (isLoading) return <Loading />
+	if (configLoading) return <Loading />
 
 	return (
 		<Routes>
 			{routes.map(route => (
+				// TODO: handle permissions here
 				<Fragment key={route.link}>
 					<Route path={route.link} element={<route.Component {...route.props} />} />;
 					{route.nestedLinks?.map(nestedRoute => (

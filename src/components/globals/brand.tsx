@@ -1,14 +1,18 @@
 import React from 'react'
+import { useRecoilValue } from 'recoil'
 import { Link } from 'react-router-dom'
 import { Image, Typography } from 'antd'
+import configAtom from 'recoilAtoms/config'
 
 interface IProps {
 	onlyLogo?: boolean
 }
 
 const Brand: React.FC<IProps> = ({ onlyLogo = false }) => {
-	const title = 'HMIS'
-	const subTitle = ''
+	const config = useRecoilValue(configAtom)
+
+	const title = config.app.name
+	const subTitle = `v${config.app.version}`
 	const logo = '/images/logo.png'
 
 	return (

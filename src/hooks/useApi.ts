@@ -1,10 +1,10 @@
-import { serverRootUrl } from 'api/network'
-import authAtom from 'recoilAtoms/auth'
-import axios, { AxiosRequestConfig } from 'axios'
-import { useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
-import { useNetwork } from '@mantine/hooks'
+import { useState } from 'react'
 import { notification } from 'antd'
+import { useRecoilValue } from 'recoil'
+import authAtom from 'recoilAtoms/auth'
+import { useNetwork } from '@mantine/hooks'
+import { serverRootUrl } from 'api/network'
+import axios, { AxiosRequestConfig } from 'axios'
 
 /**
  * TODO: Use the Browser IndexedDB to persist failed network requests
@@ -20,7 +20,6 @@ interface IUseApi {
 	onError?: (err?: any) => void
 	onFinal?: () => void
 	abortTime?: number
-	isApi?: boolean
 }
 
 const useApi = ({
@@ -32,10 +31,9 @@ const useApi = ({
 	onError = () => {},
 	onFinal = () => {},
 	abortTime = 10_000, // 10 seconds
-	isApi = true,
 }: IUseApi) => {
 	const [loading, setLoading] = useState(false)
-	const [auth, setAuth] = useRecoilState(authAtom)
+	const auth = useRecoilValue(authAtom)
 	const network = useNetwork()
 
 	const abortSignal = () => {
@@ -65,7 +63,7 @@ const useApi = ({
 
 			const res = await axios({
 				method,
-				url: `${serverRootUrl}${isApi ? '/api' : ''}${endpoint}`,
+				url: `${serverRootUrl}${endpoint}`,
 				signal: abortSignal(),
 				headers: {
 					'Content-Type': 'application/json',

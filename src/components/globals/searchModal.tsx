@@ -11,6 +11,7 @@ interface IOption {
 }
 
 const flattenedRoutes = routes.reduce<IOption['data']>((acc, curr) => {
+	// TODO: handle permissions in routes
 	const notShowRoutes = ['*', '/metrics']
 	if (curr.showInNav === false || notShowRoutes.includes(curr.link)) return [...acc]
 	if (!curr.nestedLinks) {
@@ -34,11 +35,11 @@ interface IProps {
 }
 
 const ActionSearchModal: React.FC<IProps> = ({ close, isOpen }) => {
-	const [options, setOptions] = useState<IOption[]>([{ title: 'Pages', data: flattenedRoutes }])
-	const navigate = useNavigate()
 	const ref = useRef<any>()
+	const navigate = useNavigate()
+	const [options, setOptions] = useState<IOption[]>([{ title: 'Pages', data: flattenedRoutes }])
 
-	const getSearchOptions = () => {
+	const handleSearch = debounce(() => {
 		/**
 		 * get data from routes
 		 * TODO: get data from everywhere
@@ -55,11 +56,8 @@ const ActionSearchModal: React.FC<IProps> = ({ close, isOpen }) => {
 			return [...acc, { link: curr.link, name: curr.name }]
 		}, [])
 
-		console.log({ routeResults })
 		setOptions([{ title: 'Pages', data: routeResults }])
-	}
-
-	const handleSearch = debounce(getSearchOptions, 500)
+	}, 500)
 
 	const onSelect = (key: string) => {
 		ref.current.input.value = ''
@@ -78,14 +76,14 @@ const ActionSearchModal: React.FC<IProps> = ({ close, isOpen }) => {
 			<AutoComplete
 				autoFocus
 				size='large'
-				onSelect={onSelect}
 				className='w-full'
+				onSelect={onSelect}
 				options={options.map(option => ({
 					label: <span>{option.title}</span>,
 					options: option.data.map(data => ({
 						value: data.link,
 						label: (
-							<div className='flex justify-between' onClick={() => navigate(data.link)}>
+							<div className={`flex justify-between`} onClick={() => navigate(data.link)}>
 								{data.name}
 							</div>
 						),
