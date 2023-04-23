@@ -8,7 +8,7 @@ android {
     compileSdk = 33
     defaultConfig {
         manifestPlaceholders["usesCleartextTraffic"] = "false"
-        applicationId = "com.tauri.app"
+        applicationId = "com.tauri.hmis"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -78,7 +78,7 @@ android {
     }
 
     assetPacks += mutableSetOf()
-    namespace = "com.tauri.app"
+    namespace = "com.tauri.hmis"
 }
 
 rust {

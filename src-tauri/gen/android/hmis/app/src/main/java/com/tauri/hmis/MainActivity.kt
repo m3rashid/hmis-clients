@@ -1,4 +1,4 @@
-package com.tauri.app
+package com.tauri.hmis
 
 import app.tauri.plugin.PluginManager
 

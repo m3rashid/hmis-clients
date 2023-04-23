@@ -1,13 +1,13 @@
 [package]
-name = "app"
+name = "hmis"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "HMIS - Hospital Management and Information System"
+authors = ["https://github.com/m3rashid"]
 license = ""
 repository = ""
-default-run = "app"
+default-run = "hmis"
 edition = "2021"
-rust-version = "1.59"
+rust-version = "1.69"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
