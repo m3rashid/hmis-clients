@@ -16,6 +16,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 		const setWindowWidth = () => {
 			const windowWidth = window.innerWidth
 			if (windowWidth > 576) setIsMobile(false)
+			else setIsMobile(true)
 		}
 		setWindowWidth()
 		window.addEventListener('resize', setWindowWidth)
