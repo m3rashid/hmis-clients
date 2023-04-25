@@ -46,7 +46,7 @@ const useApi = ({
 	}
 
 	const handleApiCall = async () => {
-		console.log({ network })
+		// console.log({ network })
 		if (!network.online) {
 			// TODO: push the request in queue
 

@@ -1,5 +1,6 @@
 import { RJSFSchema } from '@rjsf/utils'
 import { TableProps } from 'antd'
+import apiService from 'api/service'
 import dayjs from 'dayjs'
 import TableHoc from 'hocs/table'
 import React from 'react'
@@ -53,14 +54,14 @@ const ResourceManagement = () => {
 				addButtonLabel='Add Resource'
 				tableProps={{
 					columns: columns,
+					scroll: { x: 1000 },
 				}}
 				formBaseProps={{}}
 				routes={{
-					get: '/resource/all',
+					get: apiService('GET', '/resource/all'),
 				}}
 				showTitle={false}
 				formSchema={formSchema}
-				ActionButtons={<></>}
 			/>
 		</div>
 	)

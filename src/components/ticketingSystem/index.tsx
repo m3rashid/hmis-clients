@@ -71,12 +71,9 @@ const TicketingSystem: React.FC<IProps> = () => {
 						minHeight: '500px',
 					},
 				}}
-				routes={{
-					get: '/ticket',
-				}}
+				routes={{}}
 				showTitle={false}
 				formSchema={formSchema}
-				ActionButtons={<></>}
 			/>
 		</div>
 	)

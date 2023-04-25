@@ -4,6 +4,7 @@
 	"overrides": [],
 	"env": {
 		"browser": true,
+		"node": true,
 		"es2021": true
 	},
 	"parserOptions": {
@@ -20,6 +21,7 @@
 		"no-empty": "off",
 		"@typescript-eslint/no-explicit-any": "off",
 		"@typescript-eslint/no-empty-interface": "warn",
-		"@typescript-eslint/ban-ts-comment": "warn"
+		"@typescript-eslint/ban-ts-comment": "warn",
+		"no-empty-pattern": "off"
 	}
 }

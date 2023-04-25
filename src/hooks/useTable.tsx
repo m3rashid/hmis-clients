@@ -1,35 +1,53 @@
-import axios from 'axios'
 import { Form } from 'antd'
 import { useState } from 'react'
 import { TableHocProps } from 'hocs/table'
+import { useRecoilValue } from 'recoil'
+import configAtom from 'recoilAtoms/config'
 
-/**
- * @description The base route for the API
- * routes will be appended to this like so:
- * baseRoute/get -> GET
- * baseRoute/edit-or-create -> POST
- * baseRoute/delete -> POST
- */
-const useTable = (props: TableHocProps) => {
+const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 	const [tableData, setTableData] = useState([])
+	const config = useRecoilValue(configAtom)
 	const [modalVisible, setModalVisible] = useState(false)
 	const [loading, setLoading] = useState(false)
+	const [selectedRows, setSelectedRows] = useState<RecordType[]>([])
 	const [form] = Form.useForm()
-
-	// eslint-disable-next-line no-undef
-	const apiBaseRoute = process.env.REACT_APP_BACKEND_BASE_URL
 
 	const hideModal = () => setModalVisible(false)
 	const showModal = () => setModalVisible(true)
+
+	const showDeleteAction = selectedRows.length > 0
+	const showEditAction = selectedRows.length === 1
+	const showInfoAction = selectedRows.length === 1
+
+	const onClickEdit = () => {
+		const data = selectedRows[0]
+		console.log({ data })
+		setSelectedRows([])
+	}
+
+	const onClickDelete = async () => {
+		// @ts-ignore
+		const promises = selectedRows.map(t => deleteData(t._id))
+		const responses = await Promise.all(promises)
+
+		console.log({ responses })
+		setSelectedRows([])
+	}
+
+	const onClickInfo = () => {
+		const data = selectedRows[0]
+		console.log({ data })
+		setSelectedRows([])
+	}
 
 	const getData = async () => {
 		if (!props.routes?.get) return
 		setLoading(true)
 
 		try {
-			const { data } = await axios.get(apiBaseRoute + props.routes?.get)
-			console.log({ tableData: data })
-			setTableData(data)
+			const { data: response } = await props.routes.get()
+			console.log({ response })
+			setTableData(response)
 		} catch (err) {
 			setTableData([])
 		} finally {
@@ -41,7 +59,8 @@ const useTable = (props: TableHocProps) => {
 		if (!props.routes?.edit) return
 		setLoading(true)
 		try {
-			await axios.post(apiBaseRoute + props.routes?.edit, data)
+			const { data: response } = await props.routes.edit({ data })
+			console.log({ response })
 		} catch (err) {
 		} finally {
 			setLoading(false)
@@ -53,7 +72,8 @@ const useTable = (props: TableHocProps) => {
 		setLoading(true)
 
 		try {
-			await axios.post(apiBaseRoute + props.routes?.delete, { id })
+			const { data: response } = await props.routes.delete({ data: id })
+			console.log({ response })
 		} catch (err) {
 		} finally {
 			setLoading(false)
@@ -83,12 +103,20 @@ const useTable = (props: TableHocProps) => {
 			modalVisible,
 			loading,
 			form,
+			selectedRows,
+
+			// constants
+			showDeleteAction,
+			showEditAction,
+			showInfoAction,
+			config,
 		},
 
 		stateUpdater: {
 			setTableData,
 			setModalVisible,
 			setLoading,
+			setSelectedRows,
 		},
 
 		actions: {
@@ -100,6 +128,9 @@ const useTable = (props: TableHocProps) => {
 			handleOkOnModal,
 			handleCancelOnModal,
 			onFinishFormValues,
+			onClickEdit,
+			onClickInfo,
+			onClickDelete,
 		},
 	}
 }

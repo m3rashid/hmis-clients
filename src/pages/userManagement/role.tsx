@@ -50,7 +50,6 @@ const RoleManagement = () => {
 				formBaseProps={{}}
 				showTitle={false}
 				formSchema={formSchema}
-				ActionButtons={<></>}
 			/>
 		</div>
 	)

@@ -38,7 +38,6 @@ const PermissionManagement = () => {
 				}}
 				showTitle={false}
 				formSchema={formSchema}
-				ActionButtons={<></>}
 			/>
 		</div>
 	)

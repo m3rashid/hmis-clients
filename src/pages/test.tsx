@@ -55,7 +55,6 @@ const Test = () => {
 					dataSource: [],
 				}}
 				formSchema={formSchema}
-				ActionButtons={<></>}
 			/>
 		</div>
 	)
