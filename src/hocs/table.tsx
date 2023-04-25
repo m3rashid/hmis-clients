@@ -6,54 +6,41 @@ import {
 	Table,
 	Typography,
 	Button,
-	FormProps,
 	AutoComplete,
 	Input,
+	Switch,
 } from 'antd'
 import React, { ReactNode, useEffect } from 'react'
-import { RJSFSchema, UiSchema } from '@rjsf/utils'
 
 import useTable from 'hooks/useTable'
-import Form from 'components/atoms/form'
-// import FormBuilder from '../formBuilder'
-// import { IMeta } from '../formBuilder/FormBuilder'
+import Form, { IHocFormProps } from 'components/form'
 
 export const constants = {
 	defaultPageSize: 10,
 	defaultPageNumber: 1,
 }
 
-export interface TableHocProps {
+export interface TableHocProps extends IHocFormProps {
 	tableProps: TableProps<any>
 	modalProps?: ModalProps
 	title: string
 	ActionButtons: ReactNode
 	openModalButton?: ReactNode
-	baseRouteForData: string
 	showTitle?: boolean
-	formProps?: FormProps
 	addButtonLabel?: string
-	formUiSchema?: UiSchema
-	formSchema?: RJSFSchema
+	routes?: {
+		get?: string
+		list?: string
+		edit?: string
+		delete?: string
+	}
 }
 
-const TableHoc: React.FC<TableHocProps> = ({
-	tableProps,
-	modalProps,
-	title,
-	ActionButtons,
-	openModalButton,
-	baseRouteForData,
-	formProps,
-	showTitle = false,
-	addButtonLabel = `Add ${title}`,
-	formSchema,
-	formUiSchema,
-}) => {
+const TableHoc: React.FC<TableHocProps> = props => {
 	const {
 		actions: { showModal, getData, handleOkOnModal, handleCancelOnModal, onFinishFormValues },
 		state: { modalVisible, tableData },
-	} = useTable({ baseRoute: baseRouteForData })
+	} = useTable(props)
 
 	useEffect(() => {
 		getData()
@@ -63,28 +50,29 @@ const TableHoc: React.FC<TableHocProps> = ({
 	return (
 		<>
 			<Modal
-				{...modalProps}
+				{...props.modalProps}
 				destroyOnClose
 				open={modalVisible}
 				onCancel={handleCancelOnModal}
 				onOk={handleOkOnModal}
-				title={title}
-				style={{ ...modalProps?.style }}
+				title={props.title}
+				style={{ ...props.modalProps?.style }}
 				footer={null}
 			>
 				<Form
 					{...{
-						formProps,
-						formSchema,
-						formUiSchema,
+						formProps: props.formProps,
+						formSchema: props.formSchema,
+						formUiSchema: props.formUiSchema,
 						onFinishFormValues,
+						formBaseProps: props.formBaseProps,
 					}}
 				/>
 			</Modal>
 
-			{showTitle && (
+			{props.showTitle && (
 				<>
-					<Typography.Title level={3}>{title}</Typography.Title>
+					<Typography.Title level={3}>{props.title}</Typography.Title>
 					<Divider className='m-0 p-0 mb-4' />
 				</>
 			)}
@@ -93,39 +81,39 @@ const TableHoc: React.FC<TableHocProps> = ({
 				<div className='w-4' />
 
 				<div className='flex items-center justify-center'>
-					{ActionButtons}
+					{props.ActionButtons}
 
-					{openModalButton ?? (
+					{props.openModalButton ?? (
 						<Button type='primary' className='mx-3' onClick={showModal}>
-							{addButtonLabel}
+							{props.addButtonLabel}
 						</Button>
 					)}
 
 					<AutoComplete className='w-[200]' dropdownMatchSelectWidth={200}>
-						<Input.Search size='middle' placeholder={`Search in ${title}`} />
+						<Input.Search size='middle' placeholder={`Search in ${props.title}`} />
 					</AutoComplete>
 				</div>
 			</div>
 
-			<div className='overflow-x-auto max-w-[100vw] mb-24 bg-white'>
-				<Table
-					{...tableProps}
-					dataSource={tableProps.dataSource || tableData}
-					pagination={{
-						...tableProps.pagination,
-						position: ['bottomRight'],
-						defaultPageSize: constants.defaultPageSize,
-						defaultCurrent: constants.defaultPageNumber,
-						hideOnSinglePage: true,
-						...tableProps.pagination,
-					}}
-					style={{
-						height: '100%',
-						minHeight: '500px',
-						...tableProps.style,
-					}}
-				/>
-			</div>
+			<Table
+				{...props.tableProps}
+				dataSource={props.tableProps.dataSource || tableData}
+				pagination={{
+					...props.tableProps.pagination,
+					position: ['bottomRight'],
+					defaultPageSize: constants.defaultPageSize,
+					defaultCurrent: constants.defaultPageNumber,
+					hideOnSinglePage: true,
+					...props.tableProps.pagination,
+				}}
+				style={{
+					height: '100%',
+					minHeight: '500px',
+					...props.tableProps.style,
+				}}
+				sticky
+				scroll={{ x: 1500 }}
+			/>
 		</>
 	)
 }

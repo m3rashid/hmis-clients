@@ -55,7 +55,6 @@ const Test = () => {
 					dataSource: [],
 				}}
 				formSchema={formSchema}
-				baseRouteForData='/'
 				ActionButtons={<></>}
 			/>
 		</div>

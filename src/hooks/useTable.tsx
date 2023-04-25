@@ -1,10 +1,7 @@
 import axios from 'axios'
 import { Form } from 'antd'
 import { useState } from 'react'
-
-interface IProps<T> {
-	baseRoute: string
-}
+import { TableHocProps } from 'hocs/table'
 
 /**
  * @description The base route for the API
@@ -13,20 +10,24 @@ interface IProps<T> {
  * baseRoute/edit-or-create -> POST
  * baseRoute/delete -> POST
  */
-const useTable = <RecordType,>({ baseRoute }: IProps<RecordType>) => {
+const useTable = (props: TableHocProps) => {
 	const [tableData, setTableData] = useState([])
 	const [modalVisible, setModalVisible] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const [form] = Form.useForm()
 
+	// eslint-disable-next-line no-undef
+	const apiBaseRoute = process.env.REACT_APP_BACKEND_BASE_URL
+
 	const hideModal = () => setModalVisible(false)
 	const showModal = () => setModalVisible(true)
 
 	const getData = async () => {
+		if (!props.routes?.get) return
 		setLoading(true)
 
 		try {
-			const { data } = await axios.get(`${baseRoute}`)
+			const { data } = await axios.get(apiBaseRoute + props.routes?.get)
 			console.log({ tableData: data })
 			setTableData(data)
 		} catch (err) {
@@ -36,10 +37,11 @@ const useTable = <RecordType,>({ baseRoute }: IProps<RecordType>) => {
 		}
 	}
 
-	const editData = async (data: RecordType & { _id?: string }) => {
+	const editData = async (data: any) => {
+		if (!props.routes?.edit) return
 		setLoading(true)
 		try {
-			await axios.post(`${baseRoute}/edit-or-create`, data)
+			await axios.post(apiBaseRoute + props.routes?.edit, data)
 		} catch (err) {
 		} finally {
 			setLoading(false)
@@ -47,10 +49,11 @@ const useTable = <RecordType,>({ baseRoute }: IProps<RecordType>) => {
 	}
 
 	const deleteData = async (id: string) => {
+		if (!props.routes?.delete) return
 		setLoading(true)
 
 		try {
-			await axios.post(`${baseRoute}/delete`, { id })
+			await axios.post(apiBaseRoute + props.routes?.delete, { id })
 		} catch (err) {
 		} finally {
 			setLoading(false)

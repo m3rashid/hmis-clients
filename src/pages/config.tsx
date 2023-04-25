@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import { RJSFSchema } from '@rjsf/utils'
 import configAtom, { IConfigExposedState } from 'recoilAtoms/config'
 import { Typography, message } from 'antd'
-import Form from 'components/atoms/form'
+import Form from 'components/form'
 
 const convertToFormSchema = (config: any, widgetType?: string): RJSFSchema => {
 	const properties: RJSFSchema['properties'] = Object.entries(config).reduce(

@@ -3,8 +3,9 @@ import RJSFForm from '@rjsf/antd'
 import validator from '@rjsf/validator-ajv8'
 import { Alert, Button, FormProps } from 'antd'
 import { RJSFSchema, UiSchema } from '@rjsf/utils'
+import { customFields, customWidgets, overrideWidgetsSchema } from 'components/form/widgets'
 
-interface IProps {
+export interface IHocFormProps {
 	formProps?: FormProps
 	formUiSchema?: UiSchema
 	formSchema?: RJSFSchema
@@ -12,15 +13,18 @@ interface IProps {
 	cancelText?: string
 	submitText?: string
 	onCancel?: () => void
+	formBaseProps?: Omit<any, 'schema' | 'uiSchema' | 'validator' | 'onSubmit' | 'formContext'>
 }
 
-const Form: React.FC<IProps> = props => {
+const Form: React.FC<IHocFormProps> = props => {
 	if (!props.formSchema) return null
 
 	return (
 		<RJSFForm
 			focusOnFirstError
 			schema={props.formSchema}
+			widgets={customWidgets}
+			fields={customFields}
 			uiSchema={{
 				'ui:ErrorListTemplate': props => {
 					const { errors } = props
@@ -32,6 +36,7 @@ const Form: React.FC<IProps> = props => {
 						</div>
 					)
 				},
+				...overrideWidgetsSchema,
 				...props.formUiSchema,
 			}}
 			validator={validator}
@@ -45,6 +50,7 @@ const Form: React.FC<IProps> = props => {
 				wrapperCol: { xs: { span: 24 }, sm: { span: 18 } },
 				...props.formProps,
 			}}
+			{...props.formBaseProps}
 		>
 			<div className='w-full flex flex-row items-center justify-end gap-3'>
 				<Button onClick={props.onCancel}>{props.cancelText ?? 'Cancel'}</Button>

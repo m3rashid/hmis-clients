@@ -5,6 +5,8 @@ import {
 	InfoCircleOutlined,
 	ReadOutlined,
 	TagsOutlined,
+	TeamOutlined,
+	UserAddOutlined,
 } from '@ant-design/icons'
 
 import { IAuth } from 'recoilAtoms/auth'
@@ -16,6 +18,10 @@ import Modules from 'pages/learn/modules'
 import Metrics from 'pages/dev/metrics'
 import TicketingSystem from 'components/ticketingSystem'
 import AdminConfig from 'pages/config'
+import UserManagement from 'pages/userManagement/user'
+import RoleManagement from 'pages/userManagement/role'
+import PermissionManagement from 'pages/userManagement/permission'
+import ResourceManagement from 'pages/userManagement/resource'
 
 export type IRoute = {
 	label: string
@@ -85,6 +91,39 @@ const routes: Array<IRoute> = [
 		Component: ErrorPage,
 		permissions: [],
 		showInNav: false,
+	},
+	{
+		icon: <TeamOutlined />,
+		label: 'User Management',
+		link: '/users-management',
+		Component: UserManagement,
+		permissions: [],
+		nestedLinks: [
+			{
+				link: '/users-management/users',
+				label: 'Users',
+				Component: UserManagement,
+				icon: <UserAddOutlined />,
+			},
+			{
+				link: '/users-management/resources',
+				label: 'Resources',
+				Component: ResourceManagement,
+				icon: <UserAddOutlined />,
+			},
+			{
+				link: '/users-management/roles',
+				label: 'Roles',
+				Component: RoleManagement,
+				icon: <UserAddOutlined />,
+			},
+			{
+				link: '/users-management/permissions',
+				label: 'Permissions',
+				Component: PermissionManagement,
+				icon: <UserAddOutlined />,
+			},
+		],
 	},
 	{
 		icon: <ReadOutlined />,

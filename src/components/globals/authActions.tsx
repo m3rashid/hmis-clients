@@ -1,4 +1,4 @@
-import Form from 'components/atoms/form'
+import Form from 'components/form'
 import configAtom from 'recoilAtoms/config'
 import { useNavigate } from 'react-router-dom'
 import React, { useCallback, useState } from 'react'
