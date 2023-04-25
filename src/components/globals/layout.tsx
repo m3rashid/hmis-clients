@@ -46,7 +46,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 			<div
 				className={`h-[60px] gap-x-10 all-center fixed w-screen top-0 z-50 py-[10px] ${
 					isMobile ? 'px-[10px]' : 'px-[20px]'
-				} ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'}`}
+				} ${isDarkMode ? 'bg-neutral-800' : 'bg-neutral-200'}`}
 			>
 				<Brand onlyLogo={isMobile} />
 				<div className='flex-1 all-center'>
@@ -60,7 +60,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 				style={{ minHeight: 'calc(100vh - 60px)' }}
 				className={`h-app overflow-y-auto overflow-x-hidden max-w-screen -z-10 mt-[60px] scroll-mt-[60px] ${
 					isMobile ? 'p-[8px]' : 'p-[16px]'
-				} ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}
+				} ${isDarkMode ? 'bg-neutral-900' : 'bg-neutral-100'}`}
 			>
 				<div
 					className={`rounded-md ${isDarkMode ? 'bg-black' : 'bg-white'} ${

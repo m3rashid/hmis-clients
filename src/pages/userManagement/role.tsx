@@ -1,38 +1,32 @@
 import { RJSFSchema } from '@rjsf/utils'
-import { TableProps } from 'antd'
+import { TableProps, Tag } from 'antd'
+import apiService from 'api/service'
 import TableHoc from 'components/hocs/table'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 const RoleManagement = () => {
-	const columns: TableProps<any>['columns'] = []
-
-	const getPermissions = async () => {}
-
-	useEffect(() => {
-		getPermissions().then().catch()
-	}, [])
+	const columns: TableProps<any>['columns'] = [
+		{ title: 'Name', dataIndex: 'displayName', key: 'displayName' },
+		{ title: 'Description', dataIndex: 'description', key: 'description' },
+		{
+			title: 'permissions',
+			dataIndex: 'permissions',
+			key: 'permissions',
+			width: 170,
+			render: entry => (
+				<div className='flex gap-2 flex-col'>
+					{entry.map((t: any) => (
+						<Tag>{t.displayName}</Tag>
+					))}
+				</div>
+			),
+		},
+	]
 
 	const formSchema: RJSFSchema = {
 		type: 'object',
 		required: [],
-		properties: {
-			name: { type: 'string', title: 'Name' },
-			description: { type: 'string', title: 'Description', format: 'textarea' },
-			permissions: {
-				type: 'array',
-				title: 'Permissions',
-				items: {
-					type: 'string',
-					enum: [
-						{ value: 'foo', label: 'Foo' },
-						{ value: 'bar', label: 'Bar' },
-						{ value: 'fuzz', label: 'Fuzz' },
-						{ value: 'qux', label: 'Qux' },
-					],
-				},
-				uniqueItems: true,
-			},
-		},
+		properties: {},
 	}
 
 	return (
@@ -42,14 +36,25 @@ const RoleManagement = () => {
 				addButtonLabel='Add Role'
 				tableProps={{
 					columns: columns,
-					dataSource: [],
-					style: {
-						minHeight: '500px',
-					},
+					scroll: { x: 1000 },
 				}}
 				formBaseProps={{}}
+				routes={{
+					get: apiService('GET', '/role/all'),
+					delete: apiService('POST', '/role/delete'),
+					edit: apiService('POST', '/role/edit'),
+				}}
 				showTitle={false}
 				formSchema={formSchema}
+				modifyInfoDetails={data => {
+					if (!data) return {}
+					return Object.entries(data).reduce<Record<string, string>>((acc, [key, val]) => {
+						if (key === 'permissions') {
+							return { ...acc, [key]: val.map((v: any) => v.displayName).join(', ') }
+						}
+						return { ...acc, [key]: val }
+					}, {})
+				}}
 			/>
 		</div>
 	)

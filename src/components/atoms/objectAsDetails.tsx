@@ -1,19 +1,28 @@
 import React from 'react'
 import dayjs from 'dayjs'
-import { camelCaseToSentenceCase, toSentenceCase } from 'helpers/strings'
+import { camelCaseToSentenceCase } from 'helpers/strings'
 import { Typography } from 'antd'
 
 interface IProps {
 	data: Record<string, any>
+	notToShow?: string[]
 }
 
-const notToShow = ['_id', 'key', '__v', 'deleted', 'actualName']
 const dateKeys = ['createdAt', 'updatedAt']
 
-const ObjectAsDetails: React.FC<IProps> = ({ data }) => {
-	if (!data) return null
+const ObjectAsDetails: React.FC<IProps> = props => {
+	const notToShow = [
+		'_id',
+		'key',
+		'__v',
+		'deleted',
+		'actualName',
+		'password',
+		...(props.notToShow || []),
+	]
+	if (!props.data) return null
 
-	const parsedData = Object.entries(data).reduce<Array<{ key: string; value: string }>>(
+	const parsedData = Object.entries(props.data).reduce<Array<{ key: string; value: string }>>(
 		(acc, [key, value]) => {
 			if (notToShow.includes(key)) return acc
 			else if (dateKeys.includes(key)) {
@@ -29,7 +38,7 @@ const ObjectAsDetails: React.FC<IProps> = ({ data }) => {
 				...acc,
 				{
 					key: camelCaseToSentenceCase(key ?? ''),
-					value: toSentenceCase(JSON.stringify(value ?? {}).replace(/['"]+/g, ''), ' '),
+					value: JSON.stringify(value ?? {}).replace(/['"]+/g, ''),
 				},
 			]
 		},
@@ -37,16 +46,16 @@ const ObjectAsDetails: React.FC<IProps> = ({ data }) => {
 	)
 
 	return (
-		<>
+		<div className='flex flex-col gap-2'>
 			{parsedData.map(({ key, value }) => {
 				return (
-					<div className='grid grid-cols-2 gap-3'>
+					<div className='grid gap-2' style={{ gridTemplateColumns: '1fr 2fr' }}>
 						<Typography.Text className='font-bold'>{key}</Typography.Text>
-						<Typography.Text>{value}</Typography.Text>
+						<Typography.Text className=''>{value}</Typography.Text>
 					</div>
 				)
 			})}
-		</>
+		</div>
 	)
 }
 

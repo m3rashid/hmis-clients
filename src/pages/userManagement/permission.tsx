@@ -2,39 +2,41 @@ import { RJSFSchema } from '@rjsf/utils'
 import { TableProps } from 'antd'
 import TableHoc from 'components/hocs/table'
 import React from 'react'
-import { PERMISSION } from 'constants/enums'
+import apiService from 'api/service'
 import { toSentenceCase } from 'helpers/strings'
 
 const PermissionManagement = () => {
-	const columns: TableProps<any>['columns'] = []
+	const columns: TableProps<any>['columns'] = [
+		{ title: 'Name', dataIndex: 'displayName', key: 'displayName', width: 180 },
+		{ title: 'Description', dataIndex: 'description', key: 'description' },
+		{ title: 'Resource Type', dataIndex: 'resourceType', key: 'resourceType', width: 100 },
+		{ title: 'Scope', dataIndex: 'scope', key: 'scope', width: 100 },
+		{
+			title: 'Permission',
+			dataIndex: 'permission',
+			key: 'permission',
+			width: 130,
+			render: (entry: any) => toSentenceCase(entry),
+		},
+	]
 
 	const formSchema: RJSFSchema = {
 		type: 'object',
 		required: [],
-		properties: {
-			name: { type: 'string', title: 'Name' },
-			description: { type: 'string', title: 'Description' },
-			type: { type: 'string', title: 'Type' },
-			scope: { type: 'string', title: 'Scope' },
-			permission: {
-				type: 'string',
-				title: 'Permission',
-				oneOf: PERMISSION.map(t => ({ const: t, title: toSentenceCase(t) })),
-			},
-		},
+		properties: {},
 	}
 
 	return (
 		<div>
 			<TableHoc
+				openModalButton={false}
 				title='Permissions'
-				addButtonLabel='Add Permission'
 				tableProps={{
 					columns: columns,
-					dataSource: [],
-					style: {
-						minHeight: '500px',
-					},
+					scroll: { x: 1000 },
+				}}
+				routes={{
+					get: apiService('GET', '/permission/all'),
 				}}
 				showTitle={false}
 				formSchema={formSchema}

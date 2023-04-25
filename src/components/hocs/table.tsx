@@ -10,7 +10,6 @@ import {
 	Input,
 	Popconfirm,
 	TableColumnsType,
-	Descriptions,
 } from 'antd'
 import React, { ReactNode, useEffect } from 'react'
 
@@ -18,7 +17,6 @@ import useTable from 'hooks/useTable'
 import Form, { IHocFormProps } from 'components/form'
 import { DeleteFilled, EditFilled, InfoCircleFilled } from '@ant-design/icons'
 import dayjs from 'dayjs'
-import { camelCaseToSentenceCase, toSentenceCase } from 'helpers/strings'
 import ObjectAsDetails from 'components/atoms/objectAsDetails'
 
 export const constants = {
@@ -39,6 +37,8 @@ export interface TableHocProps<RecordType> extends IHocFormProps {
 	addButtonLabel?: string
 	showCreatedTime?: boolean
 	showUpdatedTime?: boolean
+	modifyInfoDetails?: (data: Record<string, any>) => Record<string, string>
+	notToShowInInfo?: string[]
 	routes?: {
 		get?: (data?: DefaultParams) => Promise<any>
 		list?: (data?: DefaultParams) => Promise<any>
@@ -74,8 +74,10 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 		stateUpdater: { setSelectedRows },
 	} = useTable<RecordType>(props)
 
+	const showTitle = props.showTitle || true
 	const showCreatedTime = props.showCreatedTime ?? true
 	const showUpdatedTime = props.showUpdatedTime ?? true
+	const modifyInfoDetails = props.modifyInfoDetails ?? ((data: any) => data)
 
 	useEffect(() => {
 		getData()
@@ -93,7 +95,13 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 	const TablePanel = (/* tableDataOnThisPage: any */) => {
 		return (
 			<div className='flex flex-row items-center justify-between'>
-				{props.showTitle ? <Typography.Title level={4}>{props.title}</Typography.Title> : <div />}
+				{showTitle ? (
+					<Typography.Title level={4} className='pl-2'>
+						{props.title}
+					</Typography.Title>
+				) : (
+					<div />
+				)}
 				<div className='flex items-center justify-center'>
 					<div className='flex gap-2 mr-2'>
 						{showInfoAction && (
@@ -196,6 +204,9 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 						formUiSchema: props.formUiSchema,
 						onFinishFormValues,
 						formBaseProps: props.formBaseProps,
+						cancelText: props.cancelText,
+						onCancel: handleCancelOnModal,
+						submitText: props.submitText,
 					}}
 				/>
 			</Modal>
@@ -207,7 +218,10 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 				onOk={onClickInfoCancel}
 				title={props.title + ' ' + 'Details'}
 			>
-				<ObjectAsDetails data={selectedRows[0]} />
+				<ObjectAsDetails
+					data={modifyInfoDetails(selectedRows[0])}
+					notToShow={props.notToShowInInfo ?? []}
+				/>
 			</Modal>
 
 			{props.showTitle && (

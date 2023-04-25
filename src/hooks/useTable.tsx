@@ -24,8 +24,6 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 	const showInfoAction = selectedRows.length === 1
 
 	const onClickEdit = () => {
-		const data = selectedRows[0]
-		console.log({ data })
 		setSelectedRows([])
 	}
 
