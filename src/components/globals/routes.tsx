@@ -1,9 +1,7 @@
 import React from 'react'
 import {
-	BookOutlined,
 	HomeOutlined,
 	InfoCircleOutlined,
-	ReadOutlined,
 	TagsOutlined,
 	TeamOutlined,
 	UserAddOutlined,
@@ -12,9 +10,7 @@ import {
 import { IAuth } from 'recoilAtoms/auth'
 import Home from 'pages/home'
 import About from 'pages/about'
-import Learn from 'pages/learn'
 import ErrorPage from 'pages/404'
-import Modules from 'pages/learn/modules'
 import Metrics from 'pages/dev/metrics'
 import TicketingSystem from 'components/ticketingSystem'
 import AdminConfig from 'pages/config'
@@ -122,27 +118,6 @@ const routes: Array<IRoute> = [
 				label: 'Permissions',
 				Component: PermissionManagement,
 				icon: <UserAddOutlined />,
-			},
-		],
-	},
-	{
-		icon: <ReadOutlined />,
-		label: 'Learn',
-		link: '/learn',
-		Component: Learn,
-		permissions: [],
-		nestedLinks: [
-			{
-				link: '/learn/home',
-				label: 'Home',
-				Component: Learn,
-				icon: <ReadOutlined />,
-			},
-			{
-				link: '/learn/modules',
-				label: 'Modules',
-				Component: Modules,
-				icon: <BookOutlined />,
 			},
 		],
 	},
