@@ -37,6 +37,7 @@ interface IProps {
 	title: string
 	configKey: keyof IConfigExposedState
 	widgetType?: string
+	className?: string
 }
 
 const ConfigContainer: React.FC<IProps> = props => {
@@ -52,7 +53,7 @@ const ConfigContainer: React.FC<IProps> = props => {
 	}
 
 	return (
-		<div className='grid gap-10 grid-cols-1 md:grid-cols-2'>
+		<div className={`grid gap-10 grid-cols-1 md:grid-cols-2 ${props.className}`}>
 			<div className=''>
 				<Typography.Title level={4} className='text-center mb-10'>
 					{props.title}

@@ -26,13 +26,8 @@ const Settings = () => {
 					},
 					{
 						key: '2',
-						label: 'App Colors',
-						children: <configs.AppColor />,
-					},
-					{
-						key: '3',
-						label: 'Theme Colors',
-						children: <configs.ThemeColor />,
+						label: 'Colors Config',
+						children: <configs.Colors />,
 					},
 				]}
 			/>
