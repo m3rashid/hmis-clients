@@ -7,7 +7,7 @@ export type IUi = {
 
 export const defaultUiState: IUi = {
 	sidebarCollapsed: false,
-	isMobile: window.innerWidth < 500,
+	isMobile: true,
 }
 
 const uiAtom = atom<IUi>({

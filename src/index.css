@@ -35,3 +35,9 @@ body {
 body::-webkit-scrollbar-track {
 	margin-top: 60px;
 }
+
+@media (max-width: 576px) {
+	body::-webkit-scrollbar {
+		display: none;
+	}
+}

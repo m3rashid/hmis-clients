@@ -1,27 +1,15 @@
-import { RJSFSchema } from '@rjsf/utils'
+import React from 'react'
 import { TableProps } from 'antd'
 import apiService from 'api/service'
-import dayjs from 'dayjs'
+import { RJSFSchema } from '@rjsf/utils'
 import TableHoc from 'components/hocs/table'
-import React from 'react'
+import { toSentenceCase } from 'helpers/strings'
 
 const ResourceManagement = () => {
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Name', dataIndex: 'displayName', key: 'displayName' },
 		{ title: 'Description', dataIndex: 'description', key: 'description' },
-		{ title: 'Type', dataIndex: 'type', key: 'type' },
-		{
-			title: 'Created At',
-			dataIndex: 'createdAt',
-			key: 'createdAt',
-			render: text => dayjs(text).format('DD-MM-YYYY'),
-		},
-		{
-			title: 'Last Updated',
-			dataIndex: 'updatedAt',
-			key: 'updatedAt',
-			render: text => dayjs(text).format('DD-MM-YYYY'),
-		},
+		{ title: 'Type', dataIndex: 'type', key: 'type', render: t => toSentenceCase(t) },
 	]
 
 	const formSchema: RJSFSchema = {
@@ -59,6 +47,8 @@ const ResourceManagement = () => {
 				formBaseProps={{}}
 				routes={{
 					get: apiService('GET', '/resource/all'),
+					delete: apiService('POST', '/resource/delete'),
+					edit: apiService('POST', '/resource/edit'),
 				}}
 				showTitle={false}
 				formSchema={formSchema}

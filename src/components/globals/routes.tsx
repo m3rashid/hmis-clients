@@ -2,6 +2,7 @@ import React from 'react'
 import {
 	HomeOutlined,
 	InfoCircleOutlined,
+	SettingOutlined,
 	TagsOutlined,
 	TeamOutlined,
 	UserAddOutlined,
@@ -13,7 +14,7 @@ import About from 'pages/about'
 import ErrorPage from 'pages/404'
 import Metrics from 'pages/dev/metrics'
 import TicketingSystem from 'components/ticketingSystem'
-import AdminConfig from 'pages/config'
+import Settings from 'pages/settings'
 import UserManagement from 'pages/userManagement/user'
 import RoleManagement from 'pages/userManagement/role'
 import PermissionManagement from 'pages/userManagement/permission'
@@ -60,11 +61,11 @@ const routes: Array<IRoute> = [
 		Component: TicketingSystem,
 	},
 	{
-		icon: <TagsOutlined />,
-		label: 'Config',
-		link: '/admin-config',
+		icon: <SettingOutlined />,
+		label: 'Settings',
+		link: '/settings',
 		permissions: [],
-		Component: AdminConfig,
+		Component: Settings,
 	},
 	{
 		icon: <InfoCircleOutlined />,

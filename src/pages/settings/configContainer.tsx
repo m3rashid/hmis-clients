@@ -1,9 +1,10 @@
 import React from 'react'
+import Form from 'components/form'
 import { useRecoilState } from 'recoil'
 import { RJSFSchema } from '@rjsf/utils'
-import configAtom, { IConfigExposedState } from 'recoilAtoms/config'
 import { Typography, message } from 'antd'
-import Form from 'components/form'
+import configAtom, { IConfigExposedState } from 'recoilAtoms/config'
+import { camelCaseToSentenceCase } from 'helpers/strings'
 
 const convertToFormSchema = (config: any, widgetType?: string): RJSFSchema => {
 	const properties: RJSFSchema['properties'] = Object.entries(config).reduce(
@@ -12,7 +13,7 @@ const convertToFormSchema = (config: any, widgetType?: string): RJSFSchema => {
 				...acc,
 				[key]: {
 					type: 'string',
-					title: key
+					title: camelCaseToSentenceCase(key)
 						.split(' ')
 						.map(w => w[0].toUpperCase() + w.substring(1).toLowerCase())
 						.join(' '),
@@ -32,13 +33,14 @@ const convertToFormSchema = (config: any, widgetType?: string): RJSFSchema => {
 	}
 }
 
-const AdminConfig = () => {
-	const [config, setConfig] = useRecoilState(configAtom)
+interface IProps {
+	title: string
+	configKey: keyof IConfigExposedState
+	widgetType?: string
+}
 
-	const configsToShow: IConfigExposedState = {
-		colors: config.colors,
-		appColors: config.appColors,
-	}
+const ConfigContainer: React.FC<IProps> = props => {
+	const [config, setConfig] = useRecoilState(configAtom)
 
 	const handleSave = (entryName: keyof IConfigExposedState) => (values: any) => {
 		console.log({ values, entryName })
@@ -53,33 +55,18 @@ const AdminConfig = () => {
 		<div className='grid gap-10 grid-cols-1 md:grid-cols-2'>
 			<div className=''>
 				<Typography.Title level={4} className='text-center mb-10'>
-					Application Colors Config
+					{props.title}
 				</Typography.Title>
-				<Form
-					formSchema={convertToFormSchema(configsToShow['appColors'], 'color')}
-					onFinishFormValues={handleSave('appColors')}
-					formProps={{
-						layout: 'inline',
-						className: 'grid grid-cols-3',
-					}}
-				/>
-			</div>
 
-			<div className=''>
-				<Typography.Title level={4} className='text-center mb-10'>
-					Other Colors Config
-				</Typography.Title>
+				<br />
+
 				<Form
-					formSchema={convertToFormSchema(configsToShow['colors'], 'color')}
-					onFinishFormValues={handleSave('colors')}
-					formProps={{
-						layout: 'inline',
-						className: 'grid grid-cols-3',
-					}}
+					formSchema={convertToFormSchema(config[props.configKey], props.widgetType)}
+					onFinishFormValues={handleSave(props.configKey)}
 				/>
 			</div>
 		</div>
 	)
 }
 
-export default AdminConfig
+export default ConfigContainer

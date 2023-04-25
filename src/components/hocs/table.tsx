@@ -9,12 +9,17 @@ import {
 	AutoComplete,
 	Input,
 	Popconfirm,
+	TableColumnsType,
+	Descriptions,
 } from 'antd'
 import React, { ReactNode, useEffect } from 'react'
 
 import useTable from 'hooks/useTable'
 import Form, { IHocFormProps } from 'components/form'
 import { DeleteFilled, EditFilled, InfoCircleFilled } from '@ant-design/icons'
+import dayjs from 'dayjs'
+import { camelCaseToSentenceCase, toSentenceCase } from 'helpers/strings'
+import ObjectAsDetails from 'components/atoms/objectAsDetails'
 
 export const constants = {
 	defaultPageSize: 10,
@@ -32,28 +37,33 @@ export interface TableHocProps<RecordType> extends IHocFormProps {
 	openModalButton?: ReactNode
 	showTitle?: boolean
 	addButtonLabel?: string
+	showCreatedTime?: boolean
+	showUpdatedTime?: boolean
 	routes?: {
 		get?: (data?: DefaultParams) => Promise<any>
 		list?: (data?: DefaultParams) => Promise<any>
 		edit?: (data?: DefaultParams) => Promise<any>
 		delete?: (data?: DefaultParams) => Promise<any>
+		details?: (data?: DefaultParams) => Promise<any>
 	}
 }
 
 const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<RecordType>) => {
 	const {
 		actions: {
-			showModal,
+			showFormModal,
 			getData,
 			handleOkOnModal,
 			handleCancelOnModal,
 			onFinishFormValues,
 			onClickDelete,
 			onClickEdit,
-			onClickInfo,
+			showInfoModal,
+			onClickInfoCancel,
 		},
 		state: {
-			modalVisible,
+			formModalVisible,
+			infoModalVisible,
 			tableData,
 			config,
 			showDeleteAction,
@@ -63,6 +73,9 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 		},
 		stateUpdater: { setSelectedRows },
 	} = useTable<RecordType>(props)
+
+	const showCreatedTime = props.showCreatedTime ?? true
+	const showUpdatedTime = props.showUpdatedTime ?? true
 
 	useEffect(() => {
 		getData()
@@ -88,13 +101,13 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 								type='primary'
 								style={{ backgroundColor: config.colors.info }}
 								icon={<InfoCircleFilled />}
-								onClick={onClickInfo}
+								onClick={showInfoModal}
 							>
 								Info
 							</Button>
 						)}
 
-						{showEditAction && (
+						{props.routes?.edit && showEditAction && (
 							<Button
 								type='primary'
 								style={{ backgroundColor: config.colors.warning }}
@@ -104,7 +117,7 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 								Edit
 							</Button>
 						)}
-						{showDeleteAction && (
+						{props.routes?.delete && showDeleteAction && (
 							<Popconfirm
 								title={<Typography.Text className='text-lg'>Delete item(s)</Typography.Text>}
 								description={
@@ -132,7 +145,7 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 					</div>
 
 					{props.openModalButton ?? (
-						<Button type='primary' className='mx-3' onClick={showModal}>
+						<Button type='primary' className='mx-3' onClick={showFormModal}>
 							{props.addButtonLabel}
 						</Button>
 					)}
@@ -145,12 +158,31 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 		)
 	}
 
+	const showTimeEntryInTable = (title: any, dataIndex: string): TableColumnsType<RecordType> => [
+		{
+			title,
+			dataIndex,
+			key: dataIndex,
+			width: 170,
+			render: (t: any) => dayjs(t).format('DD-MM-YYYY HH:mm A'),
+			sorter: (a: RecordType, b: RecordType, c: any) => {
+				return c === 'descend'
+					? dayjs(a.dataIndex).diff(dayjs(b.dataIndex)) >= 0
+						? 1
+						: -1
+					: dayjs(a.dataIndex).diff(dayjs(b.dataIndex)) <= 0
+					? 1
+					: -1
+			},
+		},
+	]
+
 	return (
 		<>
 			<Modal
 				{...props.modalProps}
 				destroyOnClose
-				open={modalVisible}
+				open={formModalVisible}
 				onCancel={handleCancelOnModal}
 				onOk={handleOkOnModal}
 				title={props.title}
@@ -168,6 +200,16 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 				/>
 			</Modal>
 
+			<Modal
+				destroyOnClose
+				open={infoModalVisible}
+				onCancel={onClickInfoCancel}
+				onOk={onClickInfoCancel}
+				title={props.title + ' ' + 'Details'}
+			>
+				<ObjectAsDetails data={selectedRows[0]} />
+			</Modal>
+
 			{props.showTitle && (
 				<>
 					<Typography.Title level={3}>{props.title}</Typography.Title>
@@ -175,8 +217,9 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 				</>
 			)}
 
-			<Table
+			<Table<RecordType>
 				{...props.tableProps}
+				size='middle'
 				dataSource={(props.tableProps.dataSource || tableData).map(t => ({ ...t, key: t._id }))}
 				pagination={{
 					...props.tableProps.pagination,
@@ -184,8 +227,14 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 					defaultPageSize: constants.defaultPageSize,
 					defaultCurrent: constants.defaultPageNumber,
 					hideOnSinglePage: true,
+					size: 'default',
 					...props.tableProps.pagination,
 				}}
+				columns={[
+					...(props.tableProps.columns ?? []),
+					...(showCreatedTime ? showTimeEntryInTable('Time Created', 'createdAt') : []),
+					...(showUpdatedTime ? showTimeEntryInTable('Time Updated', 'updatedAt') : []),
+				]}
 				style={{
 					height: '100%',
 					minHeight: '500px',
@@ -200,7 +249,7 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 					},
 				}}
 				sticky
-				scroll={{ x: 1500 }}
+				scroll={{ x: 1200 }}
 				title={TablePanel}
 			/>
 		</>

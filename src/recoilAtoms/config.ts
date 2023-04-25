@@ -14,11 +14,12 @@ export type IConfig = {
 		name: string
 		version: string
 		fullName: string
+		theme: 'light' | 'dark'
 	}
 	appColors: {
 		primary: string
-		primaryHover: string
-		secondary: string
+		primaryHoverLight: string
+		primaryHoverDark: string
 	}
 	colors: {
 		success: string
@@ -29,18 +30,19 @@ export type IConfig = {
 	developers: Array<Developers>
 }
 
-export type IConfigExposedState = Pick<IConfig, 'colors' | 'appColors'>
+export type IConfigExposedState = Pick<IConfig, 'colors' | 'appColors' | 'app'>
 
 export const configDefaultState: IConfig = {
 	app: {
 		name: 'HMIS',
 		version: '1.0.0',
 		fullName: 'Health Management and Informatics System',
+		theme: 'light',
 	},
 	appColors: {
 		primary: '#00BDC1',
-		primaryHover: '#E6FFFB',
-		secondary: '#484C56',
+		primaryHoverLight: '#E6FFFB',
+		primaryHoverDark: '#2a7b9744',
 	},
 	colors: {
 		success: '#22C55E',

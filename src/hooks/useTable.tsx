@@ -7,13 +7,17 @@ import configAtom from 'recoilAtoms/config'
 const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 	const [tableData, setTableData] = useState([])
 	const config = useRecoilValue(configAtom)
-	const [modalVisible, setModalVisible] = useState(false)
+	const [formModalVisible, setFormModalVisible] = useState(false)
+	const [infoModalVisible, setInfoModalVisible] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const [selectedRows, setSelectedRows] = useState<RecordType[]>([])
 	const [form] = Form.useForm()
 
-	const hideModal = () => setModalVisible(false)
-	const showModal = () => setModalVisible(true)
+	const hideFormModal = () => setFormModalVisible(false)
+	const showFormModal = () => setFormModalVisible(true)
+
+	const hideInfoModal = () => setInfoModalVisible(false)
+	const showInfoModal = () => setInfoModalVisible(true)
 
 	const showDeleteAction = selectedRows.length > 0
 	const showEditAction = selectedRows.length === 1
@@ -34,10 +38,9 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 		setSelectedRows([])
 	}
 
-	const onClickInfo = () => {
-		const data = selectedRows[0]
-		console.log({ data })
+	const onClickInfoCancel = () => {
 		setSelectedRows([])
+		hideInfoModal()
 	}
 
 	const getData = async () => {
@@ -84,13 +87,13 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 		// e: React.MouseEvent<HTMLButtonElement, MouseEvent>
 		{
 			// TODO: axios call to create the entry
-			hideModal()
+			hideFormModal()
 		}
 
 	const handleCancelOnModal = () =>
 		// e: React.MouseEvent<HTMLButtonElement, MouseEvent>
 		{
-			hideModal()
+			hideFormModal()
 		}
 
 	const onFinishFormValues = (values: any) => {
@@ -100,7 +103,7 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 	return {
 		state: {
 			tableData,
-			modalVisible,
+			formModalVisible,
 			loading,
 			form,
 			selectedRows,
@@ -110,18 +113,22 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 			showEditAction,
 			showInfoAction,
 			config,
+			infoModalVisible,
 		},
 
 		stateUpdater: {
 			setTableData,
-			setModalVisible,
+			setFormModalVisible,
 			setLoading,
 			setSelectedRows,
+			setInfoModalVisible,
 		},
 
 		actions: {
-			hideModal,
-			showModal,
+			hideFormModal,
+			showFormModal,
+			hideInfoModal,
+			showInfoModal,
 			getData,
 			editData,
 			deleteData,
@@ -129,7 +136,7 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 			handleCancelOnModal,
 			onFinishFormValues,
 			onClickEdit,
-			onClickInfo,
+			onClickInfoCancel,
 			onClickDelete,
 		},
 	}
