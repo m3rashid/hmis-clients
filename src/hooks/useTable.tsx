@@ -1,6 +1,6 @@
 import { Form } from 'antd'
 import { useState } from 'react'
-import { TableHocProps } from 'hocs/table'
+import { TableHocProps } from 'components/hocs/table'
 import { useRecoilValue } from 'recoil'
 import configAtom from 'recoilAtoms/config'
 

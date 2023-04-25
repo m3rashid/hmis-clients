@@ -1,5 +1,5 @@
 import { RJSFSchema } from '@rjsf/utils'
-import TableHoc from 'hocs/table'
+import TableHoc from 'components/hocs/table'
 import React from 'react'
 
 const Test = () => {

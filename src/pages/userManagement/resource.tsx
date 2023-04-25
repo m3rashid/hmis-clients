@@ -2,7 +2,7 @@ import { RJSFSchema } from '@rjsf/utils'
 import { TableProps } from 'antd'
 import apiService from 'api/service'
 import dayjs from 'dayjs'
-import TableHoc from 'hocs/table'
+import TableHoc from 'components/hocs/table'
 import React from 'react'
 
 const ResourceManagement = () => {

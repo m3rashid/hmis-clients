@@ -1,6 +1,6 @@
 import { RJSFSchema } from '@rjsf/utils'
 import { Button, TableProps } from 'antd'
-import TableHoc from 'hocs/table'
+import TableHoc from 'components/hocs/table'
 import React from 'react'
 import { InfoCircleOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useRecoilValue } from 'recoil'

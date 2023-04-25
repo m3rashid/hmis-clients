@@ -1,6 +1,6 @@
 import { RJSFSchema } from '@rjsf/utils'
 import { TableProps } from 'antd'
-import TableHoc from 'hocs/table'
+import TableHoc from 'components/hocs/table'
 import React from 'react'
 import { PERMISSION } from 'constants/enums'
 import { toSentenceCase } from 'helpers/strings'
