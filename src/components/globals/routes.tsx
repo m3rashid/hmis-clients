@@ -12,7 +12,6 @@ import { IAuth } from 'recoilAtoms/auth'
 import Home from 'pages/home'
 import About from 'pages/about'
 import ErrorPage from 'pages/404'
-import Metrics from 'pages/dev/metrics'
 import TicketingSystem from 'components/ticketingSystem'
 import Settings from 'pages/settings'
 import UserManagement from 'pages/userManagement/user'
@@ -72,13 +71,6 @@ const routes: Array<IRoute> = [
 		label: 'About',
 		link: '/about',
 		Component: About,
-		permissions: [],
-	},
-	{
-		icon: <InfoCircleOutlined />,
-		label: 'Server Metrics',
-		link: '/metrics',
-		Component: Metrics,
 		permissions: [],
 	},
 	{

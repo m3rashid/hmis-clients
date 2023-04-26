@@ -41,3 +41,8 @@ body::-webkit-scrollbar-track {
 		display: none;
 	}
 }
+
+.ant-table-body {
+	min-height: 500px;
+	border-radius: 6px;
+}

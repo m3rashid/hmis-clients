@@ -49,38 +49,14 @@ export interface TableHocProps<RecordType> extends IHocFormProps {
 }
 
 const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<RecordType>) => {
-	const {
-		actions: {
-			showFormModal,
-			getData,
-			handleOkOnModal,
-			handleCancelOnModal,
-			onFinishFormValues,
-			onClickDelete,
-			onClickEdit,
-			showInfoModal,
-			onClickInfoCancel,
-		},
-		state: {
-			formModalVisible,
-			infoModalVisible,
-			tableData,
-			config,
-			showDeleteAction,
-			showEditAction,
-			showInfoAction,
-			selectedRows,
-		},
-		stateUpdater: { setSelectedRows },
-	} = useTable<RecordType>(props)
-
 	const showTitle = props.showTitle || true
 	const showCreatedTime = props.showCreatedTime ?? true
 	const showUpdatedTime = props.showUpdatedTime ?? true
+	const { actions, state, stateUpdater } = useTable<RecordType>(props)
 	const modifyInfoDetails = props.modifyInfoDetails ?? ((data: any) => data)
 
 	useEffect(() => {
-		getData()
+		actions.getData()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
@@ -94,38 +70,38 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 
 	const TablePanel = (/* tableDataOnThisPage: any */) => {
 		return (
-			<div className='flex flex-row items-center justify-between'>
+			<div className={`flex flex-col sm:flex-row items-center justify-between`}>
 				{showTitle ? (
-					<Typography.Title level={4} className='pl-2'>
+					<Typography.Title level={4} className='sm:pl-2 m-0 pb-0'>
 						{props.title}
 					</Typography.Title>
 				) : (
 					<div />
 				)}
-				<div className='flex items-center justify-center'>
-					<div className='flex gap-2 mr-2'>
-						{showInfoAction && (
+				<div className='flex items-center justify-center sm:justify-end flex-grow'>
+					<div className='flex gap-2'>
+						{state.showInfoAction && (
 							<Button
 								type='primary'
-								style={{ backgroundColor: config.colors.info }}
+								style={{ backgroundColor: state.config.colors.info }}
 								icon={<InfoCircleFilled />}
-								onClick={showInfoModal}
+								onClick={actions.showInfoModal}
 							>
 								Info
 							</Button>
 						)}
 
-						{props.routes?.edit && showEditAction && (
+						{props.routes?.edit && state.showEditAction && (
 							<Button
 								type='primary'
-								style={{ backgroundColor: config.colors.warning }}
+								style={{ backgroundColor: state.config.colors.warning }}
 								icon={<EditFilled />}
-								onClick={onClickEdit}
+								onClick={actions.onClickEdit}
 							>
 								Edit
 							</Button>
 						)}
-						{props.routes?.delete && showDeleteAction && (
+						{props.routes?.delete && state.showDeleteAction && (
 							<Popconfirm
 								title={<Typography.Text className='text-lg'>Delete item(s)</Typography.Text>}
 								description={
@@ -133,17 +109,17 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 										Are you sure you want to delete item(s) ?
 									</Typography.Text>
 								}
-								onConfirm={onClickDelete}
+								onConfirm={actions.onClickDelete}
 								overlayInnerStyle={{ padding: 20 }}
 								okText='Delete'
 								okButtonProps={{
-									style: { ...popConfirmButtonStyles, backgroundColor: config.colors.danger },
+									style: { ...popConfirmButtonStyles, backgroundColor: state.config.colors.danger },
 								}}
 								cancelButtonProps={{ style: { ...popConfirmButtonStyles } }}
 							>
 								<Button
 									type='primary'
-									style={{ backgroundColor: config.colors.danger }}
+									style={{ backgroundColor: state.config.colors.danger }}
 									icon={<DeleteFilled />}
 								>
 									Delete
@@ -151,9 +127,11 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 							</Popconfirm>
 						)}
 					</div>
+				</div>
 
+				<div className='flex items-center justify-center mt-2 sm:mt-0'>
 					{props.openModalButton ?? (
-						<Button type='primary' className='mx-3' onClick={showFormModal}>
+						<Button type='primary' className='mx-3' onClick={actions.showFormModal}>
 							{props.addButtonLabel}
 						</Button>
 					)}
@@ -190,9 +168,9 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 			<Modal
 				{...props.modalProps}
 				destroyOnClose
-				open={formModalVisible}
-				onCancel={handleCancelOnModal}
-				onOk={handleOkOnModal}
+				open={state.formModalVisible}
+				onCancel={actions.handleCancelOnModal}
+				onOk={actions.handleOkOnModal}
 				title={props.title}
 				style={{ ...props.modalProps?.style }}
 				footer={null}
@@ -202,10 +180,10 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 						formProps: props.formProps,
 						formSchema: props.formSchema,
 						formUiSchema: props.formUiSchema,
-						onFinishFormValues,
+						onFinishFormValues: actions.onFinishFormValues,
 						formBaseProps: props.formBaseProps,
 						cancelText: props.cancelText,
-						onCancel: handleCancelOnModal,
+						onCancel: actions.handleCancelOnModal,
 						submitText: props.submitText,
 					}}
 				/>
@@ -213,13 +191,13 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 
 			<Modal
 				destroyOnClose
-				open={infoModalVisible}
-				onCancel={onClickInfoCancel}
-				onOk={onClickInfoCancel}
+				open={state.infoModalVisible}
+				onCancel={actions.onClickInfoCancel}
+				onOk={actions.onClickInfoCancel}
 				title={props.title + ' ' + 'Details'}
 			>
 				<ObjectAsDetails
-					data={modifyInfoDetails(selectedRows[0])}
+					data={modifyInfoDetails(state.selectedRows[0])}
 					notToShow={props.notToShowInInfo ?? []}
 				/>
 			</Modal>
@@ -233,8 +211,11 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 
 			<Table<RecordType>
 				{...props.tableProps}
+				sticky
 				size='middle'
-				dataSource={(props.tableProps.dataSource || tableData).map(t => ({ ...t, key: t._id }))}
+				title={TablePanel}
+				scroll={{ x: 1200 }}
+				rowKey={data => data._id}
 				pagination={{
 					...props.tableProps.pagination,
 					position: ['bottomRight'],
@@ -249,22 +230,19 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 					...(showCreatedTime ? showTimeEntryInTable('Time Created', 'createdAt') : []),
 					...(showUpdatedTime ? showTimeEntryInTable('Time Updated', 'updatedAt') : []),
 				]}
-				style={{
-					height: '100%',
-					minHeight: '500px',
-					...props.tableProps.style,
-				}}
+				style={{ height: '100%', minHeight: '500px', ...props.tableProps.style }}
+				dataSource={(props.tableProps.dataSource || state.tableData).map(t => ({
+					...t,
+					key: t._id,
+				}))}
 				rowSelection={{
 					type: 'checkbox',
-					selectedRowKeys: selectedRows.map(t => t._id),
+					selectedRowKeys: state.selectedRows.map(t => t._id),
 					hideSelectAll: true,
 					onChange: (_: React.Key[], rows: RecordType[]) => {
-						setSelectedRows(rows)
+						stateUpdater.setSelectedRows(rows)
 					},
 				}}
-				sticky
-				scroll={{ x: 1200 }}
-				title={TablePanel}
 			/>
 		</>
 	)

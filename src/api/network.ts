@@ -2,7 +2,7 @@ import { invoke } from '@tauri-apps/api'
 
 export const isDesktopApp = !!(window as any).__TAURI__
 
-export let serverRootUrl = 'http://localhost:4000'
+export let serverRootUrl = process.env.REACT_APP_BACKEND_BASE_URL
 
 if (isDesktopApp) {
 	invoke('get_environment_variable', { name: 'SERVER_URL' })

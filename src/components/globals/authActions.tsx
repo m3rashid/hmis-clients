@@ -1,8 +1,7 @@
 import Form from 'components/form'
-import configAtom from 'recoilAtoms/config'
 import { useNavigate } from 'react-router-dom'
 import React, { useCallback, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import authAtom, { authDefaultState } from 'recoilAtoms/auth'
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Button, Dropdown, message, Modal } from 'antd'
@@ -13,7 +12,6 @@ interface IProps {
 
 const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 	const [auth, setAuth] = useRecoilState(authAtom)
-	const config = useRecoilValue(configAtom)
 	const [authModalVisible, setAuthModalVisible] = useState(false)
 	const closeModal = () => setAuthModalVisible(false)
 	const openModal = () => setAuthModalVisible(true)
@@ -101,12 +99,12 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 		>
 			<Button
 				type='text'
-				className={`all-center ${isMobile ? 'rounded-full' : 'gap-2'}`}
+				className={`all-center rounded-full sm:gap-2`}
 				icon={
 					<Avatar
 						size='small'
 						src={`https://api.dicebear.com/5.x/pixel-art/svg?seed=${auth.user?.name}`}
-						className={isMobile ? 'mx-1' : ''}
+						className='mx-1 sm:mx-0'
 					/>
 				}
 			>

@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import { serverRootUrl } from 'api/network'
 
 export type ServiceHelper<Res, ReqData> = (
 	config?: AxiosRequestConfig<ReqData>
@@ -13,7 +14,7 @@ const apiService =
 		return axios<Res>({
 			url,
 			method,
-			baseURL: process.env.REACT_APP_BACKEND_BASE_URL,
+			baseURL: serverRootUrl,
 			...(config || {}),
 		})
 	}
