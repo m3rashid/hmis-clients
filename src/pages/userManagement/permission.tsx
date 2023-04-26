@@ -4,6 +4,7 @@ import TableHoc from 'components/hocs/table'
 import React from 'react'
 import apiService from 'api/service'
 import { toSentenceCase } from 'helpers/strings'
+import UserManagementContainer from 'pages/userManagement/container'
 
 const PermissionManagement = () => {
 	const columns: TableProps<any>['columns'] = [
@@ -27,7 +28,7 @@ const PermissionManagement = () => {
 	}
 
 	return (
-		<div>
+		<UserManagementContainer>
 			<TableHoc
 				openModalButton={false}
 				title='Permissions'
@@ -41,7 +42,7 @@ const PermissionManagement = () => {
 				showTitle={false}
 				formSchema={formSchema}
 			/>
-		</div>
+		</UserManagementContainer>
 	)
 }
 

@@ -3,7 +3,6 @@ import {
 	HomeOutlined,
 	InfoCircleOutlined,
 	SettingOutlined,
-	TagsOutlined,
 	TeamOutlined,
 	UserAddOutlined,
 } from '@ant-design/icons'
@@ -12,7 +11,6 @@ import { IAuth } from 'recoilAtoms/auth'
 import Home from 'pages/home'
 import About from 'pages/about'
 import ErrorPage from 'pages/404'
-import TicketingSystem from 'components/ticketingSystem'
 import Settings from 'pages/settings'
 import UserManagement from 'pages/userManagement/user'
 import RoleManagement from 'pages/userManagement/role'
@@ -51,13 +49,6 @@ const routes: Array<IRoute> = [
 		link: '/',
 		Component: Home,
 		permissions: [],
-	},
-	{
-		icon: <TagsOutlined />,
-		label: 'Ticketing System',
-		link: '/ticket',
-		permissions: [],
-		Component: TicketingSystem,
 	},
 	{
 		icon: <SettingOutlined />,

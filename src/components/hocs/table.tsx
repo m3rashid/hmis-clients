@@ -217,11 +217,9 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 				scroll={{ x: 1200 }}
 				rowKey={data => data._id}
 				pagination={{
-					...props.tableProps.pagination,
 					position: ['bottomRight'],
 					defaultPageSize: constants.defaultPageSize,
 					defaultCurrent: constants.defaultPageNumber,
-					hideOnSinglePage: true,
 					size: 'default',
 					...props.tableProps.pagination,
 				}}
@@ -243,6 +241,14 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 						stateUpdater.setSelectedRows(rows)
 					},
 				}}
+				onRow={data => ({
+					onDoubleClick: () => {
+						const allOthers = state.selectedRows.filter(t => t._id !== data._id)
+						if (allOthers.length === state.selectedRows.length) {
+							stateUpdater.setSelectedRows(prev => [...prev, data])
+						} else stateUpdater.setSelectedRows(allOthers)
+					},
+				})}
 			/>
 		</>
 	)

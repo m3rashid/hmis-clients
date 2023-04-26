@@ -3,6 +3,7 @@ import { TableProps, Tag } from 'antd'
 import apiService from 'api/service'
 import TableHoc from 'components/hocs/table'
 import React from 'react'
+import UserManagementContainer from 'pages/userManagement/container'
 
 const RoleManagement = () => {
 	const columns: TableProps<any>['columns'] = [
@@ -30,7 +31,7 @@ const RoleManagement = () => {
 	}
 
 	return (
-		<div>
+		<UserManagementContainer>
 			<TableHoc
 				title='Roles'
 				addButtonLabel='Add Role'
@@ -56,7 +57,7 @@ const RoleManagement = () => {
 					}, {})
 				}}
 			/>
-		</div>
+		</UserManagementContainer>
 	)
 }
 

@@ -3,8 +3,8 @@ import Form from 'components/form'
 import { useRecoilState } from 'recoil'
 import { RJSFSchema } from '@rjsf/utils'
 import { Typography, message } from 'antd'
-import configAtom, { IConfigExposedState } from 'recoilAtoms/config'
 import { camelCaseToSentenceCase } from 'helpers/strings'
+import configAtom, { IConfigExposedState } from 'recoilAtoms/config'
 
 const convertToFormSchema = (config: any, widgetType?: string): RJSFSchema => {
 	const properties: RJSFSchema['properties'] = Object.entries(config).reduce(
@@ -20,6 +20,15 @@ const convertToFormSchema = (config: any, widgetType?: string): RJSFSchema => {
 					default: value,
 					...(widgetType ? { format: widgetType } : {}),
 					key: `${index}-${key}`,
+					...(key === 'theme'
+						? {
+								title: '',
+								oneOf: [
+									{ const: 'light', title: 'Light' },
+									{ const: 'dark', title: 'Dark' },
+								],
+						  }
+						: {}),
 				},
 			}
 		},

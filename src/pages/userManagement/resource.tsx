@@ -5,12 +5,13 @@ import { RJSFSchema } from '@rjsf/utils'
 import TableHoc from 'components/hocs/table'
 import { toSentenceCase } from 'helpers/strings'
 import { PERMISSION } from 'constants/enums'
+import UserManagementContainer from 'pages/userManagement/container'
 
 const ResourceManagement = () => {
 	const columns: TableProps<any>['columns'] = [
-		{ title: 'Name', dataIndex: 'displayName', key: 'displayName' },
+		{ title: 'Name', dataIndex: 'displayName', key: 'displayName', width: 150 },
 		{ title: 'Description', dataIndex: 'description', key: 'description' },
-		{ title: 'Type', dataIndex: 'type', key: 'type', render: t => toSentenceCase(t) },
+		{ title: 'Type', dataIndex: 'type', key: 'type', render: t => toSentenceCase(t), width: 150 },
 	]
 
 	const formSchema: RJSFSchema = {
@@ -32,13 +33,16 @@ const ResourceManagement = () => {
 	}
 
 	return (
-		<div>
+		<UserManagementContainer>
 			<TableHoc
 				title='Resources'
 				addButtonLabel='Add Resource'
 				tableProps={{
 					columns: columns,
 					scroll: { x: 1000 },
+					pagination: {
+						defaultPageSize: 15,
+					},
 				}}
 				formBaseProps={{}}
 				routes={{
@@ -49,7 +53,7 @@ const ResourceManagement = () => {
 				showTitle={false}
 				formSchema={formSchema}
 			/>
-		</div>
+		</UserManagementContainer>
 	)
 }
 
