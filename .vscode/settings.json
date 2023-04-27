@@ -10,6 +10,7 @@
 		"Popconfirm",
 		"precommit",
 		"RJSF",
-		"Sider"
+		"Sider",
+		"tanstack"
 	]
 }
