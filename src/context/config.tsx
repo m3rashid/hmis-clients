@@ -1,6 +1,5 @@
-import { atom } from 'recoil'
+import { SetStateAction, Dispatch, PropsWithChildren, createContext, useState } from 'react'
 
-export type KvPairs = { [key: string]: string }
 type Developers = {
 	name: string
 	github: string
@@ -53,9 +52,12 @@ export const configDefaultState: IConfig = {
 	developers: [],
 }
 
-const configAtom = atom<IConfig>({
-	key: 'config',
-	default: configDefaultState,
-})
+export const configContext = createContext<
+	[config: IConfig, setConfig: Dispatch<SetStateAction<IConfig>>]
+>([configDefaultState, () => {}])
 
-export default configAtom
+export const ConfigContextProvider = ({ children }: PropsWithChildren) => {
+	const [config, setConfig] = useState(configDefaultState)
+
+	return <configContext.Provider value={[config, setConfig]}>{children}</configContext.Provider>
+}

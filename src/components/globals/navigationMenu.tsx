@@ -8,29 +8,35 @@ interface IProps {
 	collapsed?: boolean
 }
 
+const sidebarRoutes: MenuProps['items'] = routes.reduce((acc: any, route) => {
+	if (route.showInNav === false) return acc
+	return [
+		...acc,
+		...[
+			{
+				key: route.link,
+				icon: route.icon,
+				label: route.label,
+				...(!!route.nestedLinks && {
+					children: route.nestedLinks?.reduce((nestedArr: any, nestedRoute) => {
+						if (nestedRoute.showInNav === false) return nestedArr
+						return [
+							...nestedArr,
+							{
+								label: nestedRoute.label,
+								key: nestedRoute.link,
+								icon: nestedRoute.icon,
+							},
+						]
+					}, []),
+				}),
+			},
+		],
+	]
+}, [])
+
 const NavigationMenu: React.FC<IProps> = () => {
 	const navigate = useNavigate()
-
-	const sidebarRoutes: MenuProps['items'] = routes.reduce((acc: any, route) => {
-		if (route.showInNav === false) return [...acc]
-		return [
-			...acc,
-			...[
-				{
-					key: route.link,
-					icon: route.icon,
-					label: route.label,
-					...(!!route.nestedLinks && {
-						children: route.nestedLinks?.map(nestedRoute => ({
-							label: nestedRoute.label,
-							key: nestedRoute.link,
-							icon: nestedRoute.icon,
-						})),
-					}),
-				},
-			],
-		]
-	}, [])
 
 	return (
 		<Popover

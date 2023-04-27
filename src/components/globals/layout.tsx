@@ -1,17 +1,16 @@
 import enUs from 'antd/locale/en_US'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { ConfigProvider, theme } from 'antd'
-import configAtom from 'recoilAtoms/config'
+import { uiContext } from 'context/ui'
 import Brand from 'components/globals/brand'
+import { ConfigProvider, theme } from 'antd'
+import { configContext } from 'context/config'
 import AuthActions from 'components/globals/authActions'
-import NavigationMenu from 'components/globals/navigationMenu'
 import GlobalSearch from 'components/globals/globalSearch'
-import React, { PropsWithChildren, useLayoutEffect } from 'react'
-import uiAtom from 'recoilAtoms/ui'
+import NavigationMenu from 'components/globals/navigationMenu'
+import React, { PropsWithChildren, useContext, useLayoutEffect } from 'react'
 
 const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
-	const config = useRecoilValue(configAtom)
-	const [{ isMobile }, setIsMobile] = useRecoilState(uiAtom)
+	const [config] = useContext(configContext)
+	const [{ isMobile }, setIsMobile] = useContext(uiContext)
 
 	useLayoutEffect(() => {
 		const setWindowWidth = () => {

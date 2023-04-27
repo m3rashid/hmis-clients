@@ -1,5 +1,7 @@
 import React from 'react'
 import {
+	DatabaseOutlined,
+	DeleteOutlined,
 	HomeOutlined,
 	InfoCircleOutlined,
 	SettingOutlined,
@@ -7,7 +9,7 @@ import {
 	UserAddOutlined,
 } from '@ant-design/icons'
 
-import { IAuth } from 'recoilAtoms/auth'
+import { IAuth } from 'context/auth'
 import Home from 'pages/home'
 import About from 'pages/about'
 import ErrorPage from 'pages/404'
@@ -16,6 +18,10 @@ import UserManagement from 'pages/userManagement/user'
 import RoleManagement from 'pages/userManagement/role'
 import PermissionManagement from 'pages/userManagement/permission'
 import ResourceManagement from 'pages/userManagement/resource'
+import Consumables from 'pages/inventory/consumables'
+import NonConsumables from 'pages/inventory/nonConsumables'
+import RemovedConsumables from 'pages/inventory/removedConsumables'
+import RemovedNonConsumables from 'pages/inventory/removedNonConsumables'
 
 export type IRoute = {
 	label: string
@@ -31,6 +37,7 @@ export type IRoute = {
 		link: string
 		Component: React.FC
 		icon: React.ReactNode
+		showInNav?: boolean
 	}>
 }
 
@@ -72,6 +79,42 @@ const routes: Array<IRoute> = [
 		permissions: [],
 		showInNav: false,
 	},
+	{
+		icon: <DatabaseOutlined />,
+		label: 'Inventory',
+		link: '/inventory',
+		Component: Consumables,
+		permissions: [],
+		nestedLinks: [
+			{
+				link: '/inventory/consumables',
+				label: 'Consumables',
+				Component: Consumables,
+				icon: <DatabaseOutlined />,
+			},
+			{
+				link: '/inventory/non-consumables',
+				label: 'Non Consumables',
+				Component: NonConsumables,
+				icon: <DatabaseOutlined />,
+			},
+			{
+				link: '/inventory/consumables-removed',
+				label: 'Removed Consumables',
+				Component: RemovedConsumables,
+				icon: <DeleteOutlined />,
+				showInNav: false,
+			},
+			{
+				link: '/inventory/non-consumables-removed',
+				label: 'Removed Non Consumables',
+				Component: RemovedNonConsumables,
+				icon: <DeleteOutlined />,
+				showInNav: false,
+			},
+		],
+	},
+	// consumables-deleted
 	{
 		icon: <TeamOutlined />,
 		label: 'User Management',

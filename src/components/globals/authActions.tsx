@@ -1,8 +1,7 @@
 import Form from 'components/form'
 import { useNavigate } from 'react-router-dom'
-import React, { useCallback, useState } from 'react'
-import { useRecoilState } from 'recoil'
-import authAtom, { authDefaultState } from 'recoilAtoms/auth'
+import React, { useCallback, useContext, useState } from 'react'
+import { authContext, authDefaultState } from 'context/auth'
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Button, Dropdown, message, Modal } from 'antd'
 
@@ -11,7 +10,7 @@ interface IProps {
 }
 
 const AuthActions: React.FC<IProps> = ({ isMobile }) => {
-	const [auth, setAuth] = useRecoilState(authAtom)
+	const [auth, setAuth] = useContext(authContext)
 	const [authModalVisible, setAuthModalVisible] = useState(false)
 	const closeModal = () => setAuthModalVisible(false)
 	const openModal = () => setAuthModalVisible(true)

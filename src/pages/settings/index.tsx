@@ -1,11 +1,10 @@
-import React from 'react'
 import { Tabs } from 'antd'
-import { useRecoilValue } from 'recoil'
-import uiAtom from 'recoilAtoms/ui'
 import * as configs from './configs'
+import { uiContext } from 'context/ui'
+import React, { useContext } from 'react'
 
 const Settings = () => {
-	const { isMobile } = useRecoilValue(uiAtom)
+	const [{ isMobile }] = useContext(uiContext)
 	return (
 		<>
 			<Tabs

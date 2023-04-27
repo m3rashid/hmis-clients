@@ -5,7 +5,7 @@ import { RJSFSchema } from '@rjsf/utils'
 import TableHoc from 'components/hocs/table'
 import { toSentenceCase } from 'helpers/strings'
 import { PERMISSION } from 'constants/enums'
-import UserManagementContainer from 'pages/userManagement/container'
+import UserManagementContainer from 'pages/userManagement'
 
 const ResourceManagement = () => {
 	const columns: TableProps<any>['columns'] = [

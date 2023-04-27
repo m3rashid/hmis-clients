@@ -1,15 +1,14 @@
 import 'antd/dist/reset.css'
 import 'index.css'
 import useApi from 'hooks/useApi'
-import { useSetRecoilState } from 'recoil'
-import configAtom from 'recoilAtoms/config'
+import { configContext } from 'context/config'
 import routes from 'components/globals/routes'
 import Loading from 'components/atoms/loading'
 import { Route, Routes } from 'react-router-dom'
-import React, { Fragment, useCallback, useEffect } from 'react'
+import React, { Fragment, useCallback, useContext, useEffect } from 'react'
 
 const App = () => {
-	const setConfig = useSetRecoilState(configAtom)
+	const setConfig = useContext(configContext)[1]
 
 	const { apiCall, loading: configLoading } = useApi({
 		endpoint: '/config',

@@ -1,9 +1,8 @@
-import { useState } from 'react'
 import { notification } from 'antd'
-import { useRecoilValue } from 'recoil'
-import authAtom from 'recoilAtoms/auth'
+import { authContext } from 'context/auth'
 import { useNetwork } from '@mantine/hooks'
 import { serverRootUrl } from 'api/network'
+import { useContext, useState } from 'react'
 import axios, { AxiosRequestConfig } from 'axios'
 
 /**
@@ -33,7 +32,7 @@ const useApi = ({
 	abortTime = 10_000, // 10 seconds
 }: IUseApi) => {
 	const [loading, setLoading] = useState(false)
-	const auth = useRecoilValue(authAtom)
+	const [auth] = useContext(authContext)
 	const network = useNetwork()
 
 	const abortSignal = () => {

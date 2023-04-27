@@ -3,7 +3,7 @@ import { TableProps, Tag } from 'antd'
 import apiService from 'api/service'
 import TableHoc from 'components/hocs/table'
 import React from 'react'
-import UserManagementContainer from 'pages/userManagement/container'
+import UserManagementContainer from 'pages/userManagement'
 
 const UserManagement = () => {
 	const columns: TableProps<any>['columns'] = [

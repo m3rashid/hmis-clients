@@ -1,10 +1,9 @@
-import React from 'react'
 import Form from 'components/form'
-import { useRecoilState } from 'recoil'
+import React, { useContext } from 'react'
 import { RJSFSchema } from '@rjsf/utils'
 import { Typography, message } from 'antd'
 import { camelCaseToSentenceCase } from 'helpers/strings'
-import configAtom, { IConfigExposedState } from 'recoilAtoms/config'
+import { IConfigExposedState, configContext } from 'context/config'
 
 const convertToFormSchema = (config: any, widgetType?: string): RJSFSchema => {
 	const properties: RJSFSchema['properties'] = Object.entries(config).reduce(
@@ -50,7 +49,7 @@ interface IProps {
 }
 
 const ConfigContainer: React.FC<IProps> = props => {
-	const [config, setConfig] = useRecoilState(configAtom)
+	const [config, setConfig] = useContext(configContext)
 
 	const handleSave = (entryName: keyof IConfigExposedState) => (values: any) => {
 		console.log({ values, entryName })

@@ -1,12 +1,11 @@
 import { Form } from 'antd'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { configContext } from 'context/config'
 import { TableHocProps } from 'components/hocs/table'
-import { useRecoilValue } from 'recoil'
-import configAtom from 'recoilAtoms/config'
 
 const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 	const [tableData, setTableData] = useState([])
-	const config = useRecoilValue(configAtom)
+	const [config] = useContext(configContext)
 	const [formModalVisible, setFormModalVisible] = useState(false)
 	const [infoModalVisible, setInfoModalVisible] = useState(false)
 	const [loading, setLoading] = useState(false)

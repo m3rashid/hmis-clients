@@ -4,7 +4,7 @@ import TableHoc from 'components/hocs/table'
 import React from 'react'
 import apiService from 'api/service'
 import { toSentenceCase } from 'helpers/strings'
-import UserManagementContainer from 'pages/userManagement/container'
+import UserManagementContainer from 'pages/userManagement'
 
 const PermissionManagement = () => {
 	const columns: TableProps<any>['columns'] = [

@@ -1,15 +1,14 @@
-import React from 'react'
-import { useRecoilValue } from 'recoil'
 import { Link } from 'react-router-dom'
+import React, { useContext } from 'react'
 import { Image, Typography } from 'antd'
-import configAtom from 'recoilAtoms/config'
+import { configContext } from 'context/config'
 
 interface IProps {
 	onlyLogo?: boolean
 }
 
 const Brand: React.FC<IProps> = ({ onlyLogo = false }) => {
-	const config = useRecoilValue(configAtom)
+	const [config] = useContext(configContext)
 
 	const title = config.app.name
 	const subTitle = `v${config.app.version}`
