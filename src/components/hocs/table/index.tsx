@@ -13,7 +13,7 @@ import {
 } from 'antd'
 import React, { ReactNode, useEffect } from 'react'
 
-import useTable from 'hooks/useTable'
+import useTable from 'components/hocs/table/useTable'
 import Form, { IHocFormProps } from 'components/form'
 import { DeleteFilled, EditFilled, InfoCircleFilled } from '@ant-design/icons'
 import dayjs from 'dayjs'
