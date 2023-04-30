@@ -1,31 +1,10 @@
 import 'antd/dist/reset.css'
 import 'index.css'
-import useApi from 'hooks/useApi'
-import { configContext } from 'context/config'
+import React, { Fragment } from 'react'
 import routes from 'components/globals/routes'
-import Loading from 'components/atoms/loading'
 import { Route, Routes } from 'react-router-dom'
-import React, { Fragment, useCallback, useContext, useEffect } from 'react'
 
 const App = () => {
-	const setConfig = useContext(configContext)[1]
-
-	const { apiCall, loading: configLoading } = useApi({
-		endpoint: '/config',
-		onSuccess: data => setConfig(data),
-		onError: console.log,
-	})
-
-	const getAppConfig = useCallback(apiCall, [])
-
-	// TODO: check user logged in
-
-	useEffect(() => {
-		getAppConfig()
-	}, [getAppConfig])
-
-	if (configLoading) return <Loading />
-
 	return (
 		<Routes>
 			{routes.map(route => (

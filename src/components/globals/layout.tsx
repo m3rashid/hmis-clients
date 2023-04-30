@@ -2,15 +2,24 @@ import enUs from 'antd/locale/en_US'
 import { uiContext } from 'context/ui'
 import Brand from 'components/globals/brand'
 import { ConfigProvider, theme } from 'antd'
-import { configContext } from 'context/config'
 import AuthActions from 'components/globals/authActions'
 import GlobalSearch from 'components/globals/globalSearch'
 import NavigationMenu from 'components/globals/navigationMenu'
 import React, { PropsWithChildren, useContext, useLayoutEffect } from 'react'
+import apiService from 'api/service'
+import { useQuery } from '@tanstack/react-query'
+import { configDefaultState } from 'context/config'
 
 const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
-	const [config] = useContext(configContext)
+	const { data: configResponse } = useQuery({
+		queryKey: ['config'],
+		queryFn: () => apiService('GET', '/config')(),
+		staleTime: 1000 * 60 * 60 * 24, // 24 hours
+	})
+
+	const config = configResponse?.data || configDefaultState
 	const [{ isMobile }, setIsMobile] = useContext(uiContext)
+	const isDarkMode = config.app.theme === 'dark'
 
 	useLayoutEffect(() => {
 		const setWindowWidth = () => {
@@ -22,8 +31,6 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 		window.addEventListener('resize', setWindowWidth)
 		return () => window.removeEventListener('resize', setWindowWidth)
 	}, [])
-
-	const isDarkMode = config.app.theme === 'dark'
 
 	return (
 		<ConfigProvider

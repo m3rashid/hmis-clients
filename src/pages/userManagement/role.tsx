@@ -1,8 +1,8 @@
-import { RJSFSchema } from '@rjsf/utils'
-import { TableProps, Tag } from 'antd'
-import apiService from 'api/service'
-import TableHoc from 'components/hocs/table'
 import React from 'react'
+import apiService from 'api/service'
+import { TableProps, Tag } from 'antd'
+import { RJSFSchema } from '@rjsf/utils'
+import TableHoc from 'components/hocs/table'
 import UserManagementContainer from 'pages/userManagement'
 
 const RoleManagement = () => {
@@ -14,13 +14,15 @@ const RoleManagement = () => {
 			dataIndex: 'permissions',
 			key: 'permissions',
 			width: 170,
-			render: entry => (
-				<div className='flex gap-2 flex-col'>
-					{entry.map((t: any) => (
-						<Tag>{t.displayName}</Tag>
-					))}
-				</div>
-			),
+			render: entry => {
+				return (
+					<div className='flex gap-2 flex-col'>
+						{entry.map((t: any) => (
+							<Tag>{t.displayName}</Tag>
+						))}
+					</div>
+				)
+			},
 		},
 	]
 
@@ -51,7 +53,10 @@ const RoleManagement = () => {
 					if (!data) return {}
 					return Object.entries(data).reduce<Record<string, string>>((acc, [key, val]) => {
 						if (key === 'permissions') {
-							return { ...acc, [key]: val.map((v: any) => v.displayName).join(', ') }
+							return {
+								...acc,
+								[key]: val.map((v: any) => v.displayName).join(', '),
+							}
 						}
 						return { ...acc, [key]: val }
 					}, {})

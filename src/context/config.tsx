@@ -1,5 +1,3 @@
-import { SetStateAction, Dispatch, PropsWithChildren, createContext, useState } from 'react'
-
 type Developers = {
 	name: string
 	github: string
@@ -50,14 +48,4 @@ export const configDefaultState: IConfig = {
 		info: '#0EA5E9',
 	},
 	developers: [],
-}
-
-export const configContext = createContext<
-	[config: IConfig, setConfig: Dispatch<SetStateAction<IConfig>>]
->([configDefaultState, () => {}])
-
-export const ConfigContextProvider = ({ children }: PropsWithChildren) => {
-	const [config, setConfig] = useState(configDefaultState)
-
-	return <configContext.Provider value={[config, setConfig]}>{children}</configContext.Provider>
 }

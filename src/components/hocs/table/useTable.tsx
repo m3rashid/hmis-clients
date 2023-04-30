@@ -1,11 +1,20 @@
 import { Form } from 'antd'
-import { useContext, useState } from 'react'
-import { configContext } from 'context/config'
+import { useState } from 'react'
+import apiService from 'api/service'
+import { useQuery } from '@tanstack/react-query'
 import { TableHocProps } from 'components/hocs/table'
+import { configDefaultState } from 'context/config'
 
 const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 	const [tableData, setTableData] = useState([])
-	const [config] = useContext(configContext)
+
+	const { data: configResponse } = useQuery({
+		queryKey: ['config'],
+		queryFn: () => apiService('GET', '/config')(),
+		staleTime: 1000 * 60 * 60 * 24, // 24 hours
+	})
+	const config = configResponse?.data || configDefaultState
+
 	const [formModalVisible, setFormModalVisible] = useState(false)
 	const [infoModalVisible, setInfoModalVisible] = useState(false)
 	const [loading, setLoading] = useState(false)

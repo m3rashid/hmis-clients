@@ -1,9 +1,11 @@
 import Form from 'components/form'
-import React, { useContext } from 'react'
+import React from 'react'
+import apiService from 'api/service'
 import { RJSFSchema } from '@rjsf/utils'
 import { Typography, message } from 'antd'
 import { camelCaseToSentenceCase } from 'helpers/strings'
-import { IConfigExposedState, configContext } from 'context/config'
+import { IConfigExposedState, configDefaultState } from 'context/config'
+import { useQuery } from '@tanstack/react-query'
 
 const convertToFormSchema = (config: any, widgetType?: string): RJSFSchema => {
 	const properties: RJSFSchema['properties'] = Object.entries(config).reduce(
@@ -49,14 +51,20 @@ interface IProps {
 }
 
 const ConfigContainer: React.FC<IProps> = props => {
-	const [config, setConfig] = useContext(configContext)
+	const { data: configResponse } = useQuery({
+		queryKey: ['config'],
+		queryFn: () => apiService('GET', '/config')(),
+		staleTime: 1000 * 60 * 60 * 24, // 24 hours
+	})
+	const config = configResponse?.data || configDefaultState
 
 	const handleSave = (entryName: keyof IConfigExposedState) => (values: any) => {
 		console.log({ values, entryName })
-		setConfig({
-			...config,
-			[entryName]: values.formData,
-		})
+		// TODO: Handle Mutation
+		// setConfig({
+		// 	...configResponse?.data,
+		// 	[entryName]: values.formData,
+		// })
 		message.success('Config saved successfully')
 	}
 
