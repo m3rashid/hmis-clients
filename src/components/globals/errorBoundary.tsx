@@ -1,6 +1,6 @@
 import ErrorPage from 'pages/404'
-import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 
 const Catch = (component: any) =>
 	class extends React.Component {
@@ -32,10 +32,10 @@ type IProps = {
 const ErrorHandlerFallback: React.FC<IProps> = ({ removeError }) => {
 	// const navigate = useNavigate()
 	const { pathname } = useLocation()
-	const [currentPath, setCurrentpath] = useState('')
+	const [currentPath, setCurrentPath] = useState('')
 
 	useEffect(() => {
-		setCurrentpath(pathname)
+		setCurrentPath(pathname)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 

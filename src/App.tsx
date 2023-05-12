@@ -1,10 +1,13 @@
 import 'antd/dist/reset.css'
 import 'index.css'
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
 import routes from 'components/globals/routes'
 import { Route, Routes } from 'react-router-dom'
+import { authContext } from 'context/auth'
 
 const App = () => {
+	const [auth, setAuth] = useContext(authContext)
+
 	return (
 		<Routes>
 			{routes.map(route => (

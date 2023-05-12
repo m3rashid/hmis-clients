@@ -1,8 +1,8 @@
-import { RJSFSchema } from '@rjsf/utils'
-import { TableProps, Tag } from 'antd'
-import apiService from 'api/service'
-import TableHoc from 'components/hocs/table'
 import React from 'react'
+import apiService from 'api/service'
+import { TableProps, Tag } from 'antd'
+import { RJSFSchema } from '@rjsf/utils'
+import TableHoc from 'components/hocs/table'
 import UserManagementContainer from 'pages/userManagement'
 
 const UserManagement = () => {

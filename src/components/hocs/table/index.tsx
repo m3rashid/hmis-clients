@@ -149,7 +149,7 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 			title,
 			dataIndex,
 			key: dataIndex,
-			width: 170,
+			width: 180,
 			render: (t: any) => dayjs(t).format('DD-MM-YYYY HH:mm A'),
 			sorter: (a: RecordType, b: RecordType, c: any) => {
 				return c === 'descend'

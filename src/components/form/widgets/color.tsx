@@ -3,7 +3,6 @@ import { useId } from 'react'
 
 const CustomColorWidget = (props: any) => {
 	const id = useId()
-	console.log(props)
 
 	return (
 		<label htmlFor={`${id} color-picker`}>
@@ -12,7 +11,6 @@ const CustomColorWidget = (props: any) => {
 					id={`${id} color-picker`}
 					type='color'
 					onChange={e => {
-						console.log(e.target.value)
 						props.onChange(e.target.value)
 					}}
 					defaultValue={props.value}

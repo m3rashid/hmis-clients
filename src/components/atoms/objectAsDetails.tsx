@@ -18,6 +18,8 @@ const ObjectAsDetails: React.FC<IProps> = props => {
 		'deleted',
 		'actualName',
 		'password',
+		'createdBy',
+		'lastUpdatedBy',
 		...(props.notToShow || []),
 	]
 	if (!props.data) return null

@@ -16,8 +16,8 @@ const RemovedConsumables = () => {
 			title: 'ExpiryDate',
 			dataIndex: 'expiryDate',
 			key: 'expiryDate',
-			render: t => dayjs(t).format('DD-MM-YYYY HH:mm A'),
-			width: 150,
+			render: t => dayjs(t).format('DD-MM-YYYY'),
+			width: 100,
 		},
 		{ title: 'Manufacturer', dataIndex: 'manufacturer', key: 'manufacturer' },
 	]
@@ -31,7 +31,7 @@ const RemovedConsumables = () => {
 	return (
 		<InventoryManagementContainer>
 			<TableHoc
-				title='Removed Consumables Consumables'
+				title='Removed Consumables'
 				openModalButton={false}
 				tableProps={{
 					columns: columns,
