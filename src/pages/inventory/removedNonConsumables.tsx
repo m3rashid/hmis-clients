@@ -38,7 +38,7 @@ const RemovedNonConsumables = () => {
 		<InventoryManagementContainer>
 			<TableHoc
 				title='Removed Non Consumables'
-				openModalButton={false}
+				actionButtons={false}
 				tableProps={{
 					columns: columns,
 					scroll: { x: 1000 },

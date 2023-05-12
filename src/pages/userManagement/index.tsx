@@ -4,7 +4,7 @@ import React, { PropsWithChildren } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const UserManagementContainer: React.FC<PropsWithChildren> = ({ children }) => {
-	const items = ['users', 'resources', 'roles']
+	const items = ['users', 'resources', 'roles', 'permissions']
 	const current = useLocation().pathname.split('/').at(-1)
 	const navigate = useNavigate()
 

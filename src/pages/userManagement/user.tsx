@@ -9,7 +9,12 @@ const UserManagement = () => {
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name' },
 		{ title: 'Email', dataIndex: 'email', key: 'email' },
-		{ title: 'Email Verified', dataIndex: 'emailVerified', key: 'emailVerified' },
+		{
+			title: 'Email Verified',
+			dataIndex: 'emailVerified',
+			key: 'emailVerified',
+			render: entry => (entry ? 'Yes' : 'No'),
+		},
 		{
 			title: 'Roles',
 			dataIndex: 'roles',

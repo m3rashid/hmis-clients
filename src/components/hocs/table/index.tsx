@@ -32,13 +32,14 @@ export interface TableHocProps<RecordType> extends IHocFormProps {
 	tableProps: TableProps<RecordType>
 	modalProps?: ModalProps
 	title: string
-	openModalButton?: ReactNode
+	actionButtons?: ReactNode
 	showTitle?: boolean
 	addButtonLabel?: string
 	showCreatedTime?: boolean
 	showUpdatedTime?: boolean
 	modifyInfoDetails?: (data: Record<string, any>) => Record<string, string>
 	notToShowInInfo?: string[]
+	renderCustomForm?: ReactNode
 	routes?: {
 		get?: (data?: DefaultParams) => Promise<any>
 		list?: (data?: DefaultParams) => Promise<any>
@@ -78,7 +79,7 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 				) : (
 					<div />
 				)}
-				<div className='flex items-center justify-center sm:justify-end flex-grow'>
+				<div className='flex items-center justify-center sm:justify-end flex-grow mr-2'>
 					<div className='flex gap-2'>
 						{state.showInfoAction && (
 							<Button
@@ -130,7 +131,7 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 				</div>
 
 				<div className='flex items-center justify-center mt-2 sm:mt-0'>
-					{props.openModalButton ?? (
+					{props.actionButtons ?? (
 						<Button type='primary' className='mx-3' onClick={actions.showFormModal}>
 							{props.addButtonLabel}
 						</Button>
@@ -175,18 +176,20 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 				style={{ ...props.modalProps?.style }}
 				footer={null}
 			>
-				<Form
-					{...{
-						formProps: props.formProps,
-						formSchema: props.formSchema,
-						formUiSchema: props.formUiSchema,
-						onFinishFormValues: actions.onFinishFormValues,
-						formBaseProps: props.formBaseProps,
-						cancelText: props.cancelText,
-						onCancel: actions.handleCancelOnModal,
-						submitText: props.submitText,
-					}}
-				/>
+				{props.renderCustomForm ?? (
+					<Form
+						{...{
+							formProps: props.formProps,
+							formSchema: props.formSchema,
+							formUiSchema: props.formUiSchema,
+							onFinishFormValues: actions.onFinishFormValues,
+							formBaseProps: props.formBaseProps,
+							cancelText: props.cancelText,
+							onCancel: actions.handleCancelOnModal,
+							submitText: props.submitText,
+						}}
+					/>
+				)}
 			</Modal>
 
 			<Modal

@@ -1,6 +1,6 @@
 import { Tabs } from 'antd'
-import * as configs from './configs'
 import { uiContext } from 'context/ui'
+import * as configs from 'pages/settings/configs'
 import React, { useContext } from 'react'
 
 const Settings = () => {
@@ -22,11 +22,6 @@ const Settings = () => {
 						key: '1',
 						label: 'App Config',
 						children: <configs.App />,
-					},
-					{
-						key: '2',
-						label: 'Colors Config',
-						children: <configs.Colors />,
 					},
 				]}
 			/>

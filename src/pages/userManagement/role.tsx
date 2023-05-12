@@ -10,7 +10,7 @@ const RoleManagement = () => {
 		{ title: 'Name', dataIndex: 'displayName', key: 'displayName' },
 		{ title: 'Description', dataIndex: 'description', key: 'description' },
 		{
-			title: 'permissions',
+			title: 'Permissions',
 			dataIndex: 'permissions',
 			key: 'permissions',
 			width: 170,

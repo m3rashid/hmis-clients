@@ -4,7 +4,7 @@ import apiService from 'api/service'
 import { RJSFSchema } from '@rjsf/utils'
 import TableHoc from 'components/hocs/table'
 import { toSentenceCase } from 'helpers/strings'
-import { PERMISSION } from 'constants/enums'
+import { PERMISSION } from 'helpers/permission'
 import UserManagementContainer from 'pages/userManagement'
 
 const ResourceManagement = () => {
@@ -25,7 +25,7 @@ const ResourceManagement = () => {
 				title: 'Permissions',
 				items: {
 					type: 'string',
-					enum: PERMISSION.map(t => ({ value: t, label: toSentenceCase(t) })),
+					enum: Object.keys(PERMISSION).map(t => ({ value: t, label: toSentenceCase(t) })),
 				},
 				uniqueItems: true,
 			},
@@ -36,7 +36,8 @@ const ResourceManagement = () => {
 		<UserManagementContainer>
 			<TableHoc
 				title='Resources'
-				addButtonLabel='Add Resource'
+				// addButtonLabel='Add Resource'
+				actionButtons={false}
 				tableProps={{
 					columns: columns,
 					scroll: { x: 1000 },
@@ -47,8 +48,8 @@ const ResourceManagement = () => {
 				formBaseProps={{}}
 				routes={{
 					get: apiService('GET', '/resource/all'),
-					delete: apiService('POST', '/resource/delete'),
-					edit: apiService('POST', '/resource/edit'),
+					// delete: apiService('POST', '/resource/delete'),
+					// edit: apiService('POST', '/resource/edit'),
 				}}
 				showTitle={false}
 				formSchema={formSchema}

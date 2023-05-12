@@ -14,11 +14,12 @@ import Home from 'pages/home'
 import About from 'pages/about'
 import ErrorPage from 'pages/404'
 import Settings from 'pages/settings'
+import Consumables from 'pages/inventory/consumables'
 import UserManagement from 'pages/userManagement/user'
 import RoleManagement from 'pages/userManagement/role'
-import ResourceManagement from 'pages/userManagement/resource'
-import Consumables from 'pages/inventory/consumables'
 import NonConsumables from 'pages/inventory/nonConsumables'
+import ResourceManagement from 'pages/userManagement/resource'
+import PermissionManagement from 'pages/userManagement/permissions'
 import RemovedConsumables from 'pages/inventory/removedConsumables'
 import RemovedNonConsumables from 'pages/inventory/removedNonConsumables'
 
@@ -137,6 +138,12 @@ const routes: Array<IRoute> = [
 				link: '/users-management/roles',
 				label: 'Roles',
 				Component: RoleManagement,
+				icon: <UserAddOutlined />,
+			},
+			{
+				link: '/users-management/permissions',
+				label: 'Permissions',
+				Component: PermissionManagement,
 				icon: <UserAddOutlined />,
 			},
 		],
