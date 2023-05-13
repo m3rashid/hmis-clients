@@ -17,6 +17,7 @@ export const availablePermissions = Object.values(PERMISSION).sort((a, b) => b -
 
 export const findPermission = (level: number) => {
 	const permissions: string[] = []
+	if (!level) return permissions
 
 	for (let i = 0; i < availablePermissions.length; i++) {
 		if (level === 0) break

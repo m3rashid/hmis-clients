@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import apiService from 'api/service'
-import { TableProps, Tag } from 'antd'
-import { RJSFSchema } from '@rjsf/utils'
+import { Table, TableProps, Tag } from 'antd'
 import TableHoc from 'components/hocs/table'
 import UserManagementContainer from 'pages/userManagement'
 import { findPermission } from 'helpers/permission'
@@ -13,33 +12,58 @@ const PermissionManagement = () => {
 	const [editPermission, setEditPermission] = useState<any>()
 
 	const columns: TableProps<any>['columns'] = [
-		{ title: 'Name', dataIndex: 'displayName', key: 'displayName' },
+		{ title: 'Name', dataIndex: 'displayName', key: 'displayName', width: 200 },
 		{ title: 'Description', dataIndex: 'description', key: 'description' },
-		{ title: 'Resource Type', dataIndex: 'resourceType', key: 'resourceType' },
-		{ title: 'Scope', dataIndex: 'scope', key: 'scope' },
 		{
 			title: 'Permissions',
-			dataIndex: 'permission',
-			key: 'permission',
-			width: 170,
-			render: entry => {
-				const perms = findPermission(entry)
+			dataIndex: 'permissions',
+			key: 'permissions',
+			align: 'center',
+			render: (permissions: any) => {
 				return (
-					<div className='flex gap-2 flex-col'>
-						{perms.map((t: any) => (
-							<Tag>{toSentenceCase(t)}</Tag>
-						))}
-					</div>
+					<Table
+						dataSource={permissions}
+						pagination={false}
+						bordered={false}
+						scroll={{ x: 348 }}
+						className='nested-permission-table'
+						columns={[
+							{
+								dataIndex: 'resourceType',
+								key: 'resourceType',
+								render: res => <div style={{ minWidth: 90, width: '100%' }}>{res}</div>,
+							},
+							{
+								dataIndex: 'scope',
+								key: 'scope',
+								render: scope => {
+									return (
+										<div style={{ minWidth: 120, width: '100%' }}>
+											{scope?.map((t: string) => toSentenceCase(t)).join(', ')}
+										</div>
+									)
+								},
+							},
+							{
+								dataIndex: 'accessLevel',
+								key: 'accessLevel',
+								render: accessLevel => {
+									const perms = findPermission(accessLevel)
+									return (
+										<div className='flex gap-2 flex-col' style={{ minWidth: 90, width: '100%' }}>
+											{perms.map((t: any) => (
+												<Tag>{toSentenceCase(t)}</Tag>
+											))}
+										</div>
+									)
+								},
+							},
+						]}
+					/>
 				)
 			},
 		},
 	]
-
-	const formSchema: RJSFSchema = {
-		type: 'object',
-		required: [],
-		properties: {},
-	}
 
 	return (
 		<UserManagementContainer>
@@ -65,14 +89,16 @@ const PermissionManagement = () => {
 					get: apiService('GET', '/permission/all'),
 				}}
 				showTitle={false}
-				formSchema={formSchema}
 				modifyInfoDetails={data => {
 					if (!data) return {}
 					return Object.entries(data).reduce<Record<string, string>>((acc, [key, val]) => {
 						// if (key === 'permissions') {
 						// 	return {
 						// 		...acc,
-						// 		[key]: val.map((v: any) => v.displayName).join(', '),
+						// 		...val.map((v: any) => {
+						// 			// {resourceType, scope, accesslevel, _id}
+						// 		}),
+						// 		// [key]: val.map((v: any) => v.displayName).join(', '),
 						// 	}
 						// }
 						return { ...acc, [key]: val }

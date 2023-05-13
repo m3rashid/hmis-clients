@@ -5,11 +5,11 @@ html,
 body {
 	margin: 0;
 	padding: 0;
-	overflow: auto
+	overflow: auto;
 }
 
 .all-center {
-  @apply flex justify-center items-center;
+	@apply flex justify-center items-center;
 }
 
 * {
@@ -45,4 +45,14 @@ body::-webkit-scrollbar-track {
 .ant-table-body {
 	min-height: 500px;
 	border-radius: 6px;
+}
+
+.nested-permission-table .ant-table {
+	margin: 0 !important;
+	padding: 0 !important;
+	background-color: transparent;
+}
+
+.nested-permission-table .ant-table-thead {
+	display: none;
 }

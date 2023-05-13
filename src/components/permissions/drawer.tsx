@@ -1,40 +1,36 @@
 import ResourceAutoComplete from 'components/permissions/resourcesSearch'
 import { PlusCircleOutlined } from '@ant-design/icons'
 import React, { Fragment, useEffect, useState } from 'react'
-import { Button, Checkbox, Drawer, Form, Input, Tabs, Typography, message } from 'antd'
-import { RolePermission } from 'definitions/modules/permission'
-import { CreateOrEditRoleReqBody } from 'definitions/api/permission'
+import { Button, Checkbox, Drawer, Form, Input, Tabs } from 'antd'
+// import { RolePermission } from 'definitions/modules/permission'
+// import { CreateOrEditRoleReqBody } from 'definitions/api/permission'
 import { toSentenceCase } from 'helpers/strings'
 import apiService from 'api/service'
+
+export interface IPayload {
+	displayName: string
+	description?: string
+	permission: Array<{
+		resourceType: string
+		scope: string[]
+		accessLevel: number
+	}>
+}
+
+interface IResource {
+	_id: string
+	displayName: string
+	actualName: string
+	description?: string
+	type: string
+}
 
 interface IProps {
 	isOpen: boolean
 	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 	isEdit: boolean
 	onDrawerClose: () => void
-	data?: {
-		name: string
-		description: string
-		_id: string
-		permissions: RolePermission
-	}
-}
-
-export interface IPayload {
-	[packageName: string]: {
-		[resourceType: string]: {
-			actions: {
-				[actionPermissionName: string]: {
-					allowAll: boolean
-					allowSelf: boolean
-					resourceIds: string[]
-				}
-			}
-			independent: {
-				[independentPermissionName: string]: boolean
-			}
-		}
-	}
+	data?: IPayload & { _id: string }
 }
 
 const RoleDrawer: React.FC<IProps> = ({
@@ -45,303 +41,45 @@ const RoleDrawer: React.FC<IProps> = ({
 	onDrawerClose,
 }) => {
 	const [form] = Form.useForm()
-	const [payload, setPayload] = useState<IPayload>()
-	const [currentApp, setCurrentApp] = useState<any>(null)
-	const [installedApps, setInstalledApps] = useState<any[]>([])
-	const getApps = apiService('POST', '/api/permission/apps/installed')
-	const createOrEditRole = apiService<any, CreateOrEditRoleReqBody>(
-		'POST',
-		'/api/permission/role/createOrEdit'
-	)
-	const [currentResourceType, setCurrentResourceType] = useState('')
+	const defaultPermission = { displayName: '', permission: [], description: '' }
+	const [payload, setPayload] = useState<IPayload>(defaultPermission)
+	const [currentResource, setCurrentResource] = useState<IResource | null>(null)
+	const [allResources, setAllResources] = useState<IResource[]>([])
+	const getResources = apiService('POST', '/resource/all')
 
 	useEffect(() => {
-		getApps()
-			.then(({ data }) => {
-				setInstalledApps(data)
-				setCurrentApp(data[0])
-				if (isEdit) {
-					form.setFieldValue('name', editData?.name)
+		getResources()
+			.then(({ data }: { data: IResource[] }) => {
+				setAllResources(data)
+				setCurrentResource(data[0])
+				if (isEdit && editData) {
+					form.setFieldValue('name', editData.displayName)
 					form.setFieldValue('description', editData?.description ?? '')
+					setPayload({
+						displayName: editData.displayName,
+						permission: editData.permission,
+						description: editData.description,
+					})
 				} else {
 					form.setFieldValue('name', '')
 					form.setFieldValue('description', '')
 				}
-
-				setPayload(
-					data.reduce((acc: any, app: any) => {
-						const resources = Object.entries(app.manifest?.permissions || {})
-						return {
-							...acc,
-							[app.packageName]: resources.reduce(
-								(innerAcc, [resourceTypeName, resourceTypePermissions]) => {
-									return {
-										...innerAcc,
-										[resourceTypeName]: {
-											actions: (resourceTypePermissions as any).actions.reduce(
-												(tAcc: any, t: string) => {
-													if (
-														isEdit &&
-														editData?.permissions?.[app.packageName]?.[resourceTypeName]?.[t]
-													) {
-														return {
-															...tAcc,
-															[t]: {
-																allowAll:
-																	editData?.permissions?.[app.packageName]?.[resourceTypeName]?.[
-																		t
-																	] === 'all',
-																allowSelf:
-																	editData?.permissions?.[app.packageName]?.[resourceTypeName]?.[
-																		t
-																	].includes('self'),
-																resourceIds: !Array.isArray(
-																	editData?.permissions?.[app.packageName]?.[resourceTypeName]?.[t]
-																)
-																	? []
-																	: editData?.permissions?.[app.packageName]?.[
-																			resourceTypeName
-																			// @ts-ignore
-																	  ]?.[t].filter(a => a !== 'self'),
-															},
-														}
-													}
-
-													return {
-														...tAcc,
-														[t]: {
-															allowAll: false,
-															allowSelf: false,
-															resourceIds: [],
-														},
-													}
-												},
-												{}
-											),
-											independent: (resourceTypePermissions as any)?.independent.reduce(
-												(independentAcc: any, independentPermission: string) => {
-													if (
-														isEdit &&
-														editData?.permissions?.[app.packageName]?.[resourceTypeName]?.[
-															independentPermission
-														] === 'independent'
-													) {
-														return {
-															...independentAcc,
-															[independentPermission]: true,
-														}
-													}
-													return {
-														...independentAcc,
-														[independentPermission]: false,
-													}
-												},
-												{}
-											),
-										},
-									}
-								},
-								{}
-							),
-						}
-					}, {})
-				)
 			})
 			.catch(console.log)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	const onAppChange = (packageName: string) => {
-		const app = installedApps.find(t => t.packageName === packageName)
-		setCurrentApp(app ?? null)
-		const resourceTypes = Object.keys(app.manifest?.permissions || {})
-		setCurrentResourceType(resourceTypes[0])
-	}
-
-	const handleSubmitRole = async () => {
-		try {
-			await form.validateFields()
-		} catch (err: any) {
-			return
-		}
-
-		if (!payload) return
-
-		const transformedPayload = Object.entries(payload).reduce((acc, [packageName, appInner]) => {
-			const innerRoleDetails = Object.entries(appInner).reduce<RolePermission['resourceType']>(
-				(appInnerAcc, [resourceType, resourceTypeInner]) => {
-					const actionPermissions = Object.entries(resourceTypeInner.actions).reduce(
-						(resourceTypeInnerAcc, [actionPermissionName, actionPermissionsInner]) => {
-							if (actionPermissionsInner.allowAll) {
-								return {
-									...resourceTypeInnerAcc,
-									[actionPermissionName]: 'all',
-								}
-							}
-							if (
-								actionPermissionsInner.resourceIds.length === 0 &&
-								!actionPermissionsInner.allowSelf
-							) {
-								return { ...resourceTypeInnerAcc }
-							}
-							return {
-								...resourceTypeInnerAcc,
-								[actionPermissionName]: [
-									...actionPermissionsInner.resourceIds,
-									...(actionPermissionsInner.allowSelf ? ['self'] : []),
-								],
-							}
-						},
-						{}
-					)
-
-					const independentPermissions = Object.entries(resourceTypeInner.independent).reduce(
-						(resourceTypeInnerAcc, [independentPermissionName, independentPermissionGranted]) => {
-							if (!independentPermissionGranted) {
-								return { ...resourceTypeInnerAcc }
-							}
-							return {
-								...resourceTypeInnerAcc,
-								[independentPermissionName]: 'independent',
-							}
-						},
-						{}
-					)
-
-					if (
-						Object.keys(actionPermissions).length === 0 &&
-						Object.keys(independentPermissions).length === 0
-					) {
-						return {
-							...appInnerAcc,
-						}
-					}
-
-					return {
-						...appInnerAcc,
-						[resourceType]: {
-							...actionPermissions,
-							...independentPermissions,
-						},
-					}
-				},
-				{}
-			)
-
-			if (Object.keys(innerRoleDetails).length === 0) {
-				return { ...acc }
-			}
-
-			return { ...acc, [packageName]: innerRoleDetails }
-		}, {} as RolePermission)
-
-		// TODO: handle edit
-		try {
-			const { data: responseData } = await createOrEditRole({
-				data: {
-					...(isEdit && editData?._id ? { _id: editData._id } : {}),
-					name: form.getFieldValue('name'),
-					description: form.getFieldValue('description') ?? '',
-					permissions: transformedPayload ?? {},
-				},
-			})
-
-			console.log(responseData)
-			message.success(`Successfully Created role ${form.getFieldValue('name')}`)
-			setPayload({})
-			setIsOpen(false)
-		} catch (err: any) {
-			console.log(err)
-			message.error(err.message || 'An Error occurred in creating role')
-		}
-	}
-
-	const onClickIndependentPermission = (
-		appName: string,
-		resourceType: string,
-		independentPermission: string,
-		checked: boolean
-	) => {
-		setPayload(p => {
-			if (!p) return p
-			return {
-				...p,
-				[appName]: {
-					...p[appName],
-					[resourceType]: {
-						...p[appName]?.[resourceType],
-						independent: {
-							...p[appName]?.[resourceType]?.independent,
-							[independentPermission]: checked,
-						},
-					},
-				},
-			}
-		})
-	}
-
-	const onChangeActionPermissions = (
-		appName: string,
-		resourceType: string,
-		actionPermission: string,
-		type: 'all' | 'self',
-		checked: boolean
-	) => {
-		setPayload(p => {
-			if (!p) return p
-			return {
-				...p,
-				[appName]: {
-					...p[appName],
-					[resourceType]: {
-						...p[appName]?.[resourceType],
-						actions: {
-							...p[appName]?.[resourceType].actions,
-							[actionPermission]: {
-								...p[appName]?.[resourceType]?.actions?.[actionPermission],
-								...(type === 'all' ? { allowAll: checked } : { allowSelf: checked }),
-							},
-						},
-					},
-				},
-			}
-		})
-	}
-
-	const onSelectActionPermissionResourceIds = (
-		appName: string,
-		resourceType: string,
-		actionPermission: string,
-		resourceIds: string[]
-	) => {
-		setPayload(p => {
-			if (!p) return p
-			return {
-				...p,
-				[appName]: {
-					...p[appName],
-					[resourceType]: {
-						...p[appName]?.[resourceType],
-						actions: {
-							...p[appName]?.[resourceType]?.actions,
-							[actionPermission]: {
-								...p[appName]?.[resourceType]?.actions?.[actionPermission],
-								resourceIds,
-							},
-						},
-					},
-				},
-			}
-		})
+	const onResourceChange = (resourceActualName: string) => {
+		const resource = allResources.find(t => t.actualName === resourceActualName)
+		setCurrentResource(resource ?? null)
 	}
 
 	const closeDrawer = () => {
-		if (isEdit) {
-			setPayload({})
-		}
+		if (isEdit) setPayload(defaultPermission)
 		setIsOpen(false)
 		onDrawerClose()
 	}
+
+	const handleSubmitPermission = async () => {}
 
 	return (
 		<Fragment>
@@ -351,7 +89,7 @@ const RoleDrawer: React.FC<IProps> = ({
 				onClick={() => setIsOpen(true)}
 				icon={<PlusCircleOutlined />}
 			>
-				Add Role
+				Add Permission
 			</Button>
 
 			<Drawer
@@ -359,21 +97,25 @@ const RoleDrawer: React.FC<IProps> = ({
 				open={isOpen}
 				onClose={closeDrawer}
 				width='50vw'
-				title={`${isEdit ? 'Update' : 'Create'} User Role`}
+				title={`${isEdit ? 'Update' : 'Create'} User Permission`}
 				footer={
 					<div className='flex gap-2 h-12 items-center justify-end'>
 						<Button onClick={closeDrawer}>Cancel</Button>
-						<Button type='primary' onClick={handleSubmitRole}>
+						<Button type='primary' onClick={handleSubmitPermission}>
 							Confirm Create Role
 						</Button>
 					</div>
 				}
 			>
-				<Form form={form}>
+				<Form
+					form={form}
+					labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
+					wrapperCol={{ xs: { span: 24 }, sm: { span: 18 } }}
+				>
 					<Form.Item
 						rules={[{ required: true, message: 'Name is required' }]}
 						name='name'
-						label='Role Name'
+						label='Name'
 					>
 						<Input required />
 					</Form.Item>
@@ -382,6 +124,19 @@ const RoleDrawer: React.FC<IProps> = ({
 						<Input.TextArea />
 					</Form.Item>
 
+					<Tabs
+						size='small'
+						tabPosition='left'
+						onChange={onResourceChange}
+						defaultValue={currentResource?.actualName}
+						items={allResources?.map(t => ({
+							key: t.actualName,
+							value: t.actualName,
+							label: toSentenceCase(t.displayName),
+							children: <Fragment></Fragment>,
+						}))}
+					/>
+					{/*
 					<Tabs
 						size='small'
 						tabPosition='left'
@@ -504,6 +259,7 @@ const RoleDrawer: React.FC<IProps> = ({
 							),
 						}))}
 					/>
+				*/}
 				</Form>
 			</Drawer>
 		</Fragment>
