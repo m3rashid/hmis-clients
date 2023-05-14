@@ -5,12 +5,10 @@ import dayjs from 'dayjs'
 import { RJSFSchema } from '@rjsf/utils'
 import TableHoc from 'components/hocs/table'
 import apiService from 'api/service'
-import { toSentenceCase } from 'helpers/strings'
 
 const RemovedNonConsumables = () => {
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name', width: 150 },
-		{ title: 'Type', dataIndex: 'type', key: 'type', render: t => toSentenceCase(t), width: 80 },
 		{ title: 'Quantity', dataIndex: 'quantityLeft', key: 'quantityLeft', width: 80 },
 		{
 			title: 'Last Servicing Date',

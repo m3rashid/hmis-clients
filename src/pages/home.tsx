@@ -44,7 +44,7 @@ const featuresData = [
 	},
 	{
 		key: '5',
-		header: 'Insights and Analytics',
+		header: 'Dashboards (Insights and Analytics)',
 		features: [
 			'How is your hospital performing?',
 			'How are your assets and resources being utilized?',
@@ -52,8 +52,14 @@ const featuresData = [
 	},
 	{
 		key: '6',
-		header: 'Tracking and Behavior',
-		features: ['Patient Navigation', 'Patient Behavior', 'Patient Journey', 'Patient Satisfaction'],
+		header: 'Patient Management',
+		features: [
+			'Patient Navigation',
+			'Patient Behavior',
+			'Patient Journey',
+			'Patient Satisfaction',
+			'Tracking and Behavior',
+		],
 	},
 	{
 		key: '7',

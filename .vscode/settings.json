@@ -11,7 +11,8 @@
 		"precommit",
 		"RJSF",
 		"Sider",
-		"tanstack"
+		"tanstack",
+		"Usergroup"
 	],
 	"editor.formatOnSave": true
 }
