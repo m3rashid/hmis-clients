@@ -1,28 +1,51 @@
-import ResourceAutoComplete from 'components/permissions/resourcesSearch'
-import { PlusCircleOutlined } from '@ant-design/icons'
-import React, { Fragment, useEffect, useState } from 'react'
-import { Button, Checkbox, Drawer, Form, Input, Tabs } from 'antd'
-// import { RolePermission } from 'definitions/modules/permission'
-// import { CreateOrEditRoleReqBody } from 'definitions/api/permission'
-import { toSentenceCase } from 'helpers/strings'
 import apiService from 'api/service'
+import { PlusCircleOutlined } from '@ant-design/icons'
+import { isString, toSentenceCase } from 'helpers/strings'
+import React, { Fragment, useEffect, useState } from 'react'
+import ResourceSearch from 'components/permissions/resourcesSearch'
+import { Button, Checkbox, Descriptions, Drawer, Form, Input, Tabs, Typography } from 'antd'
+
+interface IPermission {
+	[resourceTypeName: string]: {
+		actions: {
+			[actionPermissionName: string]: {
+				allowAll: boolean
+				allowSelf: boolean
+				resourceIds: string[]
+			}
+		}
+		independent: {
+			[independentPermissionName: string]: boolean
+		}
+	}
+}
 
 export interface IPayload {
 	displayName: string
 	description?: string
-	permission: Array<{
-		resourceType: string
-		scope: string[]
-		accessLevel: number
-	}>
+	permissions: IPermission
 }
 
-interface IResource {
+interface IResourceType {
+	name: string
+	description: string
+	availablePermissions: {
+		independent: string[]
+		actions: string[]
+	}
+}
+
+type SpecialPermission = 'ALL' | 'INDEPENDENT'
+
+interface IEditData {
 	_id: string
 	displayName: string
-	actualName: string
 	description?: string
-	type: string
+	permissions: {
+		[resourceTypeName: string]: {
+			[permissionName: string]: SpecialPermission | string[] // Array<ObjectId | 'SELF'>
+		}
+	}
 }
 
 interface IProps {
@@ -30,7 +53,7 @@ interface IProps {
 	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 	isEdit: boolean
 	onDrawerClose: () => void
-	data?: IPayload & { _id: string }
+	data?: IEditData
 }
 
 const RoleDrawer: React.FC<IProps> = ({
@@ -41,45 +64,166 @@ const RoleDrawer: React.FC<IProps> = ({
 	onDrawerClose,
 }) => {
 	const [form] = Form.useForm()
-	const defaultPermission = { displayName: '', permission: [], description: '' }
-	const [payload, setPayload] = useState<IPayload>(defaultPermission)
-	const [currentResource, setCurrentResource] = useState<IResource | null>(null)
-	const [allResources, setAllResources] = useState<IResource[]>([])
-	const getResources = apiService('POST', '/resource/all')
+	const [payload, setPayload] = useState<IPayload | null>(null)
+	const [currentResourceType, setCurrentResourceType] = useState<IResourceType | null>(null)
+	const [allResourceTypes, setAllResourceTypes] = useState<IResourceType[]>([])
+	const getResources = apiService<IResourceType[]>('GET', '/resource-types/all')
 
 	useEffect(() => {
 		getResources()
-			.then(({ data }: { data: IResource[] }) => {
-				setAllResources(data)
-				setCurrentResource(data[0])
-				if (isEdit && editData) {
-					form.setFieldValue('name', editData.displayName)
+			.then(({ data }) => {
+				setAllResourceTypes(data)
+				setCurrentResourceType(data[0])
+				if (isEdit) {
+					form.setFieldValue('name', editData?.displayName)
 					form.setFieldValue('description', editData?.description ?? '')
-					setPayload({
-						displayName: editData.displayName,
-						permission: editData.permission,
-						description: editData.description,
-					})
 				} else {
 					form.setFieldValue('name', '')
 					form.setFieldValue('description', '')
 				}
+
+				const newPermissions = data.reduce<IPermission>(
+					(acc, resourceType) => ({
+						...acc,
+						[resourceType.name]: {
+							actions: resourceType.availablePermissions.actions.reduce((resAcc, actionPerm) => {
+								const currentPermission = editData?.permissions[resourceType.name]?.[actionPerm]
+								return {
+									...resAcc,
+									[actionPerm]: {
+										allowAll: currentPermission
+											? isString(currentPermission) && currentPermission === 'ALL'
+											: false,
+										allowSelf: currentPermission
+											? !isString(currentPermission) && currentPermission?.includes('SELF')
+											: false,
+										resourceIds: currentPermission
+											? !isString(currentPermission) && currentPermission.filter(t => t !== 'SELF')
+											: [],
+									},
+								}
+							}, {}),
+							independent: resourceType.availablePermissions.independent.reduce(
+								(resAcc, independentPerm) => {
+									const currentPermission =
+										editData?.permissions[resourceType.name]?.[independentPerm]
+									return {
+										...resAcc,
+										[independentPerm]: currentPermission
+											? isString(currentPermission) && currentPermission === 'INDEPENDENT'
+											: false,
+									}
+								},
+								{}
+							),
+						},
+					}),
+					{}
+				)
+
+				setPayload({
+					displayName: editData?.displayName ?? '',
+					description: editData?.description ?? '',
+					permissions: newPermissions,
+				})
 			})
 			.catch(console.log)
 	}, [])
 
 	const onResourceChange = (resourceActualName: string) => {
-		const resource = allResources.find(t => t.actualName === resourceActualName)
-		setCurrentResource(resource ?? null)
+		const resource = allResourceTypes.find(t => t.name === resourceActualName)
+		setCurrentResourceType(resource ?? null)
 	}
 
 	const closeDrawer = () => {
-		if (isEdit) setPayload(defaultPermission)
+		if (isEdit) setPayload(null)
 		setIsOpen(false)
 		onDrawerClose()
 	}
 
+	const handleAllowAll = (checked: boolean, resourceName: string, permissionName: string) => {
+		setPayload(prev => {
+			if (!prev) return null
+			return {
+				...prev,
+				permissions: {
+					...prev.permissions,
+					[resourceName]: {
+						...prev.permissions[resourceName],
+						actions: {
+							...prev.permissions[resourceName].actions,
+							[permissionName]: {
+								...prev.permissions[resourceName].actions[permissionName],
+								allowAll: checked,
+							},
+						},
+					},
+				},
+			}
+		})
+	}
+
+	const handleAllowIndependent = (
+		checked: boolean,
+		resourceName: string,
+		permissionName: string
+	) => {
+		setPayload(prev => {
+			if (!prev) return null
+			return {
+				...prev,
+				permissions: {
+					...prev.permissions,
+					[resourceName]: {
+						...prev.permissions[resourceName],
+						independent: {
+							[permissionName]: checked,
+						},
+					},
+				},
+			}
+		})
+	}
+
+	const handleAllowSelf = (checked: boolean, resourceName: string, permissionName: string) => {
+		setPayload(prev => {
+			if (!prev) return null
+			return {
+				...prev,
+				permissions: {
+					...prev.permissions,
+					[resourceName]: {
+						...prev.permissions[resourceName],
+						actions: {
+							...prev.permissions[resourceName].actions,
+							[permissionName]: {
+								...prev.permissions[resourceName].actions[permissionName],
+								allowSelf: checked,
+							},
+						},
+					},
+				},
+			}
+		})
+	}
+
 	const handleSubmitPermission = async () => {}
+
+	const updateName = (name: string) => {
+		setPayload(prev => {
+			if (!prev) return null
+			return { ...prev, displayName: name }
+		})
+	}
+
+	const updateDescription = (desc: string) => {
+		setPayload(prev => {
+			if (!prev) return null
+			return { ...prev, description: desc }
+		})
+	}
+
+	const onSelectResourceId = (resourceIds: string[]) => {}
 
 	return (
 		<Fragment>
@@ -89,7 +233,7 @@ const RoleDrawer: React.FC<IProps> = ({
 				onClick={() => setIsOpen(true)}
 				icon={<PlusCircleOutlined />}
 			>
-				Add Permission
+				Add Role
 			</Button>
 
 			<Drawer
@@ -97,7 +241,7 @@ const RoleDrawer: React.FC<IProps> = ({
 				open={isOpen}
 				onClose={closeDrawer}
 				width='50vw'
-				title={`${isEdit ? 'Update' : 'Create'} User Permission`}
+				title={`${isEdit ? 'Update' : 'Create'} Role`}
 				footer={
 					<div className='flex gap-2 h-12 items-center justify-end'>
 						<Button onClick={closeDrawer}>Cancel</Button>
@@ -117,149 +261,81 @@ const RoleDrawer: React.FC<IProps> = ({
 						name='name'
 						label='Name'
 					>
-						<Input required />
+						<Input
+							required
+							value={payload?.displayName}
+							onChange={e => updateName(e.target.value)}
+						/>
 					</Form.Item>
 
 					<Form.Item name='description' label='Description'>
-						<Input.TextArea />
+						<Input.TextArea
+							value={payload?.description}
+							onChange={e => updateDescription(e.target.value)}
+						/>
 					</Form.Item>
 
 					<Tabs
 						size='small'
 						tabPosition='left'
 						onChange={onResourceChange}
-						defaultValue={currentResource?.actualName}
-						items={allResources?.map(t => ({
-							key: t.actualName,
-							value: t.actualName,
-							label: toSentenceCase(t.displayName),
-							children: <Fragment></Fragment>,
-						}))}
-					/>
-					{/*
-					<Tabs
-						size='small'
-						tabPosition='left'
-						onChange={onAppChange}
-						defaultValue={currentApp?.packageName}
-						items={installedApps?.map(t => ({
-							key: t.packageName,
-							value: t.packageName,
-							label: toSentenceCase(t.appName),
-							children: (
-								<Fragment>
-									{Object.entries(currentApp?.manifest?.permissions || {}).length === 0 ? (
-										<div className='w-full h-[300px] flex items-center justify-center'>
-											<Typography.Text className='text-lg'>No Resources Found</Typography.Text>
+						defaultValue={currentResourceType?.name}
+						items={Object.entries(payload?.permissions ?? {}).map(
+							([resourceName, resPermissions]) => ({
+								key: resourceName,
+								value: resourceName,
+								label: toSentenceCase(resourceName),
+								children: (
+									<Fragment>
+										<Descriptions size='middle'>
+											<Descriptions.Item label='Resource'>
+												{toSentenceCase(resourceName)}
+											</Descriptions.Item>
+										</Descriptions>
+
+										<div className='mb-2 ml-[2px]'>
+											<Typography.Text>Independent Permissions</Typography.Text>
 										</div>
-									) : (
-										<Tabs
-											size='small'
-											tabPosition='top'
-											defaultValue={currentResourceType}
-											items={Object.entries(currentApp?.manifest?.permissions || {}).map(
-												([resourceTypeName, resourceTypePermissions]) => ({
-													key: resourceTypeName,
-													value: resourceTypeName,
-													label: toSentenceCase(resourceTypeName),
-													children: (
-														<Fragment key={resourceTypeName}>
-															{((resourceTypePermissions as any).independent ?? []).length >= 0 ? (
-																<Typography.Text className='block mb-2 ml-1 font-bold'>
-																	Independent Permissions
-																</Typography.Text>
-															) : null}
 
-															<div className='rounded-md p-2 flex flex-col gap-2'>
-																{((resourceTypePermissions as any).independent ?? []).map(
-																	(independentPermission: string) => {
-																		return (
-																			<div
-																				key={independentPermission}
-																				className='flex flex-row items-center justify-between mr-6'
-																			>
-																				<Typography.Text>
-																					{toSentenceCase(independentPermission) +
-																						' ' +
-																						resourceTypeName}
-																				</Typography.Text>
+										{Object.entries(resPermissions.independent).map(([permissionName, actions]) => (
+											<div className='bg-gray-100 rounded-md p-2 mb-2 flex items-center justify-between'>
+												<Typography.Text strong>{toSentenceCase(permissionName)}</Typography.Text>
 
-																				<Checkbox
-																					className='mx-2 px-0'
-																					checked={
-																						payload?.[t.packageName]?.[resourceTypeName]
-																							?.independent?.[independentPermission]
-																					}
-																					onChange={e => {
-																						onClickIndependentPermission(
-																							t.packageName,
-																							resourceTypeName,
-																							independentPermission,
-																							e.target.checked
-																						)
-																					}}
-																				>
-																					Allow
-																				</Checkbox>
-																			</div>
-																		)
-																	}
-																)}
-															</div>
+												<div className=''>
+													<Checkbox
+														onChange={e =>
+															handleAllowIndependent(e.target.checked, resourceName, permissionName)
+														}
+													>
+														Allow
+													</Checkbox>
+												</div>
+											</div>
+										))}
 
-															{((resourceTypePermissions as any).actions ?? []).length >= 0 ? (
-																<Typography.Text className='block mb-2 ml-1 mt-8 font-bold'>
-																	Other Permissions
-																</Typography.Text>
-															) : null}
-															<div className='flex flex-col gap-4'>
-																{((resourceTypePermissions as any).actions ?? []).map(
-																	(actionPermission: string) => {
-																		return (
-																			<ResourceAutoComplete
-																				{...{
-																					payload,
-																					actionPermission,
-																					key: actionPermission,
-																					packageName: t.packageName,
-																					resourceType: resourceTypeName,
-																					onChangeActionCheckboxes: (
-																						checked: boolean,
-																						type: 'all' | 'self'
-																					) => {
-																						onChangeActionPermissions(
-																							t.packageName,
-																							resourceTypeName,
-																							actionPermission,
-																							type,
-																							checked
-																						)
-																					},
-																					onSelectResourceId: (resourceIds: string[]) => {
-																						onSelectActionPermissionResourceIds(
-																							t.packageName,
-																							resourceTypeName,
-																							actionPermission,
-																							resourceIds
-																						)
-																					},
-																				}}
-																			/>
-																		)
-																	}
-																)}
-															</div>
-														</Fragment>
-													),
-												})
-											)}
-										/>
-									)}
-								</Fragment>
-							),
-						}))}
+										<div className='mt-10 mb-2 ml-[2px]'>
+											<Typography.Text>Action Permissions</Typography.Text>
+										</div>
+
+										{Object.keys(resPermissions.actions).map(permissionName => (
+											<div className='bg-gray-100 rounded-md p-2 mb-3'>
+												<ResourceSearch
+													{...{
+														payload,
+														resourceName,
+														onSelectResourceId,
+														permissionName,
+														handleAllowAll,
+														handleAllowSelf,
+													}}
+												/>
+											</div>
+										))}
+									</Fragment>
+								),
+							})
+						)}
 					/>
-				*/}
 				</Form>
 			</Drawer>
 		</Fragment>

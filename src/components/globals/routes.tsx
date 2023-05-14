@@ -18,8 +18,6 @@ import Consumables from 'pages/inventory/consumables'
 import UserManagement from 'pages/userManagement/user'
 import RoleManagement from 'pages/userManagement/role'
 import NonConsumables from 'pages/inventory/nonConsumables'
-import ResourceManagement from 'pages/userManagement/resource'
-import PermissionManagement from 'pages/userManagement/permissions'
 import RemovedConsumables from 'pages/inventory/removedConsumables'
 import RemovedNonConsumables from 'pages/inventory/removedNonConsumables'
 
@@ -114,7 +112,6 @@ const routes: Array<IRoute> = [
 			},
 		],
 	},
-	// consumables-deleted
 	{
 		icon: <TeamOutlined />,
 		label: 'User Management',
@@ -129,21 +126,9 @@ const routes: Array<IRoute> = [
 				icon: <UserAddOutlined />,
 			},
 			{
-				link: '/users-management/resources',
-				label: 'Resources',
-				Component: ResourceManagement,
-				icon: <UserAddOutlined />,
-			},
-			{
 				link: '/users-management/roles',
 				label: 'Roles',
 				Component: RoleManagement,
-				icon: <UserAddOutlined />,
-			},
-			{
-				link: '/users-management/permissions',
-				label: 'Permissions',
-				Component: PermissionManagement,
 				icon: <UserAddOutlined />,
 			},
 		],
