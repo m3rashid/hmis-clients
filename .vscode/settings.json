@@ -1,5 +1,9 @@
 {
-	"eslint.run": "onSave",
+	"editor.formatOnSave": false,
+	"eslint.validate": ["typescript"],
+	"editor.codeActionsOnSave": {
+		"source.fixAll": true
+	},
 	"cSpell.words": [
 		"Appstore",
 		"dompurify",
@@ -13,6 +17,5 @@
 		"Sider",
 		"tanstack",
 		"Usergroup"
-	],
-	"editor.formatOnSave": true
+	]
 }
