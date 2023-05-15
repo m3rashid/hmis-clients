@@ -1,8 +1,6 @@
 import React from 'react'
 
-interface IProps {}
-
-const Dashboard: React.FC<IProps> = () => {
+const Dashboard = () => {
 	return (
 		<>
 			<div>Dashboard</div>

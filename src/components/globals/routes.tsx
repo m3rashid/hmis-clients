@@ -2,6 +2,7 @@ import React from 'react'
 import {
 	ApartmentOutlined,
 	AppstoreOutlined,
+	CustomerServiceOutlined,
 	DatabaseOutlined,
 	DeleteOutlined,
 	DeploymentUnitOutlined,
@@ -10,26 +11,28 @@ import {
 	HeartOutlined,
 	HomeOutlined,
 	InfoCircleOutlined,
+	NotificationOutlined,
 	PlusCircleOutlined,
 	SettingOutlined,
 	SolutionOutlined,
 	TeamOutlined,
 	UserAddOutlined,
+	UserOutlined,
 	UserSwitchOutlined,
 	UsergroupAddOutlined,
 } from '@ant-design/icons'
-
 import { IAuth } from 'context/auth'
 
 const Home = React.lazy(() => import('pages/home'))
 const About = React.lazy(() => import('pages/about'))
-const ErrorPage = React.lazy(() => import('pages/404'))
 const Settings = React.lazy(() => import('pages/settings'))
 const Payments = React.lazy(() => import('pages/payments'))
 const LabManagement = React.lazy(() => import('pages/lab'))
 const Dashboard = React.lazy(() => import('pages/dashboard'))
 const PatientManagement = React.lazy(() => import('pages/patient'))
+const Notifications = React.lazy(() => import('pages/notifications'))
 const InPatientDepartment = React.lazy(() => import('pages/inPatient'))
+const AttendanceManagement = React.lazy(() => import('pages/attendance'))
 const OutPatientDepartment = React.lazy(() => import('pages/outPatient'))
 const HospitalPackage = React.lazy(() => import('pages/hospitalPackage'))
 const Consumables = React.lazy(() => import('pages/inventory/consumables'))
@@ -40,30 +43,49 @@ const HealthInsuranceManagement = React.lazy(() => import('pages/healthInsurance
 const RemovedConsumables = React.lazy(() => import('pages/inventory/removedConsumables'))
 const RemovedNonConsumables = React.lazy(() => import('pages/inventory/removedNonConsumables'))
 
+export const resourceTypes = [
+	'USER',
+	'PROFILE',
+	'ADDRESS',
+	'PERMISSION',
+	'ROLE',
+	'AVAILABILITY',
+	'LEAVE',
+	'APPOINTMENT',
+	'CONSUMABLES',
+	'NON_CONSUMABLES',
+	'PRESCRIPTION',
+	'CONFIG',
+	'ATTENDANCE',
+] as const
+
+interface IPermission {
+	resource: (typeof resourceTypes)[number]
+	action: string
+}
+
 export type IRoute = {
+	icon: React.ReactNode
 	label: string
 	link: string
-	Component: React.FC
-	permissions: Array<string>
-	icon: React.ReactNode
-	props?: any
+	Component?: React.FC
 	showInNav?: boolean
-	role?: Array<string>
+	permission?: IPermission
 	nestedLinks?: Array<{
+		icon: React.ReactNode
 		label: string
 		link: string
 		Component: React.FC
-		icon: React.ReactNode
 		showInNav?: boolean
+		permission?: IPermission
 	}>
 }
 
-export const checkAccess = (auth: IAuth, route: IRoute) => {
+export const checkAccess = (auth: IAuth, permission?: IPermission) => {
 	if (!auth.isLoggedIn) return false
-	if (!route.role || route.role.includes('*')) return true
-	if (auth.user?.userRole === 'ADMIN') return true
-	const contains = route.role.some(role => auth.user?.permissions.includes(role))
-	return contains
+	if (!permission) return true
+	// TODO: check permissions here
+	return true
 }
 
 const routes: Array<IRoute> = [
@@ -72,53 +94,89 @@ const routes: Array<IRoute> = [
 		label: 'Home',
 		link: '/',
 		Component: Home,
-		permissions: [],
 	},
 	{
-		icon: <UserSwitchOutlined />,
-		label: 'Out Patient Department',
-		link: '/opd',
-		Component: OutPatientDepartment,
-		permissions: [],
+		icon: <TeamOutlined />,
+		label: 'Permission Management',
+		link: '/users',
+		nestedLinks: [
+			{
+				icon: <UserAddOutlined />,
+				label: 'Users',
+				link: '/users/users',
+				Component: UserManagement,
+				permission: { resource: 'USER', action: 'READ' },
+			},
+			{
+				icon: <UserAddOutlined />,
+				label: 'Roles',
+				link: '/users/roles',
+				permission: { resource: 'ROLE', action: 'READ' },
+				Component: RoleManagement,
+			},
+		],
 	},
 	{
-		icon: <UsergroupAddOutlined />,
-		label: 'In Patient Department',
-		link: '/ipd',
-		Component: InPatientDepartment,
-		permissions: [],
+		icon: <HeartOutlined />,
+		label: 'Patient Management',
+		link: '/patient',
+		nestedLinks: [
+			{
+				icon: <HeartOutlined />,
+				label: 'Patient Home',
+				link: '/patient/home',
+				Component: PatientManagement,
+				permission: { resource: 'USER', action: 'READ' },
+			},
+			{
+				icon: <UserSwitchOutlined />,
+				label: 'Out Patient Department',
+				link: '/patient/opd',
+				Component: OutPatientDepartment,
+				permission: { resource: 'USER', action: 'READ' },
+			},
+			{
+				icon: <UsergroupAddOutlined />,
+				label: 'In Patient Department',
+				link: '/patient/ipd',
+				Component: InPatientDepartment,
+				permission: { resource: 'USER', action: 'READ' },
+			},
+		],
 	},
 	{
 		icon: <DatabaseOutlined />,
 		label: 'Inventory',
 		link: '/inventory',
-		Component: Consumables,
-		permissions: [],
 		nestedLinks: [
 			{
-				link: '/inventory/consumables',
-				label: 'Consumables',
-				Component: Consumables,
 				icon: <ApartmentOutlined />,
+				label: 'Consumables',
+				link: '/inventory/consumables',
+				Component: Consumables,
+				permission: { resource: 'CONSUMABLES', action: 'READ' },
 			},
 			{
-				link: '/inventory/non-consumables',
-				label: 'Non Consumables',
-				Component: NonConsumables,
 				icon: <AppstoreOutlined />,
+				label: 'Non Consumables',
+				link: '/inventory/non-consumables',
+				Component: NonConsumables,
+				permission: { resource: 'NON_CONSUMABLES', action: 'READ' },
 			},
 			{
-				link: '/inventory/consumables-removed',
-				label: 'Removed Consumables',
-				Component: RemovedConsumables,
 				icon: <DeleteOutlined />,
+				label: 'Removed Consumables',
+				link: '/inventory/consumables-removed',
+				Component: RemovedConsumables,
+				permission: { resource: 'CONSUMABLES', action: 'READ' },
 				showInNav: false,
 			},
 			{
-				link: '/inventory/non-consumables-removed',
-				label: 'Removed Non Consumables',
-				Component: RemovedNonConsumables,
 				icon: <DeleteOutlined />,
+				label: 'Removed Non Consumables',
+				link: '/inventory/non-consumables-removed',
+				Component: RemovedNonConsumables,
+				permission: { resource: 'NON_CONSUMABLES', action: 'READ' },
 				showInNav: false,
 			},
 		],
@@ -128,70 +186,62 @@ const routes: Array<IRoute> = [
 		label: 'Lab Management',
 		link: '/lab',
 		Component: LabManagement,
-		permissions: [],
+		permission: { resource: 'USER', action: 'READ' },
 	},
 	{
-		icon: <FundOutlined />,
-		label: 'Dashboards',
-		link: '/dashboards',
-		Component: Dashboard,
-		permissions: [],
-	},
-	{
-		icon: <HeartOutlined />,
-		label: 'Patient Management',
-		link: '/patient',
-		Component: PatientManagement,
-		permissions: [],
-	},
-	{
-		icon: <DollarCircleOutlined />,
-		label: 'Payments',
-		link: '/payments',
-		Component: Payments,
-		permissions: [],
+		icon: <CustomerServiceOutlined />,
+		label: 'Services',
+		link: '/services',
+		nestedLinks: [
+			{
+				icon: <DollarCircleOutlined />,
+				label: 'Payments',
+				link: '/services/payments',
+				Component: Payments,
+				permission: { resource: 'USER', action: 'READ' },
+			},
+			{
+				icon: <PlusCircleOutlined />,
+				label: 'Health Insurance',
+				link: '/services/health',
+				Component: HealthInsuranceManagement,
+				permission: { resource: 'USER', action: 'READ' },
+			},
+			{
+				icon: <FundOutlined />,
+				label: 'Dashboards',
+				link: '/services/dashboards',
+				Component: Dashboard,
+				permission: { resource: 'USER', action: 'READ' },
+			},
+			{
+				icon: <UserOutlined />,
+				label: 'Attendance',
+				link: '/services/attendance',
+				Component: AttendanceManagement,
+				permission: { resource: 'ATTENDANCE', action: 'READ' },
+			},
+			{
+				icon: <NotificationOutlined />,
+				label: 'Notice and Circulars',
+				link: '/services/notices',
+				Component: Notifications,
+				permission: { resource: 'USER', action: 'READ' },
+			},
+		],
 	},
 	{
 		icon: <SolutionOutlined />,
 		label: 'Packages',
 		link: '/packages',
 		Component: HospitalPackage,
-		permissions: [],
-	},
-	{
-		icon: <PlusCircleOutlined />,
-		label: 'Health Insurance',
-		link: '/health-insurance',
-		Component: HealthInsuranceManagement,
-		permissions: [],
-	},
-
-	{
-		icon: <TeamOutlined />,
-		label: 'User Management',
-		link: '/users-management',
-		Component: UserManagement,
-		permissions: [],
-		nestedLinks: [
-			{
-				link: '/users-management/users',
-				label: 'Users',
-				Component: UserManagement,
-				icon: <UserAddOutlined />,
-			},
-			{
-				link: '/users-management/roles',
-				label: 'Roles',
-				Component: RoleManagement,
-				icon: <UserAddOutlined />,
-			},
-		],
+		permission: { resource: 'USER', action: 'READ' },
 	},
 	{
 		icon: <SettingOutlined />,
 		label: 'Settings',
 		link: '/settings',
-		permissions: [],
+		permission: { resource: 'USER', action: 'READ' },
 		Component: Settings,
 	},
 	{
@@ -199,15 +249,6 @@ const routes: Array<IRoute> = [
 		label: 'About',
 		link: '/about',
 		Component: About,
-		permissions: [],
-	},
-	{
-		icon: <InfoCircleOutlined />,
-		label: '',
-		link: '*',
-		Component: ErrorPage,
-		permissions: [],
-		showInNav: false,
 	},
 ]
 

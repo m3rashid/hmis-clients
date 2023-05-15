@@ -1,8 +1,6 @@
 import React from 'react'
 
-interface IProps {}
-
-const HospitalPackage: React.FC<IProps> = () => {
+const HospitalPackage = () => {
 	return (
 		<>
 			<div>HospitalPackage</div>

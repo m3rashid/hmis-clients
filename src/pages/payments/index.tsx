@@ -1,8 +1,6 @@
 import React from 'react'
 
-interface IProps {}
-
-const Payments: React.FC<IProps> = () => {
+const Payments = () => {
 	return (
 		<>
 			<div>Payments</div>

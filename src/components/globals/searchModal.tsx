@@ -78,6 +78,7 @@ const ActionSearchModal: React.FC<IProps> = ({ close, isOpen }) => {
 				size='large'
 				className='w-full'
 				onSelect={onSelect}
+				defaultActiveFirstOption={true}
 				options={options.map(option => ({
 					label: <span>{option.title}</span>,
 					options: option.data.map(data => ({
