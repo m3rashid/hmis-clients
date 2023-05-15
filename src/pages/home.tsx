@@ -93,13 +93,11 @@ const Home = () => {
 				<div className='flex-grow'>
 					<Typography.Title level={2}>Welcome to HMIS</Typography.Title>
 					<Typography.Text>HMIS powers the Hospitals for all administrative needs</Typography.Text>
-
 					<br />
 					<br />
 					<br />
 
 					<Typography.Title level={3}>Features</Typography.Title>
-
 					<Collapse
 						accordion
 						expandIconPosition='right'
