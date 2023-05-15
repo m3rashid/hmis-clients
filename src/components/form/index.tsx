@@ -12,7 +12,7 @@ export interface IHocFormProps {
 	onFinishFormValues?: (formValues: any) => void
 	cancelText?: string
 	submitText?: string
-	onCancel?: () => void
+	onCancel?: React.MouseEventHandler<HTMLAnchorElement> & React.MouseEventHandler<HTMLButtonElement>
 	formBaseProps?: Omit<any, 'schema' | 'uiSchema' | 'validator' | 'onSubmit' | 'formContext'>
 }
 

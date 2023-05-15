@@ -15,7 +15,7 @@ import React, { ReactNode, useEffect } from 'react'
 
 import useTable from 'components/hocs/table/useTable'
 import Form, { IHocFormProps } from 'components/form'
-import { DeleteFilled, EditFilled, InfoCircleFilled } from '@ant-design/icons'
+import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import ObjectAsDetails from 'components/atoms/objectAsDetails'
 
@@ -46,6 +46,7 @@ export interface TableHocProps<RecordType> extends IHocFormProps {
 		edit?: (data?: DefaultParams) => Promise<any>
 		delete?: (data?: DefaultParams) => Promise<any>
 		details?: (data?: DefaultParams) => Promise<any>
+		create?: (data?: DefaultParams) => Promise<any>
 	}
 }
 
@@ -132,7 +133,12 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 
 				<div className='flex items-center justify-center mt-2 sm:mt-0'>
 					{props.actionButtons ?? (
-						<Button type='primary' className='mx-3' onClick={actions.showFormModal}>
+						<Button
+							type='primary'
+							className='mx-3'
+							onClick={actions.showFormModal}
+							icon={<PlusCircleOutlined />}
+						>
 							{props.addButtonLabel}
 						</Button>
 					)}
@@ -167,7 +173,6 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 	return (
 		<>
 			<Modal
-				{...props.modalProps}
 				destroyOnClose
 				open={state.formModalVisible}
 				onCancel={actions.handleCancelOnModal}
@@ -175,6 +180,7 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 				title={props.title}
 				style={{ ...props.modalProps?.style }}
 				footer={null}
+				{...props.modalProps}
 			>
 				{props.renderCustomForm ?? (
 					<Form

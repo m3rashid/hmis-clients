@@ -1,6 +1,6 @@
 import { Form } from 'antd'
-import { useState } from 'react'
 import apiService from 'api/service'
+import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { TableHocProps } from 'components/hocs/table'
 import { configDefaultState } from 'context/config'
@@ -89,21 +89,20 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 		}
 	}
 
-	const handleOkOnModal = () =>
-		// e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-		{
-			// TODO: axios call to create the entry
-			hideFormModal()
-		}
+	const handleOkOnModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		// TODO: axios call to create the entry
+		hideFormModal()
+	}
 
-	const handleCancelOnModal = () =>
-		// e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-		{
-			hideFormModal()
-		}
+	const handleCancelOnModal: React.MouseEventHandler<HTMLAnchorElement> &
+		React.MouseEventHandler<HTMLButtonElement> = e => {
+		hideFormModal()
+	}
 
 	const onFinishFormValues = (values: any) => {
-		console.log({ values })
+		if (!props.onFinishFormValues) return
+		// TODO: handle the form values
+		props.onFinishFormValues(values)
 	}
 
 	return {
