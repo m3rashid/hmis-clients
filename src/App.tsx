@@ -1,7 +1,7 @@
 import 'antd/dist/reset.css'
 import 'index.css'
 import { Typography } from 'antd'
-import ErrorPage from 'pages/404'
+import ErrorPage from 'pages/error'
 import { authContext } from 'context/auth'
 import routes from 'components/globals/routes'
 import Loading from 'components/atoms/loading'

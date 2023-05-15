@@ -1,4 +1,4 @@
-import ErrorPage from 'pages/404'
+import ErrorPage from 'pages/error'
 import { useLocation } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 
