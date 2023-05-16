@@ -1,23 +1,23 @@
+import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleOutlined } from '@ant-design/icons'
 import {
+	AutoComplete,
+	Button,
 	Divider,
+	Input,
 	Modal,
 	ModalProps,
-	TableProps,
-	Table,
-	Typography,
-	Button,
-	AutoComplete,
-	Input,
 	Popconfirm,
+	Table,
 	TableColumnsType,
+	TableProps,
+	Typography,
 } from 'antd'
+import dayjs from 'dayjs'
 import React, { ReactNode, useEffect } from 'react'
 
-import useTable from 'components/hocs/table/useTable'
-import Form, { IHocFormProps } from 'components/form'
-import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleOutlined } from '@ant-design/icons'
-import dayjs from 'dayjs'
 import ObjectAsDetails from 'components/atoms/objectAsDetails'
+import Form, { IHocFormProps } from 'components/form'
+import useTable from 'components/hocs/table/useTable'
 
 export const constants = {
 	defaultPageSize: 10,

@@ -1,9 +1,10 @@
-import Form from 'components/form'
-import { useNavigate } from 'react-router-dom'
-import React, { useCallback, useContext, useState } from 'react'
-import { authContext, authDefaultState } from 'context/auth'
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
-import { Avatar, Button, Dropdown, message, Modal } from 'antd'
+import { Avatar, Button, Dropdown, Modal, message } from 'antd'
+import React, { useCallback, useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import Form from 'components/form'
+import { authContext, authDefaultState } from 'context/auth'
 
 interface IProps {
 	isMobile: boolean

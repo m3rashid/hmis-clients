@@ -1,8 +1,9 @@
-import React from 'react'
-import routes from 'components/globals/routes'
-import { useNavigate } from 'react-router-dom'
 import { AppstoreOutlined } from '@ant-design/icons'
 import { Menu, MenuProps, Popover, Typography } from 'antd'
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import routes from 'components/globals/routes'
 
 interface IProps {
 	collapsed?: boolean

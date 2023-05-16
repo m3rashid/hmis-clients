@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
-import ActionSearchModal from './searchModal'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { Input, Tooltip, Typography } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
+import { Input, Tooltip, Typography } from 'antd'
+import React, { useState } from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
+
+import ActionSearchModal from './searchModal'
 
 interface IProps {
 	iconOnly?: boolean

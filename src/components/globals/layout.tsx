@@ -1,14 +1,15 @@
-import enUs from 'antd/locale/en_US'
-import { uiContext } from 'context/ui'
-import Brand from 'components/globals/brand'
+import { useQuery } from '@tanstack/react-query'
 import { ConfigProvider, theme } from 'antd'
+import enUs from 'antd/locale/en_US'
+import React, { PropsWithChildren, useContext, useLayoutEffect } from 'react'
+
+import apiService from 'api/service'
 import AuthActions from 'components/globals/authActions'
+import Brand from 'components/globals/brand'
 import GlobalSearch from 'components/globals/globalSearch'
 import NavigationMenu from 'components/globals/navigationMenu'
-import React, { PropsWithChildren, useContext, useLayoutEffect } from 'react'
-import apiService from 'api/service'
-import { useQuery } from '@tanstack/react-query'
 import { configDefaultState } from 'context/config'
+import { uiContext } from 'context/ui'
 
 const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 	const { data: configResponse } = useQuery({

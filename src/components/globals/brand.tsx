@@ -1,8 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
+import { Image, Typography } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Image, Typography } from 'antd'
+
 import apiService from 'api/service'
-import { useQuery } from '@tanstack/react-query'
 import { configDefaultState } from 'context/config'
 
 interface IProps {

@@ -1,13 +1,14 @@
 import 'antd/dist/reset.css'
 import 'index.css'
 import { Typography } from 'antd'
-import ErrorPage from 'pages/error'
-import { authContext } from 'context/auth'
-import routes from 'components/globals/routes'
-import Loading from 'components/atoms/loading'
-import { Navigate, Route, Routes } from 'react-router-dom'
 import { Fragment, Suspense, useContext } from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
+
+import Loading from 'components/atoms/loading'
 import ErrorBoundary from 'components/globals/errorBoundary'
+import routes from 'components/globals/routes'
+import { authContext } from 'context/auth'
+import ErrorPage from 'pages/error'
 
 const FullPageLoading = () => (
 	<Loading classNames='min-h-[80vh] flex-col' spinProps={{ size: 'large' }}>

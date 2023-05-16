@@ -1,4 +1,3 @@
-import React from 'react'
 import {
 	ApartmentOutlined,
 	AppstoreOutlined,
@@ -21,6 +20,8 @@ import {
 	UserSwitchOutlined,
 	UsergroupAddOutlined,
 } from '@ant-design/icons'
+import React from 'react'
+
 import { IAuth } from 'context/auth'
 
 const Home = React.lazy(() => import('pages/home'))

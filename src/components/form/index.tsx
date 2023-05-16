@@ -1,8 +1,9 @@
-import React from 'react'
 import RJSFForm from '@rjsf/antd'
+import { RJSFSchema, UiSchema } from '@rjsf/utils'
 import validator from '@rjsf/validator-ajv8'
 import { Alert, Button, FormProps } from 'antd'
-import { RJSFSchema, UiSchema } from '@rjsf/utils'
+import React from 'react'
+
 import { customFields, customWidgets, overrideWidgetsSchema } from 'components/form/widgets'
 
 export interface IHocFormProps {

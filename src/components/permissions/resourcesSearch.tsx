@@ -1,10 +1,11 @@
-import apiService from 'api/service'
-import debounce from 'lodash.debounce'
-import { toSentenceCase } from 'helpers/strings'
-import React, { Fragment, useState } from 'react'
 import { SearchOutlined } from '@ant-design/icons'
 import { Checkbox, Select, Typography } from 'antd'
+import debounce from 'lodash.debounce'
+import React, { Fragment, useState } from 'react'
+
+import apiService from 'api/service'
 import { IPayload } from 'components/permissions/drawer'
+import { toSentenceCase } from 'helpers/strings'
 
 interface IProps {
 	permissionName: string

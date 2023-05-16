@@ -1,7 +1,8 @@
+import { Collapse, List, Steps, Typography } from 'antd'
 import React from 'react'
 import Lottie from 'react-lottie'
+
 import * as allServices from 'animations/hmis-services.json'
-import { Collapse, List, Steps, Typography } from 'antd'
 
 const featuresData = [
 	{

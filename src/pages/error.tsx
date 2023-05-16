@@ -1,6 +1,6 @@
+import { Button, Typography } from 'antd'
 import React, { useEffect } from 'react'
 import Lottie from 'react-lottie'
-import { Button, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
 const importJson = (name: string) => {

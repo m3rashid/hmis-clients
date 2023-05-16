@@ -1,7 +1,8 @@
-import { Form } from 'antd'
-import apiService from 'api/service'
-import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { Form } from 'antd'
+import React, { useState } from 'react'
+
+import apiService from 'api/service'
 import { TableHocProps } from 'components/hocs/table'
 import { configDefaultState } from 'context/config'
 

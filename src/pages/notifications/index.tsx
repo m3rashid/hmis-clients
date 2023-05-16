@@ -1,7 +1,8 @@
-import React from 'react'
-import { TableProps } from 'antd'
-import apiService from 'api/service'
 import { RJSFSchema } from '@rjsf/utils'
+import { TableProps } from 'antd'
+import React from 'react'
+
+import apiService from 'api/service'
 import TableHoc from 'components/hocs/table'
 
 const Notifications = () => {

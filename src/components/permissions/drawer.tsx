@@ -1,9 +1,10 @@
-import apiService from 'api/service'
 import { PlusCircleOutlined } from '@ant-design/icons'
-import { isString, toSentenceCase } from 'helpers/strings'
-import React, { Fragment, useEffect, useState } from 'react'
-import ResourceSearch from 'components/permissions/resourcesSearch'
 import { Button, Checkbox, Descriptions, Drawer, Form, Input, Tabs, Typography } from 'antd'
+import React, { Fragment, useEffect, useState } from 'react'
+
+import apiService from 'api/service'
+import ResourceSearch from 'components/permissions/resourcesSearch'
+import { isString, toSentenceCase } from 'helpers/strings'
 
 interface IPermission {
 	[resourceTypeName: string]: {

@@ -1,7 +1,8 @@
 import { Tabs } from 'antd'
-import { toSentenceCase } from 'helpers/strings'
 import React, { PropsWithChildren } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+
+import { toSentenceCase } from 'helpers/strings'
 
 const UserManagementContainer: React.FC<PropsWithChildren> = ({ children }) => {
 	const items = ['users', 'roles']

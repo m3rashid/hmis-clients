@@ -1,10 +1,11 @@
-import React from 'react'
-import InventoryManagementContainer from 'pages/inventory'
+import { RJSFSchema } from '@rjsf/utils'
 import { TableProps } from 'antd'
 import dayjs from 'dayjs'
-import { RJSFSchema } from '@rjsf/utils'
-import TableHoc from 'components/hocs/table'
+import React from 'react'
+
 import apiService from 'api/service'
+import TableHoc from 'components/hocs/table'
+import InventoryManagementContainer from 'pages/inventory'
 
 const RemovedConsumables = () => {
 	const columns: TableProps<any>['columns'] = [

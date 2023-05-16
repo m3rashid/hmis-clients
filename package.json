@@ -9,10 +9,9 @@
 		"eject": "react-scripts eject",
 		"tauri": "tauri",
 		"bundle": "tauri build",
-		"format:check": "prettier --check .",
 		"format:write": "prettier --write .",
 		"lint:check": "eslint .",
-		"lint:fix": "eslint --fix .",
+		"lint:fix": "eslint --fix \"**/!(node_modules|dist)/*.{js,jsx,ts,tsx}\"",
 		"precommit": "lint-staged",
 		"prepare": "husky install"
 	},
@@ -55,6 +54,7 @@
 		"autoprefixer": "^10.4.14",
 		"eslint": "^8.39.0",
 		"eslint-config-prettier": "^8.8.0",
+		"eslint-import-resolver-typescript": "^3.5.5",
 		"eslint-plugin-import": "^2.27.5",
 		"eslint-plugin-jsx-a11y": "^6.7.1",
 		"eslint-plugin-prettier": "^4.2.1",
@@ -85,12 +85,12 @@
 		]
 	},
 	"lint-staged": {
-		"*.{js,ts,tsx}": [
-			"eslint",
-			"prettier --write"
+		"*.{js,ts,tsx,d.ts}": [
+			"yarn lint:fix",
+			"yarn format:write"
 		],
 		"*.json": [
-			"prettier --write"
+			"yarn format:write"
 		]
 	}
 }

@@ -1,7 +1,8 @@
-import React from 'react'
-import dayjs from 'dayjs'
-import { camelCaseToSentenceCase } from 'helpers/strings'
 import { Typography } from 'antd'
+import dayjs from 'dayjs'
+import React from 'react'
+
+import { camelCaseToSentenceCase } from 'helpers/strings'
 
 interface IProps {
 	data: Record<string, any>
