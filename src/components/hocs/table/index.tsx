@@ -19,11 +19,6 @@ import ObjectAsDetails from 'components/atoms/objectAsDetails'
 import Form, { IHocFormProps } from 'components/form'
 import useTable from 'components/hocs/table/useTable'
 
-export const constants = {
-	defaultPageSize: 10,
-	defaultPageNumber: 1,
-}
-
 export interface DefaultParams {
 	data?: any
 }
@@ -227,8 +222,10 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 				rowKey={data => data._id}
 				pagination={{
 					position: ['bottomRight'],
-					defaultPageSize: constants.defaultPageSize,
-					defaultCurrent: constants.defaultPageNumber,
+					defaultPageSize: state.tableData.limit,
+					defaultCurrent: state.tableData.pagingCounter,
+					total: state.tableData.totalDocs,
+					hideOnSinglePage: true,
 					size: 'default',
 					...props.tableProps.pagination,
 				}}
@@ -238,7 +235,7 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 					...(showUpdatedTime ? showTimeEntryInTable('Time Updated', 'updatedAt') : []),
 				]}
 				style={{ height: '100%', minHeight: '500px', ...props.tableProps.style }}
-				dataSource={(props.tableProps.dataSource || state.tableData).map(t => ({
+				dataSource={(props.tableProps.dataSource || state.tableData.docs).map(t => ({
 					...t,
 					key: t._id,
 				}))}

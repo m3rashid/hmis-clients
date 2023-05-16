@@ -1,6 +1,6 @@
 import { AppstoreOutlined } from '@ant-design/icons'
 import { Menu, MenuProps, Popover, Typography } from 'antd'
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import routes from 'components/globals/routes'
@@ -38,6 +38,7 @@ const sidebarRoutes: MenuProps['items'] = routes.reduce((acc: any, route) => {
 
 const NavigationMenu: React.FC<IProps> = () => {
 	const navigate = useNavigate()
+	const [openKey, setOpenKey] = useState<string>()
 
 	return (
 		<Popover
@@ -47,6 +48,8 @@ const NavigationMenu: React.FC<IProps> = () => {
 					items={sidebarRoutes}
 					mode='inline'
 					theme='light'
+					openKeys={openKey ? [openKey] : []}
+					onOpenChange={keys => setOpenKey(keys[keys.length - 1])}
 					className='bg-transparent border-0 p-0 m-0 w-64 md:w-96'
 					multiple={false}
 					onClick={({ key }) => navigate(key)}

@@ -47,9 +47,9 @@ const UserManagement = () => {
 				}}
 				formBaseProps={{}}
 				routes={{
-					get: apiService('GET', '/user/all'),
-					delete: apiService('POST', '/user/delete'),
-					edit: apiService('POST', '/user/edit'),
+					get: apiService('GET', '/auth/user/all'),
+					delete: apiService('POST', '/auth/user/delete'),
+					edit: apiService('POST', '/auth/user/edit'),
 				}}
 				showTitle={false}
 				formSchema={formSchema}

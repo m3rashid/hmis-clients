@@ -14,7 +14,7 @@ const UserManagementContainer: React.FC<PropsWithChildren> = ({ children }) => {
 			<Tabs
 				centered
 				defaultActiveKey={current}
-				onChange={d => navigate(`/users-management/${d}`)}
+				onChange={d => navigate(`/users/${d}`)}
 				items={items.map(t => ({ key: t, label: toSentenceCase(t) }))}
 			/>
 			{children}

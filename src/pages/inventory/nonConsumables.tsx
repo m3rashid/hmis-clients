@@ -41,9 +41,6 @@ const NonConsumables = () => {
 				tableProps={{
 					columns: columns,
 					scroll: { x: 1000 },
-					pagination: {
-						defaultPageSize: 15,
-					},
 				}}
 				formBaseProps={{}}
 				routes={{

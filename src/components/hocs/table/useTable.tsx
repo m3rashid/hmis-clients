@@ -6,8 +6,34 @@ import apiService from 'api/service'
 import { TableHocProps } from 'components/hocs/table'
 import { configDefaultState } from 'context/config'
 
+interface PaginatedListIResponse {
+	docs: any[]
+	totalDocs: number
+	limit: number
+	totalPages: number
+	page: number
+	pagingCounter: number
+	hasPrevPage: boolean
+	hasNextPage: boolean
+	prevPage: number | null
+	nextPage: number | null
+}
+
+const defaultTableResponse: PaginatedListIResponse = {
+	docs: [],
+	totalDocs: 0,
+	limit: 15,
+	totalPages: 1,
+	page: 1,
+	pagingCounter: 1,
+	hasPrevPage: false,
+	hasNextPage: false,
+	prevPage: null,
+	nextPage: null,
+}
+
 const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
-	const [tableData, setTableData] = useState([])
+	const [tableData, setTableData] = useState<PaginatedListIResponse>(defaultTableResponse)
 
 	const { data: configResponse } = useQuery({
 		queryKey: ['config'],
@@ -59,7 +85,7 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 			console.log({ response })
 			setTableData(response)
 		} catch (err) {
-			setTableData([])
+			setTableData(defaultTableResponse)
 		} finally {
 			setLoading(false)
 		}
