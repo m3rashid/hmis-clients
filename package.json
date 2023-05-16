@@ -1,6 +1,10 @@
 {
 	"name": "web",
 	"version": "0.0.0",
+	"repository": "https://github.com/m3rashid-org/hmis-node-server.git",
+	"author": "m3rashid <m3rashid.hussain@gmail.com>",
+	"main": "src/index.tsx",
+	"license": "MIT",
 	"scripts": {
 		"dev": "react-scripts start",
 		"build": "react-scripts build",
