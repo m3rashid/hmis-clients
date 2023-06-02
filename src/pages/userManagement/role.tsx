@@ -1,11 +1,11 @@
 import { RJSFSchema } from '@rjsf/utils'
 import { TableProps } from 'antd'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
-import apiService from 'api/service'
-import TableHoc from 'components/hocs/table'
-import RoleDrawer from 'components/permissions/drawer'
-import UserManagementContainer from 'pages/userManagement'
+import apiService from 'src/api/service'
+import TableHoc from 'src/components/hocs/table'
+import RoleDrawer from 'src/components/permissions/drawer'
+import UserManagementContainer from 'src/pages/userManagement'
 
 const RoleManagement = () => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false)

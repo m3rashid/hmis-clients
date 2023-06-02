@@ -1,8 +1,7 @@
 import { Collapse, List, Steps, Typography } from 'antd'
-import React from 'react'
 import Lottie from 'react-lottie'
 
-import * as allServices from 'animations/hmis-services.json'
+import allServices from 'src/animations/hmis-services.json'
 
 const featuresData = [
 	{
@@ -101,7 +100,7 @@ const Home = () => {
 					<Typography.Title level={3}>Features</Typography.Title>
 					<Collapse
 						accordion
-						expandIconPosition='right'
+						expandIconPosition='end'
 						ghost
 						defaultActiveKey={[featuresData[0].key]}
 						className='bg-white border-0 p-0 m-0'
@@ -144,7 +143,7 @@ const Home = () => {
 				</div>
 
 				<div>
-					<Lottie options={{ animationData: allServices }} height={800} />
+					<Lottie options={{ animationData: allServices }} height={500} />
 				</div>
 			</div>
 		</>

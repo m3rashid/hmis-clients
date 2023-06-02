@@ -15,9 +15,9 @@ import {
 import dayjs from 'dayjs'
 import React, { ReactNode, useEffect } from 'react'
 
-import ObjectAsDetails from 'components/atoms/objectAsDetails'
-import Form, { IHocFormProps } from 'components/form'
-import useTable from 'components/hocs/table/useTable'
+import ObjectAsDetails from 'src/components/atoms/objectAsDetails'
+import Form, { IHocFormProps } from 'src/components/form'
+import useTable from 'src/components/hocs/table/useTable'
 
 export interface DefaultParams {
 	data?: any

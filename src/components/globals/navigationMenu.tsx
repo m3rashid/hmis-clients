@@ -3,7 +3,7 @@ import { Menu, MenuProps, Popover, Typography } from 'antd'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import routes from 'components/globals/routes'
+import routes from 'src/components/globals/routes'
 
 interface IProps {
 	collapsed?: boolean

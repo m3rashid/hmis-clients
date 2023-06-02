@@ -2,8 +2,8 @@ import { RJSFSchema } from '@rjsf/utils'
 import { TableProps } from 'antd'
 import React from 'react'
 
-import apiService from 'api/service'
-import TableHoc from 'components/hocs/table'
+import apiService from 'src/api/service'
+import TableHoc from 'src/components/hocs/table'
 
 const Notifications = () => {
 	const columns: TableProps<any>['columns'] = [

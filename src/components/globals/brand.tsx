@@ -1,22 +1,15 @@
-import { useQuery } from '@tanstack/react-query'
 import { Image, Typography } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import apiService from 'api/service'
-import { configDefaultState } from 'context/config'
+import { IConfig } from 'src/context/config'
 
 interface IProps {
 	onlyLogo?: boolean
+	config: IConfig
 }
 
-const Brand: React.FC<IProps> = ({ onlyLogo = false }) => {
-	const { data: configResponse } = useQuery({
-		queryKey: ['config'],
-		queryFn: () => apiService('GET', '/config')(),
-		staleTime: 1000 * 60 * 60 * 24, // 24 hours
-	})
-	const config = configResponse?.data || configDefaultState
+const Brand: React.FC<IProps> = ({ config, onlyLogo = false }) => {
 	const title = config.app.name
 	const subTitle = `v${config.app.version}`
 	const logo = '/images/logo.png'

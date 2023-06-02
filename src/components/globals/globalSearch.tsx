@@ -3,7 +3,7 @@ import { Input, Tooltip, Typography } from 'antd'
 import React, { useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import ActionSearchModal from './searchModal'
+import ActionSearchModal from 'src/components/globals/searchModal'
 
 interface IProps {
 	iconOnly?: boolean

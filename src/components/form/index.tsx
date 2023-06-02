@@ -4,7 +4,7 @@ import validator from '@rjsf/validator-ajv8'
 import { Alert, Button, FormProps } from 'antd'
 import React from 'react'
 
-import { customFields, customWidgets, overrideWidgetsSchema } from 'components/form/widgets'
+import { customFields, customWidgets, overrideWidgetsSchema } from 'src/components/form/widgets'
 
 export interface IHocFormProps {
 	formProps?: FormProps

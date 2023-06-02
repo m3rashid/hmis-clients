@@ -1,10 +1,9 @@
 import { RJSFSchema } from '@rjsf/utils'
 import { TableProps, Tag } from 'antd'
-import React from 'react'
 
-import apiService from 'api/service'
-import TableHoc from 'components/hocs/table'
-import UserManagementContainer from 'pages/userManagement'
+import apiService from 'src/api/service'
+import TableHoc from 'src/components/hocs/table'
+import UserManagementContainer from 'src/pages/userManagement'
 
 const UserManagement = () => {
 	const columns: TableProps<any>['columns'] = [

@@ -3,10 +3,10 @@ import { useQuery } from '@tanstack/react-query'
 import { Typography, message } from 'antd'
 import React from 'react'
 
-import apiService from 'api/service'
-import Form from 'components/form'
-import { IConfigExposedState, configDefaultState } from 'context/config'
-import { camelCaseToSentenceCase } from 'helpers/strings'
+import apiService from 'src/api/service'
+import Form from 'src/components/form'
+import { IConfigExposedState, configDefaultState } from 'src/context/config'
+import { camelCaseToSentenceCase } from 'src/helpers/strings'
 
 const convertToFormSchema = (config: any, widgetType?: string): RJSFSchema => {
 	const properties: RJSFSchema['properties'] = Object.entries(config).reduce(

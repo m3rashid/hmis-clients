@@ -3,9 +3,9 @@ import { Checkbox, Select, Typography } from 'antd'
 import debounce from 'lodash.debounce'
 import React, { Fragment, useState } from 'react'
 
-import apiService from 'api/service'
-import { IPayload } from 'components/permissions/drawer'
-import { toSentenceCase } from 'helpers/strings'
+import apiService from 'src/api/service'
+import { IPayload } from 'src/components/permissions/drawer'
+import { toSentenceCase } from 'src/helpers/strings'
 
 interface IProps {
 	permissionName: string

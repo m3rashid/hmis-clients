@@ -22,27 +22,27 @@ import {
 } from '@ant-design/icons'
 import React from 'react'
 
-import { IAuth } from 'context/auth'
+import { IAuth } from 'src/context/auth'
 
-const Home = React.lazy(() => import('pages/home'))
-const About = React.lazy(() => import('pages/about'))
-const Settings = React.lazy(() => import('pages/settings'))
-const Payments = React.lazy(() => import('pages/payments'))
-const LabManagement = React.lazy(() => import('pages/lab'))
-const Dashboard = React.lazy(() => import('pages/dashboard'))
-const PatientManagement = React.lazy(() => import('pages/patient'))
-const Notifications = React.lazy(() => import('pages/notifications'))
-const InPatientDepartment = React.lazy(() => import('pages/inPatient'))
-const AttendanceManagement = React.lazy(() => import('pages/attendance'))
-const OutPatientDepartment = React.lazy(() => import('pages/outPatient'))
-const HospitalPackage = React.lazy(() => import('pages/hospitalPackage'))
-const Consumables = React.lazy(() => import('pages/inventory/consumables'))
-const UserManagement = React.lazy(() => import('pages/userManagement/user'))
-const RoleManagement = React.lazy(() => import('pages/userManagement/role'))
-const NonConsumables = React.lazy(() => import('pages/inventory/nonConsumables'))
-const HealthInsuranceManagement = React.lazy(() => import('pages/healthInsurance'))
-const RemovedConsumables = React.lazy(() => import('pages/inventory/removedConsumables'))
-const RemovedNonConsumables = React.lazy(() => import('pages/inventory/removedNonConsumables'))
+const Home = React.lazy(() => import('src/pages/home'))
+const About = React.lazy(() => import('src/pages/about'))
+const Settings = React.lazy(() => import('src/pages/settings'))
+const Payments = React.lazy(() => import('src/pages/payments'))
+const LabManagement = React.lazy(() => import('src/pages/lab'))
+const Dashboard = React.lazy(() => import('src/pages/dashboard'))
+const PatientManagement = React.lazy(() => import('src/pages/patient'))
+const Notifications = React.lazy(() => import('src/pages/notifications'))
+const InPatientDepartment = React.lazy(() => import('src/pages/inPatient'))
+const AttendanceManagement = React.lazy(() => import('src/pages/attendance'))
+const OutPatientDepartment = React.lazy(() => import('src/pages/outPatient'))
+const HospitalPackage = React.lazy(() => import('src/pages/hospitalPackage'))
+const Consumables = React.lazy(() => import('src/pages/inventory/consumables'))
+const UserManagement = React.lazy(() => import('src/pages/userManagement/user'))
+const RoleManagement = React.lazy(() => import('src/pages/userManagement/role'))
+const NonConsumables = React.lazy(() => import('src/pages/inventory/nonConsumables'))
+const HealthInsuranceManagement = React.lazy(() => import('src/pages/healthInsurance'))
+const RemovedConsumables = React.lazy(() => import('src/pages/inventory/removedConsumables'))
+const RemovedNonConsumables = React.lazy(() => import('src/pages/inventory/removedNonConsumables'))
 
 export const resourceTypes = [
 	'USER',

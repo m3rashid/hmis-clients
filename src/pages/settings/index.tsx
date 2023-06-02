@@ -1,8 +1,8 @@
 import { Tabs } from 'antd'
 import React, { useContext } from 'react'
 
-import { uiContext } from 'context/ui'
-import * as configs from 'pages/settings/configs'
+import { uiContext } from 'src/context/ui'
+import * as configs from 'src/pages/settings/configs'
 
 const Settings = () => {
 	const [{ isMobile }] = useContext(uiContext)

@@ -3,9 +3,9 @@ import { TableProps } from 'antd'
 import dayjs from 'dayjs'
 import React from 'react'
 
-import apiService from 'api/service'
-import TableHoc from 'components/hocs/table'
-import InventoryManagementContainer from 'pages/inventory'
+import apiService from 'src/api/service'
+import TableHoc from 'src/components/hocs/table'
+import InventoryManagementContainer from 'src/pages/inventory'
 
 const RemovedNonConsumables = () => {
 	const columns: TableProps<any>['columns'] = [

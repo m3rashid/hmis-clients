@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import ErrorPage from 'pages/error'
+import ErrorPage from 'src/pages/error'
 
 const Catch = (component: any) =>
 	class extends React.Component {

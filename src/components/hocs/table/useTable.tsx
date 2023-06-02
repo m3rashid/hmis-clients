@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 import { Form } from 'antd'
 import React, { useState } from 'react'
 
-import apiService from 'api/service'
-import { TableHocProps } from 'components/hocs/table'
-import { configDefaultState } from 'context/config'
+import apiService from 'src/api/service'
+import { TableHocProps } from 'src/components/hocs/table'
+import { configDefaultState } from 'src/context/config'
 
 interface PaginatedListIResponse {
 	docs: any[]

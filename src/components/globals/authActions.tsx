@@ -3,8 +3,8 @@ import { Avatar, Button, Dropdown, Modal, message } from 'antd'
 import React, { useCallback, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import Form from 'components/form'
-import { authContext, authDefaultState } from 'context/auth'
+import Form from 'src/components/form'
+import { authContext, authDefaultState } from 'src/context/auth'
 
 interface IProps {
 	isMobile: boolean

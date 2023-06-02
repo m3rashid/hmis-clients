@@ -1,8 +1,8 @@
 import { RegistryFieldsType, RegistryWidgetsType, UiSchema } from '@rjsf/utils'
 
-import CustomColorWidget from 'components/form/widgets/color'
-import CustomMultiSelect from 'components/form/widgets/select'
-import CustomTextArea from 'components/form/widgets/textArea'
+import CustomColorWidget from 'src/components/form/widgets/color'
+import CustomMultiSelect from 'src/components/form/widgets/select'
+import CustomTextArea from 'src/components/form/widgets/textArea'
 
 export const overrideWidgetsSchema: UiSchema = {
 	'ui:TextareaWidget': 'CustomTextArea',

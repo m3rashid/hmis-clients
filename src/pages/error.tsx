@@ -25,12 +25,7 @@ const ErrorPage: React.FC<IProps> = ({ buttonLabel = 'Return to Home', type = '4
 			className='flex justify-center items-center flex-col gap-10 bg-white'
 			style={{ minHeight: 'calc(100vh - 130px)' }}
 		>
-			<Lottie
-				options={{
-					animationData: data,
-				}}
-				height={type === '404' ? 600 : 300}
-			/>
+			<Lottie options={{ animationData: data }} height={type === '404' ? 600 : 300} />
 			<div className='flex flex-col gap-2 items-center'>
 				<Typography.Title level={3}>
 					{type === '404' ? 'Page Not Found' : 'Access Denied'}

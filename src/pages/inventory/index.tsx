@@ -2,7 +2,7 @@ import { Tabs } from 'antd'
 import React, { PropsWithChildren } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { toSentenceCase } from 'helpers/strings'
+import { toSentenceCase } from 'src/helpers/strings'
 
 const InventoryManagementContainer: React.FC<PropsWithChildren> = ({ children }) => {
 	const items = ['consumables', 'non-consumables', 'consumables-removed', 'non-consumables-removed']

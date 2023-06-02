@@ -4,7 +4,7 @@ import debounce from 'lodash.debounce'
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import routes from 'components/globals/routes'
+import routes from 'src/components/globals/routes'
 
 interface IOption {
 	title: string

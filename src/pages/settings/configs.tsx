@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ConfigContainer from './configContainer'
+import ConfigContainer from 'src/pages/settings/configContainer'
 
 export const Colors = () => (
 	<div className='flex flex-col sm:flex-row items-stretch justify-stretch'>

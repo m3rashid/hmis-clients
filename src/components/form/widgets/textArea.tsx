@@ -1,5 +1,4 @@
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
-import React from 'react'
 import ReactQuill from 'react-quill'
 
 const CustomTextArea = () => {
