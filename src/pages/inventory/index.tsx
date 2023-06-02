@@ -6,7 +6,8 @@ import { toSentenceCase } from 'src/helpers/strings'
 
 const InventoryManagementContainer: React.FC<PropsWithChildren> = ({ children }) => {
 	const items = ['consumables', 'non-consumables', 'consumables-removed', 'non-consumables-removed']
-	const current = useLocation().pathname.split('/').at(-1)
+	const paths = useLocation().pathname.split('/')
+	const current = paths[paths.length - 1]
 	const navigate = useNavigate()
 	return (
 		<div>

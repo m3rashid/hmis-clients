@@ -22,7 +22,7 @@
 
     /* Absolute File Imports */
     "baseUrl": ".",
-    "rootDir": "src"
+    "rootDir": "src",
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

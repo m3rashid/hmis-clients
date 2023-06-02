@@ -6,7 +6,8 @@ import { toSentenceCase } from 'src/helpers/strings'
 
 const UserManagementContainer: React.FC<PropsWithChildren> = ({ children }) => {
 	const items = ['users', 'roles']
-	const current = useLocation().pathname.split('/').at(-1)
+	const paths = useLocation().pathname.split('/')
+	const current = paths[paths.length - 1]
 	const navigate = useNavigate()
 
 	return (

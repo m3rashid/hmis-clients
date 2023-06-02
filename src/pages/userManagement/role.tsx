@@ -9,7 +9,7 @@ import UserManagementContainer from 'src/pages/userManagement'
 
 const RoleManagement = () => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-	const [editPermission, setEditPermission] = useState<any>()
+	const [editPermission /* setEditPermission */] = useState<any>()
 
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Name', dataIndex: 'displayName', key: 'displayName' },

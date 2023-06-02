@@ -129,6 +129,7 @@ const RoleDrawer: React.FC<IProps> = ({
 				})
 			})
 			.catch(console.log)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	const onResourceChange = (resourceActualName: string) => {
@@ -224,7 +225,9 @@ const RoleDrawer: React.FC<IProps> = ({
 		})
 	}
 
-	const onSelectResourceId = (resourceIds: string[]) => {}
+	const onSelectResourceId = () =>
+		// resourceIds: string[]
+		{}
 
 	return (
 		<Fragment>
@@ -298,21 +301,30 @@ const RoleDrawer: React.FC<IProps> = ({
 											<Typography.Text>Independent Permissions</Typography.Text>
 										</div>
 
-										{Object.entries(resPermissions.independent).map(([permissionName, actions]) => (
-											<div className='bg-gray-100 rounded-md p-2 mb-2 flex items-center justify-between'>
-												<Typography.Text strong>{toSentenceCase(permissionName)}</Typography.Text>
+										{Object.entries(resPermissions.independent).map(
+											([
+												permissionName,
+												// actions
+											]) => (
+												<div className='bg-gray-100 rounded-md p-2 mb-2 flex items-center justify-between'>
+													<Typography.Text strong>{toSentenceCase(permissionName)}</Typography.Text>
 
-												<div className=''>
-													<Checkbox
-														onChange={e =>
-															handleAllowIndependent(e.target.checked, resourceName, permissionName)
-														}
-													>
-														Allow
-													</Checkbox>
+													<div className=''>
+														<Checkbox
+															onChange={e =>
+																handleAllowIndependent(
+																	e.target.checked,
+																	resourceName,
+																	permissionName
+																)
+															}
+														>
+															Allow
+														</Checkbox>
+													</div>
 												</div>
-											</div>
-										))}
+											)
+										)}
 
 										<div className='mt-10 mb-2 ml-[2px]'>
 											<Typography.Text>Action Permissions</Typography.Text>

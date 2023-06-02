@@ -4,7 +4,7 @@ import ReactQuill from 'react-quill'
 const CustomTextArea = () => {
 	return (
 		// eslint-disable-next-line no-undef
-		<GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMARLY_CLIENT_ID}>
+		<GrammarlyEditorPlugin clientId={import.meta.env.VITE_GRAMMARLY_CLIENT_ID}>
 			<ReactQuill theme='snow' />
 		</GrammarlyEditorPlugin>
 	)

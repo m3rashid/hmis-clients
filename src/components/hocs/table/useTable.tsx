@@ -116,15 +116,19 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 		}
 	}
 
-	const handleOkOnModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-		// TODO: axios call to create the entry
-		hideFormModal()
-	}
+	const handleOkOnModal = () =>
+		// e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+		{
+			// TODO: axios call to create the entry
+			hideFormModal()
+		}
 
 	const handleCancelOnModal: React.MouseEventHandler<HTMLAnchorElement> &
-		React.MouseEventHandler<HTMLButtonElement> = e => {
-		hideFormModal()
-	}
+		React.MouseEventHandler<HTMLButtonElement> = () =>
+		// e
+		{
+			hideFormModal()
+		}
 
 	const onFinishFormValues = (values: any) => {
 		if (!props.onFinishFormValues) return

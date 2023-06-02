@@ -28,12 +28,14 @@ const ResourceSearch: React.FC<IProps> = ({
 	const getResourcesByResourceType = apiService('POST', '/api/permission/resources')
 
 	// TODO
-	const handleGetOptions = debounce(async (value: string) => {
-		const { data } = await getResourcesByResourceType({
-			data: { resourceName } as any,
-		})
-		setOptions(data)
-	}, 500)
+	const handleGetOptions = debounce(async () =>
+		// value: string
+		{
+			const { data } = await getResourcesByResourceType({
+				data: { resourceName } as any,
+			})
+			setOptions(data)
+		}, 500)
 
 	return (
 		<Fragment>

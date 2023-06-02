@@ -1,5 +1,5 @@
 import { Tabs } from 'antd'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { uiContext } from 'src/context/ui'
 import * as configs from 'src/pages/settings/configs'

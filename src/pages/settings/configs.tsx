@@ -1,5 +1,3 @@
-import React from 'react'
-
 import ConfigContainer from 'src/pages/settings/configContainer'
 
 export const Colors = () => (
