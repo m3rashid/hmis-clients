@@ -1,7 +1,6 @@
 import { RJSFSchema } from '@rjsf/utils'
 import { TableProps } from 'antd'
 import dayjs from 'dayjs'
-import React from 'react'
 
 import apiService from 'src/api/service'
 import TableHoc from 'src/components/hocs/table'

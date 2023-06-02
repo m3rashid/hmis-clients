@@ -11,7 +11,6 @@
 		"tauri": "tauri",
 		"bundle": "tauri build",
 		"format:write": "prettier --write .",
-		"lint:check": "eslint .",
 		"lint:fix": "eslint --fix \"**/!(node_modules|dist)/*.{js,jsx,ts,tsx}\"",
 		"precommit": "lint-staged",
 		"prepare": "husky install"
