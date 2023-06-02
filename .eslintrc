@@ -3,6 +3,7 @@
 	"extends": [
 		"prettier",
 		"plugin:@typescript-eslint/recommended",
+		"plugin:@tanstack/eslint-plugin-query/recommended",
 		"eslint:recommended",
 		"plugin:react-hooks/recommended",
 		"plugin:import/recommended",
