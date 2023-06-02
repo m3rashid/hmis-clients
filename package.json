@@ -80,11 +80,11 @@
 	},
 	"lint-staged": {
 		"*.{js,ts,tsx,d.ts}": [
-			"yarn lint:fix",
-			"yarn format:write"
+			"pnpm lint:fix",
+			"pnpm format:write"
 		],
 		"*.json": [
-			"yarn format:write"
+			"pnpm format:write"
 		]
 	}
 }

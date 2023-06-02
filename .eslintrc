@@ -29,8 +29,8 @@
 		"sourceType": "module"
 	},
 	"rules": {
-		 "@tanstack/query/exhaustive-deps": "error",
-    "@tanstack/query/prefer-query-object-syntax": "error",
+		"@tanstack/query/exhaustive-deps": "error",
+		"@tanstack/query/prefer-query-object-syntax": "error",
 		"prettier/prettier": ["error"],
 		"@typescript-eslint/no-unused-vars": "warn",
 		"no-unused-vars": "warn",
