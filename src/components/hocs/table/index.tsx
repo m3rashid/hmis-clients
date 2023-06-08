@@ -138,7 +138,7 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 						</Button>
 					)}
 
-					<AutoComplete className='w-[200]' dropdownMatchSelectWidth={200}>
+					<AutoComplete className='w-[200]' popupMatchSelectWidth={200}>
 						<Input.Search size='middle' placeholder={`Search in ${props.title}`} />
 					</AutoComplete>
 				</div>
