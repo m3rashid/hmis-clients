@@ -1,7 +1,6 @@
 {
-	"plugins": ["react", "@tanstack/query", "react-hooks", "prettier", "import"],
+	"plugins": ["react", "@tanstack/query", "react-hooks", "import"],
 	"extends": [
-		"prettier",
 		"eslint:recommended",
 		"plugin:@typescript-eslint/recommended",
 		"plugin:@tanstack/eslint-plugin-query/recommended",
@@ -32,7 +31,6 @@
 	"rules": {
 		"@tanstack/query/exhaustive-deps": "error",
 		"@tanstack/query/prefer-query-object-syntax": "error",
-		"prettier/prettier": ["error"],
 		"@typescript-eslint/no-unused-vars": "warn",
 		"no-unused-vars": "warn",
 		"@typescript-eslint/no-empty-function": "off",

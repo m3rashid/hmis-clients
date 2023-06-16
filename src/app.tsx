@@ -1,5 +1,5 @@
 import 'antd/dist/reset.css'
-import './index.css'
+import 'src/index.css'
 import { Typography } from 'antd'
 import { Fragment, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
@@ -7,8 +7,8 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import Loading from 'src/components/atoms/loading'
 import ErrorBoundary from 'src/components/globals/errorBoundary'
 import routes from 'src/components/globals/routes'
-// import { authContext } from 'src/context/auth'
 import ErrorPage from 'src/pages/error'
+
 
 const FullPageLoading = () => (
 	<Loading classNames='min-h-[80vh] flex-col' spinProps={{ size: 'large' }}>
@@ -17,8 +17,6 @@ const FullPageLoading = () => (
 )
 
 const App = () => {
-	// const [auth, setAuth] = useContext(authContext)
-
 	return (
 		<Suspense fallback={<FullPageLoading />}>
 			<ErrorBoundary>
