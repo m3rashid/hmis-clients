@@ -14,8 +14,8 @@ import { uiContext } from 'src/context/ui'
 const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 	const { data: configResponse } = useQuery({
 		queryKey: ['config'],
-		queryFn: apiService('GET', '/config'),
-	})
+		queryFn: apiService('/config', 'GET'),
+	});
 
 	const config = configResponse?.data || configDefaultState
 	const [{ isMobile }, setIsMobile] = useContext(uiContext)

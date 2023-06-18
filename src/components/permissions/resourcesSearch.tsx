@@ -25,7 +25,7 @@ const ResourceSearch: React.FC<IProps> = ({
 	handleAllowSelf,
 }) => {
 	const [options, setOptions] = useState<Array<{ label: string; value: string }>>([])
-	const getResourcesByResourceType = apiService('POST', '/api/permission/resources')
+	const getResourcesByResourceType = apiService('/api/permission/resources')
 
 	// TODO
 	const handleGetOptions = debounce(async () =>

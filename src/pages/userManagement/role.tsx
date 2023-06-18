@@ -25,7 +25,7 @@ const RoleManagement = () => {
 	return (
 		<UserManagementContainer>
 			<TableHoc
-				title='Roles'
+				title="Roles"
 				actionButtons={
 					<RoleDrawer
 						{...{
@@ -43,25 +43,25 @@ const RoleManagement = () => {
 				}}
 				formBaseProps={{}}
 				routes={{
-					get: apiService('GET', '/role/all'),
+					get: apiService('/role/all', 'GET'),
 				}}
 				showTitle={false}
 				formSchema={formSchema}
-				modifyInfoDetails={data => {
-					if (!data) return {}
+				modifyInfoDetails={(data) => {
+					if (!data) return {};
 					return Object.entries(data).reduce<Record<string, string>>((acc, [key, val]) => {
 						if (key === 'permissions') {
 							return {
 								...acc,
 								// [key]: val.map((v: any) => v.displayName).join(', '),
-							}
+							};
 						}
-						return { ...acc, [key]: val }
-					}, {})
+						return { ...acc, [key]: val };
+					}, {});
 				}}
 			/>
 		</UserManagementContainer>
-	)
+	);
 }
 
 export default RoleManagement

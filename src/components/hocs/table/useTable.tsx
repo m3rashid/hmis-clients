@@ -37,9 +37,9 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 
 	const { data: configResponse } = useQuery({
 		queryKey: ['config'],
-		queryFn: () => apiService('GET', '/config')(),
+		queryFn: () => apiService('/config', 'GET')(),
 		staleTime: 1000 * 60 * 60 * 24, // 24 hours
-	})
+	});
 	const config = configResponse?.data || configDefaultState
 
 	const [formModalVisible, setFormModalVisible] = useState(false)

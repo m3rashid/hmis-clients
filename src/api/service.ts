@@ -1,18 +1,18 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import io from 'socket.io-client';
 
-import { serverRootUrl } from 'src/api/network';
+import { instance, serverRootUrl } from 'src/api/network';
 
 export let socket = io(serverRootUrl, {
 	transports: ['websocket'],
 	autoConnect: false,
-	auth: { token: localStorage.getItem('refresh_token') },
+	auth: { token: localStorage.getItem('refreshToken') },
 });
 
 window.setTimeout(() => {
 	socket = io(serverRootUrl, {
 		autoConnect: false,
-		auth: { token: localStorage.getItem('refresh_token') },
+		auth: { token: localStorage.getItem('refreshToken') },
 	});
 }, 2000);
 
@@ -22,14 +22,13 @@ export type ServiceHelper<Res, ReqData> = (
 
 const apiService =
 	<Res = any, ReqData = undefined>(
-		method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
-		url: string
+		url: string,
+		method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'POST',
 	): ServiceHelper<Res, ReqData> =>
 	(config) => {
-		return axios<Res>({
+		return instance<Res>({
 			url,
 			method,
-			baseURL: serverRootUrl,
 			...(config || {}),
 		});
 	};

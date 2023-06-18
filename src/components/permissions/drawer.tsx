@@ -68,7 +68,7 @@ const RoleDrawer: React.FC<IProps> = ({
 	const [payload, setPayload] = useState<IPayload | null>(null)
 	const [currentResourceType, setCurrentResourceType] = useState<IResourceType | null>(null)
 	const [allResourceTypes, setAllResourceTypes] = useState<IResourceType[]>([])
-	const getResources = apiService<IResourceType[]>('GET', '/resource/all')
+	const getResources = apiService<IResourceType[]>('/resource/all', 'GET');
 
 	useEffect(() => {
 		getResources()

@@ -2,7 +2,8 @@ import { message } from 'antd';
 import { useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import apiService, { socket } from "src/api/service"
+import { instance } from 'src/api/network';
+import apiService, { socket } from 'src/api/service';
 import { authContext, authDefaultState } from 'src/context/auth';
 
 export interface Login {
@@ -13,8 +14,8 @@ export interface Login {
 const useAuth = () => {
 	const navigate = useNavigate();
 	const [auth, setAuth] = useContext(authContext);
-	const revalidateApi = apiService('POST', '/auth/revalidate');
-	const loginUser = apiService<any, Login>('POST', '/auth/login');
+	const revalidateApi = apiService('/auth/revalidate');
+	const loginUser = apiService<any, Login>('/auth/login');
 
 	const loginFailed = () => message.error({ content: 'login Failed', key: 'auth/login' });
 
@@ -23,7 +24,8 @@ const useAuth = () => {
 			const { data } = await loginUser({ data: values });
 			const { accessToken, refreshToken, user } = data;
 			setAuth((prev) => ({ ...prev, isLoggedIn: true, token: accessToken, user }));
-			localStorage.setItem('refresh_token', refreshToken);
+			instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+			localStorage.setItem('refreshToken', refreshToken);
 			message.success({ content: 'login Successful', key: 'auth/login' });
 			after();
 		} catch (error) {
@@ -32,47 +34,44 @@ const useAuth = () => {
 	};
 
 	const logout = useCallback(() => {
-		localStorage.removeItem('refresh_token');
+		localStorage.removeItem('refreshToken');
+		instance.defaults.headers.common['Authorization'] = '';
 		navigate('/');
 		socket.disconnect();
 		setAuth(authDefaultState);
 	}, [navigate, setAuth]);
 
-	const revalidateJWT = async () => {
-		const token = localStorage.getItem('refresh_token');
-		if (!token) throw new Error('No token found');
-		const { data } = await revalidateApi({ headers: { Authorization: `Bearer ${token}` } });
-		const { accessToken, refreshToken, user } = data;
-		setAuth((prev) => ({ ...prev, isLoggedIn: true, token: accessToken, user }));
-		localStorage.setItem('refresh_token', refreshToken);
-		// @ts-ignore
-		socket.io.opts.auth.token = accessToken;
-		socket.disconnect().connect();
-		message.success({ content: 'login Successful', key: 'auth/login' });
-	};
-
-	const revalidate = useCallback(async () => {
-		setTimeout(() => {
-			revalidateJWT().catch((err: any) => {
-				console.log(err);
-				setAuth({
-					user: null,
-					error: null,
-					token: null,
-					loading: false,
-					isLoggedIn: false,
-				});
+	const revalidateJWT = async ({ msg = false }: { msg?: boolean }) => {
+		try {
+			const token = localStorage.getItem('refreshToken');
+			if (!token) throw new Error('No token found');
+			const { data } = await revalidateApi({ headers: { Authorization: `Bearer ${token}` } });
+			const { accessToken, refreshToken, user } = data;
+			setAuth((prev) => ({ ...prev, isLoggedIn: true, token: `Bearer ${accessToken}`, user }));
+			localStorage.setItem('refreshToken', refreshToken);
+			instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+			// @ts-ignore
+			socket.io.opts.auth.token = accessToken;
+			socket.disconnect().connect();
+			if (msg) message.success({ content: 'login Successful', key: 'auth/login' });
+		} catch (err) {
+			console.log(err);
+			setAuth({
+				user: null,
+				error: null,
+				token: null,
+				loading: false,
+				isLoggedIn: false,
 			});
-		}, 5000);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [setAuth]);
+		}
+	};
 
 	return {
 		auth,
 		login,
 		logout,
-		revalidate,
 		loginFailed,
+		revalidateJWT,
 	};
 };
 

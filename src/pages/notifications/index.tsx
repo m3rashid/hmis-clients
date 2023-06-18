@@ -49,8 +49,8 @@ const Notifications = () => {
 				}}
 				formBaseProps={{}}
 				routes={{
-					get: apiService('GET', '/notification/all'),
-					create: apiService('POST', '/notification'),
+					get: apiService('/notification/all', 'GET'),
+					create: apiService('/notification'),
 				}}
 				formSchema={formSchema}
 			/>

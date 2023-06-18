@@ -38,32 +38,32 @@ const UserManagement = () => {
 	return (
 		<UserManagementContainer>
 			<TableHoc
-				title='Users'
-				addButtonLabel='Add User'
+				title="Users"
+				addButtonLabel="Add User"
 				tableProps={{
 					columns: columns,
 					scroll: { x: 1000 },
 				}}
 				formBaseProps={{}}
 				routes={{
-					get: apiService('GET', '/auth/user/all'),
-					delete: apiService('POST', '/auth/user/delete'),
-					edit: apiService('POST', '/auth/user/edit'),
+					get: apiService('/auth/user/all', 'GET'),
+					delete: apiService('/auth/user/delete'),
+					edit: apiService('/auth/user/edit'),
 				}}
 				showTitle={false}
 				formSchema={formSchema}
-				modifyInfoDetails={data => {
-					if (!data) return {}
+				modifyInfoDetails={(data) => {
+					if (!data) return {};
 					return Object.entries(data).reduce<Record<string, string>>((acc, [key, val]) => {
 						if (key === 'roles') {
-							return { ...acc, [key]: val.map((v: any) => v.displayName).join(', ') }
+							return { ...acc, [key]: val.map((v: any) => v.displayName).join(', ') };
 						}
-						return { ...acc, [key]: val }
-					}, {})
+						return { ...acc, [key]: val };
+					}, {});
 				}}
 			/>
 		</UserManagementContainer>
-	)
+	);
 }
 
 export default UserManagement

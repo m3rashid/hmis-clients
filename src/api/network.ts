@@ -1,4 +1,5 @@
 import { invoke } from '@tauri-apps/api'
+import axios from 'axios'
 
 export const isDesktopApp = !!(window as any).__TAURI__
 
@@ -11,3 +12,7 @@ if (isDesktopApp) {
 		})
 		.catch(console.log)
 }
+
+export const instance = axios.create({
+	baseURL: serverRootUrl,
+});

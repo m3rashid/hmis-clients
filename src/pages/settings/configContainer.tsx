@@ -54,9 +54,9 @@ interface IProps {
 const ConfigContainer: React.FC<IProps> = props => {
 	const { data: configResponse } = useQuery({
 		queryKey: ['config'],
-		queryFn: () => apiService('GET', '/config')(),
+		queryFn: () => apiService('/config', 'GET')(),
 		staleTime: 1000 * 60 * 60 * 24, // 24 hours
-	})
+	});
 	const config = configResponse?.data || configDefaultState
 
 	const handleSave = (entryName: keyof IConfigExposedState) => (values: any) => {

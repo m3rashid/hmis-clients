@@ -39,9 +39,9 @@ const Consumables = () => {
 				}}
 				formBaseProps={{}}
 				routes={{
-					get: apiService('GET', '/inventory/consumable/all'),
-					delete: apiService('POST', '/inventory/consumable/delete'),
-					edit: apiService('POST', '/inventory/consumable/edit'),
+					get: apiService( '/inventory/consumable/all', 'GET'),
+					delete: apiService( '/inventory/consumable/delete'),
+					edit: apiService( '/inventory/consumable/edit'),
 				}}
 				showTitle={false}
 				formSchema={formSchema}
