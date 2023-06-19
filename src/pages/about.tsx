@@ -1,10 +1,10 @@
-import { Tabs } from 'antd'
+import { Tabs } from 'antd';
 
 const About = () => {
 	return (
-		<div className='' style={{ minHeight: 'calc(100vh - 130px)' }}>
+		<div className="" style={{ minHeight: 'calc(100vh - 130px)' }}>
 			<Tabs
-				tabPosition='left'
+				tabPosition="left"
 				items={[
 					{ label: 'Permissions', key: 'permissions', children: <div>Permissions</div> },
 					{ label: 'Inventory', key: 'inventory', children: <div>Inventory</div> },
@@ -12,7 +12,7 @@ const About = () => {
 				]}
 			/>
 		</div>
-	)
-}
+	);
+};
 
-export default About
+export default About;

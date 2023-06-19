@@ -1,17 +1,17 @@
-import { Typography } from 'antd'
-import dayjs from 'dayjs'
-import React from 'react'
+import { Typography } from 'antd';
+import dayjs from 'dayjs';
+import React from 'react';
 
-import { camelCaseToSentenceCase } from 'src/helpers/strings'
+import { camelCaseToSentenceCase } from '../../helpers/strings';
 
 interface IProps {
-	data: Record<string, any>
-	notToShow?: string[]
+	data: Record<string, any>;
+	notToShow?: string[];
 }
 
-const dateKeys = ['createdAt', 'updatedAt']
+const dateKeys = ['createdAt', 'updatedAt'];
 
-const ObjectAsDetails: React.FC<IProps> = props => {
+const ObjectAsDetails: React.FC<IProps> = (props) => {
 	const notToShow = [
 		'_id',
 		'key',
@@ -22,12 +22,12 @@ const ObjectAsDetails: React.FC<IProps> = props => {
 		'createdBy',
 		'lastUpdatedBy',
 		...(props.notToShow || []),
-	]
-	if (!props.data) return null
+	];
+	if (!props.data) return null;
 
 	const parsedData = Object.entries(props.data).reduce<Array<{ key: string; value: string }>>(
 		(acc, [key, value]) => {
-			if (notToShow.includes(key)) return acc
+			if (notToShow.includes(key)) return acc;
 			else if (dateKeys.includes(key)) {
 				return [
 					...acc,
@@ -35,7 +35,7 @@ const ObjectAsDetails: React.FC<IProps> = props => {
 						key: camelCaseToSentenceCase(key ?? ''),
 						value: dayjs(value).format('DD-MM-YYYY HH:mm A'),
 					},
-				]
+				];
 			}
 			return [
 				...acc,
@@ -43,23 +43,23 @@ const ObjectAsDetails: React.FC<IProps> = props => {
 					key: camelCaseToSentenceCase(key ?? ''),
 					value: JSON.stringify(value ?? {}).replace(/['"]+/g, ''),
 				},
-			]
+			];
 		},
 		[]
-	)
+	);
 
 	return (
-		<div className='flex flex-col gap-2'>
+		<div className="flex flex-col gap-2">
 			{parsedData.map(({ key, value }) => {
 				return (
-					<div className='grid gap-2' style={{ gridTemplateColumns: '1fr 2fr' }}>
-						<Typography.Text className='font-bold'>{key}</Typography.Text>
-						<Typography.Text className=''>{value}</Typography.Text>
+					<div className="grid gap-2" style={{ gridTemplateColumns: '1fr 2fr' }}>
+						<Typography.Text className="font-bold">{key}</Typography.Text>
+						<Typography.Text className="">{value}</Typography.Text>
 					</div>
-				)
+				);
 			})}
 		</div>
-	)
-}
+	);
+};
 
-export default ObjectAsDetails
+export default ObjectAsDetails;

@@ -1,10 +1,10 @@
-import { RJSFSchema } from '@rjsf/utils'
-import { TableProps } from 'antd'
-import dayjs from 'dayjs'
+import { RJSFSchema } from '@rjsf/utils';
+import { TableProps } from 'antd';
+import dayjs from 'dayjs';
 
-import apiService from 'src/api/service'
-import TableHoc from 'src/components/hocs/table'
-import InventoryManagementContainer from 'src/pages/inventory'
+import apiService from '../../api/service';
+import TableHoc from '../../components/hocs/table';
+import InventoryManagementContainer from './index';
 
 const RemovedConsumables = () => {
 	const columns: TableProps<any>['columns'] = [
@@ -31,12 +31,12 @@ const RemovedConsumables = () => {
 		type: 'object',
 		required: [],
 		properties: {},
-	}
+	};
 
 	return (
 		<InventoryManagementContainer>
 			<TableHoc
-				title='Removed Consumables'
+				title="Removed Consumables"
 				actionButtons={false}
 				tableProps={{
 					columns: columns,
@@ -47,15 +47,15 @@ const RemovedConsumables = () => {
 				}}
 				formBaseProps={{}}
 				routes={{
-					get: apiService( '/inventory/consumable/removed', 'GET'),
-					delete: apiService( '/inventory/consumable/delete'),
-					edit: apiService( '/inventory/consumable/edit'),
+					get: apiService('/inventory/consumable/removed', 'GET'),
+					delete: apiService('/inventory/consumable/delete'),
+					edit: apiService('/inventory/consumable/edit'),
 				}}
 				showTitle={false}
 				formSchema={formSchema}
 			/>
 		</InventoryManagementContainer>
-	)
-}
+	);
+};
 
-export default RemovedConsumables
+export default RemovedConsumables;

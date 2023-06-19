@@ -1,15 +1,15 @@
-import { useQuery } from '@tanstack/react-query'
-import { ConfigProvider, theme } from 'antd'
-import enUs from 'antd/locale/en_US'
-import React, { PropsWithChildren, useContext, useLayoutEffect } from 'react'
+import { useQuery } from '@tanstack/react-query';
+import { ConfigProvider, theme } from 'antd';
+import enUs from 'antd/locale/en_US';
+import React, { PropsWithChildren, useContext, useLayoutEffect } from 'react';
 
-import apiService from 'src/api/service'
-import AuthActions from 'src/components/globals/authActions'
-import Brand from 'src/components/globals/brand'
-import GlobalSearch from 'src/components/globals/globalSearch'
-import NavigationMenu from 'src/components/globals/navigationMenu'
-import { configDefaultState } from 'src/context/config'
-import { uiContext } from 'src/context/ui'
+import apiService from '../../api/service';
+import AuthActions from './authActions';
+import Brand from './brand';
+import GlobalSearch from './globalSearch';
+import NavigationMenu from './navigationMenu';
+import { configDefaultState } from '../../context/config';
+import { uiContext } from '../../context/ui';
 
 const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 	const { data: configResponse } = useQuery({
@@ -17,21 +17,21 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 		queryFn: apiService('/config', 'GET'),
 	});
 
-	const config = configResponse?.data || configDefaultState
-	const [{ isMobile }, setIsMobile] = useContext(uiContext)
-	const isDarkMode = config.app.theme === 'dark'
+	const config = configResponse?.data || configDefaultState;
+	const [{ isMobile }, setIsMobile] = useContext(uiContext);
+	const isDarkMode = config.app.theme === 'dark';
 
 	useLayoutEffect(() => {
 		const setWindowWidth = () => {
-			const windowWidth = window.innerWidth
-			if (windowWidth > 576) setIsMobile(prev => ({ ...prev, isMobile: false }))
-			else setIsMobile(prev => ({ ...prev, isMobile: true }))
-		}
-		setWindowWidth()
-		window.addEventListener('resize', setWindowWidth)
-		return () => window.removeEventListener('resize', setWindowWidth)
+			const windowWidth = window.innerWidth;
+			if (windowWidth > 576) setIsMobile((prev) => ({ ...prev, isMobile: false }));
+			else setIsMobile((prev) => ({ ...prev, isMobile: true }));
+		};
+		setWindowWidth();
+		window.addEventListener('resize', setWindowWidth);
+		return () => window.removeEventListener('resize', setWindowWidth);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+	}, []);
 
 	return (
 		<>
@@ -57,7 +57,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 					}`}
 				>
 					<Brand onlyLogo={isMobile} config={config} />
-					<div className='flex-1 all-center'>
+					<div className="flex-1 all-center">
 						<NavigationMenu />
 						<GlobalSearch />
 					</div>
@@ -76,7 +76,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 				</div>
 			</ConfigProvider>
 		</>
-	)
-}
+	);
+};
 
-export default AppLayout
+export default AppLayout;

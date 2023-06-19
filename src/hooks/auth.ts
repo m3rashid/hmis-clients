@@ -2,9 +2,9 @@ import { message } from 'antd';
 import { useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { instance } from 'src/api/network';
-import apiService, { socket } from 'src/api/service';
-import { authContext, authDefaultState } from 'src/context/auth';
+import { instance } from '../api/network';
+import apiService, { socket } from '..//api/service';
+import { authContext, authDefaultState } from '../context/auth';
 
 export interface Login {
 	email: string;

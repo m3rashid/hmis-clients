@@ -1,24 +1,25 @@
-import RJSFForm from '@rjsf/antd'
-import { RJSFSchema, UiSchema } from '@rjsf/utils'
-import validator from '@rjsf/validator-ajv8'
-import { Alert, Button, FormProps } from 'antd'
-import React from 'react'
+import RJSFForm from '@rjsf/antd';
+import { RJSFSchema, UiSchema } from '@rjsf/utils';
+import validator from '@rjsf/validator-ajv8';
+import { Alert, Button, FormProps } from 'antd';
+import React from 'react';
 
-import { customFields, customWidgets, overrideWidgetsSchema } from 'src/components/form/widgets'
+import { customFields, customWidgets, overrideWidgetsSchema } from './widgets';
 
 export interface IHocFormProps {
-	formProps?: FormProps
-	formUiSchema?: UiSchema
-	formSchema?: RJSFSchema
-	onFinishFormValues?: (formValues: any) => void
-	cancelText?: string
-	submitText?: string
-	onCancel?: React.MouseEventHandler<HTMLAnchorElement> & React.MouseEventHandler<HTMLButtonElement>
-	formBaseProps?: Omit<any, 'schema' | 'uiSchema' | 'validator' | 'onSubmit' | 'formContext'>
+	formProps?: FormProps;
+	formUiSchema?: UiSchema;
+	formSchema?: RJSFSchema;
+	onFinishFormValues?: (formValues: any) => void;
+	cancelText?: string;
+	submitText?: string;
+	onCancel?: React.MouseEventHandler<HTMLAnchorElement> &
+		React.MouseEventHandler<HTMLButtonElement>;
+	formBaseProps?: Omit<any, 'schema' | 'uiSchema' | 'validator' | 'onSubmit' | 'formContext'>;
 }
 
-const Form: React.FC<IHocFormProps> = props => {
-	if (!props.formSchema) return null
+const Form: React.FC<IHocFormProps> = (props) => {
+	if (!props.formSchema) return null;
 
 	return (
 		<RJSFForm
@@ -27,15 +28,15 @@ const Form: React.FC<IHocFormProps> = props => {
 			widgets={customWidgets}
 			fields={customFields}
 			uiSchema={{
-				'ui:ErrorListTemplate': props => {
-					const { errors } = props
+				'ui:ErrorListTemplate': (props) => {
+					const { errors } = props;
 					return (
-						<div className='mb-6 flex flex-col gap-2'>
+						<div className="mb-6 flex flex-col gap-2">
 							{errors.map((e, i) => {
-								return <Alert message={e.stack as string} key={i} type='error' showIcon closable />
+								return <Alert message={e.stack as string} key={i} type="error" showIcon closable />;
 							})}
 						</div>
-					)
+					);
 				},
 				...overrideWidgetsSchema,
 				...props.formUiSchema,
@@ -53,14 +54,14 @@ const Form: React.FC<IHocFormProps> = props => {
 			}}
 			{...props.formBaseProps}
 		>
-			<div className='w-full flex flex-row items-center justify-end gap-3'>
+			<div className="w-full flex flex-row items-center justify-end gap-3">
 				<Button onClick={props.onCancel}>{props.cancelText ?? 'Cancel'}</Button>
-				<Button type='primary' htmlType='submit'>
+				<Button type="primary" htmlType="submit">
 					{props.submitText ?? 'Submit'}
 				</Button>
 			</div>
 		</RJSFForm>
-	)
-}
+	);
+};
 
-export default Form
+export default Form;

@@ -1,33 +1,33 @@
 type Developers = {
-	name: string
-	github: string
-	linkedIn: string
-	website: string
-	image: string
-}
+	name: string;
+	github: string;
+	linkedIn: string;
+	website: string;
+	image: string;
+};
 
 export type IConfig = {
 	app: {
-		name: string
-		version: string
-		fullName: string
-		theme: 'light' | 'dark'
-	}
+		name: string;
+		version: string;
+		fullName: string;
+		theme: 'light' | 'dark';
+	};
 	appColors: {
-		primary: string
-		primaryHoverLight: string
-		primaryHoverDark: string
-	}
+		primary: string;
+		primaryHoverLight: string;
+		primaryHoverDark: string;
+	};
 	colors: {
-		success: string
-		warning: string
-		danger: string
-		info: string
-	}
-	developers: Array<Developers>
-}
+		success: string;
+		warning: string;
+		danger: string;
+		info: string;
+	};
+	developers: Array<Developers>;
+};
 
-export type IConfigExposedState = Pick<IConfig, 'colors' | 'appColors' | 'app'>
+export type IConfigExposedState = Pick<IConfig, 'colors' | 'appColors' | 'app'>;
 
 export const configDefaultState: IConfig = {
 	app: {
@@ -48,4 +48,4 @@ export const configDefaultState: IConfig = {
 		info: '#0EA5E9',
 	},
 	developers: [],
-}
+};

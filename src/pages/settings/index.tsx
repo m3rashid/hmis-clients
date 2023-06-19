@@ -1,15 +1,15 @@
-import { Tabs } from 'antd'
-import { useContext } from 'react'
+import { Tabs } from 'antd';
+import { useContext } from 'react';
 
-import { uiContext } from 'src/context/ui'
-import * as configs from 'src/pages/settings/configs'
+import { uiContext } from '../../context/ui';
+import * as configs from './configs';
 
 const Settings = () => {
-	const [{ isMobile }] = useContext(uiContext)
+	const [{ isMobile }] = useContext(uiContext);
 	return (
 		<>
 			<Tabs
-				defaultActiveKey='1'
+				defaultActiveKey="1"
 				centered
 				tabPosition={isMobile ? 'top' : 'left'}
 				style={{
@@ -27,7 +27,7 @@ const Settings = () => {
 				]}
 			/>
 		</>
-	)
-}
+	);
+};
 
-export default Settings
+export default Settings;

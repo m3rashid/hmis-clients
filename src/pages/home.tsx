@@ -1,7 +1,7 @@
-import { Collapse, List, Steps, Typography } from 'antd'
-import Lottie from 'react-lottie'
+import { Collapse, List, Steps, Typography } from 'antd';
+import Lottie from 'react-lottie';
 
-import allServices from 'src/animations/hmis-services.json'
+import allServices from '../animations/hmis-services.json';
 
 const featuresData = [
 	{
@@ -84,13 +84,13 @@ const featuresData = [
 		header: 'Other Features',
 		features: ['Patient options for nearest hospital selection (tenant based)'],
 	},
-]
+];
 
 const Home = () => {
 	return (
 		<>
-			<div className='flex flex-col-reverse sm:flex-row gap-10 items-center justify-between'>
-				<div className='flex-grow'>
+			<div className="flex flex-col-reverse sm:flex-row gap-10 items-center justify-between">
+				<div className="flex-grow">
 					<Typography.Title level={2}>Welcome to HMIS</Typography.Title>
 					<Typography.Text>HMIS powers the Hospitals for all administrative needs</Typography.Text>
 					<br />
@@ -100,41 +100,41 @@ const Home = () => {
 					<Typography.Title level={3}>Features</Typography.Title>
 					<Collapse
 						accordion
-						expandIconPosition='end'
+						expandIconPosition="end"
 						ghost
 						defaultActiveKey={[featuresData[0].key]}
-						className='bg-white border-0 p-0 m-0'
+						className="bg-white border-0 p-0 m-0"
 						bordered={false}
 					>
-						{featuresData.map(feature => (
+						{featuresData.map((feature) => (
 							<Collapse.Panel
-								className='m-0 p-0'
+								className="m-0 p-0"
 								key={feature.key}
 								header={
-									<Typography.Text className='font-semibold'>{feature.header}</Typography.Text>
+									<Typography.Text className="font-semibold">{feature.header}</Typography.Text>
 								}
 							>
 								<List
 									bordered={false}
-									className='ml-2'
+									className="ml-2"
 									dataSource={feature.features}
 									renderItem={(item, index) => {
 										if (typeof item === 'string')
 											return (
-												<List.Item className='border-0' key={feature.key + index + item}>
+												<List.Item className="border-0" key={feature.key + index + item}>
 													{item}
 												</List.Item>
-											)
+											);
 										return (
 											<List.Item key={feature.key + index}>
 												<Steps
-													size='small'
-													className='border-0'
+													size="small"
+													className="border-0"
 													current={item.length}
-													items={item.map(t => ({ title: t, key: t + index }))}
+													items={item.map((t) => ({ title: t, key: t + index }))}
 												/>
 											</List.Item>
-										)
+										);
 									}}
 								/>
 							</Collapse.Panel>
@@ -147,7 +147,7 @@ const Home = () => {
 				</div>
 			</div>
 		</>
-	)
-}
+	);
+};
 
-export default Home
+export default Home;

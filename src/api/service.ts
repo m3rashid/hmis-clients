@@ -1,7 +1,7 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import io from 'socket.io-client';
 
-import { instance, serverRootUrl } from 'src/api/network';
+import { instance, serverRootUrl } from '../api/network';
 
 export let socket = io(serverRootUrl, {
 	transports: ['websocket'],
@@ -23,7 +23,7 @@ export type ServiceHelper<Res, ReqData> = (
 const apiService =
 	<Res = any, ReqData = undefined>(
 		url: string,
-		method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'POST',
+		method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'POST'
 	): ServiceHelper<Res, ReqData> =>
 	(config) => {
 		return instance<Res>({

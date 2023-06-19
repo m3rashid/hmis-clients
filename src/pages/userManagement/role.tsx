@@ -1,26 +1,26 @@
-import { RJSFSchema } from '@rjsf/utils'
-import { TableProps } from 'antd'
-import { useState } from 'react'
+import { RJSFSchema } from '@rjsf/utils';
+import { TableProps } from 'antd';
+import { useState } from 'react';
 
-import apiService from 'src/api/service'
-import TableHoc from 'src/components/hocs/table'
-import RoleDrawer from 'src/components/permissions/drawer'
-import UserManagementContainer from 'src/pages/userManagement'
+import apiService from '../../api/service';
+import TableHoc from '../..//components/hocs/table';
+import RoleDrawer from '../../components/permissions/drawer';
+import UserManagementContainer from './index';
 
 const RoleManagement = () => {
-	const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-	const [editPermission /* setEditPermission */] = useState<any>()
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [editPermission /* setEditPermission */] = useState<any>();
 
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Name', dataIndex: 'displayName', key: 'displayName', width: 250 },
 		{ title: 'Description', dataIndex: 'description', key: 'description' },
-	]
+	];
 
 	const formSchema: RJSFSchema = {
 		type: 'object',
 		required: [],
 		properties: {},
-	}
+	};
 
 	return (
 		<UserManagementContainer>
@@ -57,6 +57,6 @@ const RoleManagement = () => {
 			/>
 		</UserManagementContainer>
 	);
-}
+};
 
-export default RoleManagement
+export default RoleManagement;

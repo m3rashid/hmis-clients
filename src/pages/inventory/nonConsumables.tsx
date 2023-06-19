@@ -1,10 +1,10 @@
-import { RJSFSchema } from '@rjsf/utils'
-import { TableProps } from 'antd'
-import dayjs from 'dayjs'
+import { RJSFSchema } from '@rjsf/utils';
+import { TableProps } from 'antd';
+import dayjs from 'dayjs';
 
-import apiService from 'src/api/service'
-import TableHoc from 'src/components/hocs/table'
-import InventoryManagementContainer from 'src/pages/inventory'
+import apiService from '../../api/service';
+import TableHoc from '../../components/hocs/table';
+import InventoryManagementContainer from './index';
 
 const NonConsumables = () => {
 	const columns: TableProps<any>['columns'] = [
@@ -14,29 +14,29 @@ const NonConsumables = () => {
 			title: 'Last Servicing Date',
 			dataIndex: 'lastServicingDate',
 			key: 'lastServicingDate',
-			render: t => dayjs(t).format('DD-MM-YYYY HH:mm A'),
+			render: (t) => dayjs(t).format('DD-MM-YYYY HH:mm A'),
 			width: 150,
 		},
 		{
 			title: 'Next Servicing Date',
 			dataIndex: 'nextServicingDate',
 			key: 'nextServicingDate',
-			render: t => dayjs(t).format('DD-MM-YYYY HH:mm A'),
+			render: (t) => dayjs(t).format('DD-MM-YYYY HH:mm A'),
 			width: 150,
 		},
-	]
+	];
 
 	const formSchema: RJSFSchema = {
 		type: 'object',
 		required: [],
 		properties: {},
-	}
+	};
 
 	return (
 		<InventoryManagementContainer>
 			<TableHoc
-				title='Non Consumables'
-				addButtonLabel='Add Non Consumable'
+				title="Non Consumables"
+				addButtonLabel="Add Non Consumable"
 				tableProps={{
 					columns: columns,
 					scroll: { x: 1000 },
@@ -51,7 +51,7 @@ const NonConsumables = () => {
 				formSchema={formSchema}
 			/>
 		</InventoryManagementContainer>
-	)
-}
+	);
+};
 
-export default NonConsumables
+export default NonConsumables;

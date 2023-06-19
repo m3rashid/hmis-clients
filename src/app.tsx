@@ -4,10 +4,10 @@ import { Typography } from 'antd';
 import { Fragment, Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import Loading from 'src/components/atoms/loading';
-import ErrorBoundary from 'src/components/globals/errorBoundary';
-import routes from 'src/components/globals/routes';
-import ErrorPage from 'src/pages/error';
+import Loading from './components/atoms/loading';
+import ErrorBoundary from './components/globals/errorBoundary';
+import routes from './components/globals/routes';
+import ErrorPage from './pages/error';
 
 import useAuth from './hooks/auth';
 

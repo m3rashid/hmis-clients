@@ -1,14 +1,14 @@
-import { RJSFSchema } from '@rjsf/utils'
-import { TableProps } from 'antd'
+import { RJSFSchema } from '@rjsf/utils';
+import { TableProps } from 'antd';
 
-import apiService from 'src/api/service'
-import TableHoc from 'src/components/hocs/table'
+import apiService from '../../api/service';
+import TableHoc from '../../components/hocs/table';
 
 const Notifications = () => {
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Title', dataIndex: 'title', key: 'title', width: 250 },
 		{ title: 'Description', dataIndex: 'description', key: 'description' },
-	]
+	];
 
 	const formSchema: RJSFSchema = {
 		type: 'object',
@@ -24,24 +24,24 @@ const Notifications = () => {
 			},
 		},
 		required: ['title', 'description'],
-	}
+	};
 
 	const handleFormSubmit = (data: any) => {
-		const { title, description } = data.formData
-		console.log({ title, description })
-	}
+		const { title, description } = data.formData;
+		console.log({ title, description });
+	};
 
 	return (
 		<>
 			<TableHoc
-				title='Notifications'
-				addButtonLabel='New Notification'
+				title="Notifications"
+				addButtonLabel="New Notification"
 				modalProps={{
 					title: 'New Notification',
 					width: 600,
 				}}
-				submitText='Save and Release'
-				cancelText='Save as Draft'
+				submitText="Save and Release"
+				cancelText="Save as Draft"
 				onFinishFormValues={handleFormSubmit}
 				tableProps={{
 					columns: columns,
@@ -55,7 +55,7 @@ const Notifications = () => {
 				formSchema={formSchema}
 			/>
 		</>
-	)
-}
+	);
+};
 
-export default Notifications
+export default Notifications;

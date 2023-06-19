@@ -2,8 +2,8 @@ import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Dropdown, Modal } from 'antd';
 import React, { useState } from 'react';
 
-import Form from 'src/components/form';
-import useAuth from 'src/hooks/auth';
+import Form from '../../components/form';
+import useAuth from '../../hooks/auth';
 
 interface IProps {
 	isMobile: boolean;

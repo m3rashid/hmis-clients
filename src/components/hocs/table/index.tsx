@@ -1,4 +1,4 @@
-import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleOutlined } from '@ant-design/icons'
+import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleOutlined } from '@ant-design/icons';
 import {
 	AutoComplete,
 	Button,
@@ -11,51 +11,51 @@ import {
 	TableColumnsType,
 	TableProps,
 	Typography,
-} from 'antd'
-import dayjs from 'dayjs'
-import React, { ReactNode, useEffect } from 'react'
+} from 'antd';
+import dayjs from 'dayjs';
+import React, { ReactNode, useEffect } from 'react';
 
-import ObjectAsDetails from 'src/components/atoms/objectAsDetails'
-import Form, { IHocFormProps } from 'src/components/form'
-import useTable from 'src/components/hocs/table/useTable'
+import ObjectAsDetails from '../../../components/atoms/objectAsDetails';
+import Form, { IHocFormProps } from '../../../components/form';
+import useTable from './useTable';
 
 export interface DefaultParams {
-	data?: any
+	data?: any;
 }
 
 export interface TableHocProps<RecordType> extends IHocFormProps {
-	tableProps: TableProps<RecordType>
-	modalProps?: ModalProps
-	title: string
-	actionButtons?: ReactNode
-	showTitle?: boolean
-	addButtonLabel?: string
-	showCreatedTime?: boolean
-	showUpdatedTime?: boolean
-	modifyInfoDetails?: (data: Record<string, any>) => Record<string, string>
-	notToShowInInfo?: string[]
-	renderCustomForm?: ReactNode
+	tableProps: TableProps<RecordType>;
+	modalProps?: ModalProps;
+	title: string;
+	actionButtons?: ReactNode;
+	showTitle?: boolean;
+	addButtonLabel?: string;
+	showCreatedTime?: boolean;
+	showUpdatedTime?: boolean;
+	modifyInfoDetails?: (data: Record<string, any>) => Record<string, string>;
+	notToShowInInfo?: string[];
+	renderCustomForm?: ReactNode;
 	routes?: {
-		get?: (data?: DefaultParams) => Promise<any>
-		list?: (data?: DefaultParams) => Promise<any>
-		edit?: (data?: DefaultParams) => Promise<any>
-		delete?: (data?: DefaultParams) => Promise<any>
-		details?: (data?: DefaultParams) => Promise<any>
-		create?: (data?: DefaultParams) => Promise<any>
-	}
+		get?: (data?: DefaultParams) => Promise<any>;
+		list?: (data?: DefaultParams) => Promise<any>;
+		edit?: (data?: DefaultParams) => Promise<any>;
+		delete?: (data?: DefaultParams) => Promise<any>;
+		details?: (data?: DefaultParams) => Promise<any>;
+		create?: (data?: DefaultParams) => Promise<any>;
+	};
 }
 
 const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<RecordType>) => {
-	const showTitle = props.showTitle || true
-	const showCreatedTime = props.showCreatedTime ?? true
-	const showUpdatedTime = props.showUpdatedTime ?? true
-	const { actions, state, stateUpdater } = useTable<RecordType>(props)
-	const modifyInfoDetails = props.modifyInfoDetails ?? ((data: any) => data)
+	const showTitle = props.showTitle || true;
+	const showCreatedTime = props.showCreatedTime ?? true;
+	const showUpdatedTime = props.showUpdatedTime ?? true;
+	const { actions, state, stateUpdater } = useTable<RecordType>(props);
+	const modifyInfoDetails = props.modifyInfoDetails ?? ((data: any) => data);
 
 	useEffect(() => {
-		actions.getData()
+		actions.getData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+	}, []);
 
 	const popConfirmButtonStyles: React.CSSProperties = {
 		height: 34,
@@ -63,23 +63,23 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 		paddingRight: 16,
 		borderRadius: 6,
 		marginTop: 10,
-	}
+	};
 
 	const TablePanel = (/* tableDataOnThisPage: any */) => {
 		return (
 			<div className={`flex flex-col sm:flex-row items-center justify-between`}>
 				{showTitle ? (
-					<Typography.Title level={4} className='sm:pl-2 m-0 pb-0'>
+					<Typography.Title level={4} className="sm:pl-2 m-0 pb-0">
 						{props.title}
 					</Typography.Title>
 				) : (
 					<div />
 				)}
-				<div className='flex items-center justify-center sm:justify-end flex-grow mr-2'>
-					<div className='flex gap-2'>
+				<div className="flex items-center justify-center sm:justify-end flex-grow mr-2">
+					<div className="flex gap-2">
 						{state.showInfoAction && (
 							<Button
-								type='primary'
+								type="primary"
 								style={{ backgroundColor: state.config.colors.info }}
 								icon={<InfoCircleFilled />}
 								onClick={actions.showInfoModal}
@@ -90,7 +90,7 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 
 						{props.routes?.edit && state.showEditAction && (
 							<Button
-								type='primary'
+								type="primary"
 								style={{ backgroundColor: state.config.colors.warning }}
 								icon={<EditFilled />}
 								onClick={actions.onClickEdit}
@@ -100,22 +100,22 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 						)}
 						{props.routes?.delete && state.showDeleteAction && (
 							<Popconfirm
-								title={<Typography.Text className='text-lg'>Delete item(s)</Typography.Text>}
+								title={<Typography.Text className="text-lg">Delete item(s)</Typography.Text>}
 								description={
-									<Typography.Text className='text-base'>
+									<Typography.Text className="text-base">
 										Are you sure you want to delete item(s) ?
 									</Typography.Text>
 								}
 								onConfirm={actions.onClickDelete}
 								overlayInnerStyle={{ padding: 20 }}
-								okText='Delete'
+								okText="Delete"
 								okButtonProps={{
 									style: { ...popConfirmButtonStyles, backgroundColor: state.config.colors.danger },
 								}}
 								cancelButtonProps={{ style: { ...popConfirmButtonStyles } }}
 							>
 								<Button
-									type='primary'
+									type="primary"
 									style={{ backgroundColor: state.config.colors.danger }}
 									icon={<DeleteFilled />}
 								>
@@ -126,11 +126,11 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 					</div>
 				</div>
 
-				<div className='flex items-center justify-center mt-2 sm:mt-0'>
+				<div className="flex items-center justify-center mt-2 sm:mt-0">
 					{props.actionButtons ?? (
 						<Button
-							type='primary'
-							className='mx-3'
+							type="primary"
+							className="mx-3"
 							onClick={actions.showFormModal}
 							icon={<PlusCircleOutlined />}
 						>
@@ -138,13 +138,13 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 						</Button>
 					)}
 
-					<AutoComplete className='w-[200]' popupMatchSelectWidth={200}>
-						<Input.Search size='middle' placeholder={`Search in ${props.title}`} />
+					<AutoComplete className="w-[200]" popupMatchSelectWidth={200}>
+						<Input.Search size="middle" placeholder={`Search in ${props.title}`} />
 					</AutoComplete>
 				</div>
 			</div>
-		)
-	}
+		);
+	};
 
 	const showTimeEntryInTable = (title: any, dataIndex: string): TableColumnsType<RecordType> => [
 		{
@@ -160,10 +160,10 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 						: -1
 					: dayjs(a.dataIndex).diff(dayjs(b.dataIndex)) <= 0
 					? 1
-					: -1
+					: -1;
 			},
 		},
-	]
+	];
 
 	return (
 		<>
@@ -209,17 +209,17 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 			{props.showTitle && (
 				<>
 					<Typography.Title level={3}>{props.title}</Typography.Title>
-					<Divider className='m-0 p-0 mb-4' />
+					<Divider className="m-0 p-0 mb-4" />
 				</>
 			)}
 
 			<Table<RecordType>
 				{...props.tableProps}
 				sticky
-				size='middle'
+				size="middle"
 				title={TablePanel}
 				scroll={{ x: 1200 }}
-				rowKey={data => data._id}
+				rowKey={(data) => data._id}
 				pagination={{
 					position: ['bottomRight'],
 					defaultPageSize: state.tableData.limit,
@@ -235,29 +235,29 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 					...(showUpdatedTime ? showTimeEntryInTable('Time Updated', 'updatedAt') : []),
 				]}
 				style={{ height: '100%', minHeight: '500px', ...props.tableProps.style }}
-				dataSource={(props.tableProps.dataSource || state.tableData.docs).map(t => ({
+				dataSource={(props.tableProps.dataSource || state.tableData.docs).map((t) => ({
 					...t,
 					key: t._id,
 				}))}
 				rowSelection={{
 					type: 'checkbox',
-					selectedRowKeys: state.selectedRows.map(t => t._id),
+					selectedRowKeys: state.selectedRows.map((t) => t._id),
 					hideSelectAll: true,
 					onChange: (_: React.Key[], rows: RecordType[]) => {
-						stateUpdater.setSelectedRows(rows)
+						stateUpdater.setSelectedRows(rows);
 					},
 				}}
-				onRow={data => ({
+				onRow={(data) => ({
 					onDoubleClick: () => {
-						const allOthers = state.selectedRows.filter(t => t._id !== data._id)
+						const allOthers = state.selectedRows.filter((t) => t._id !== data._id);
 						if (allOthers.length === state.selectedRows.length) {
-							stateUpdater.setSelectedRows(prev => [...prev, data])
-						} else stateUpdater.setSelectedRows(allOthers)
+							stateUpdater.setSelectedRows((prev) => [...prev, data]);
+						} else stateUpdater.setSelectedRows(allOthers);
 					},
 				})}
 			/>
 		</>
-	)
-}
+	);
+};
 
-export default TableHoc
+export default TableHoc;

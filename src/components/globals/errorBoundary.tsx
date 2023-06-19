@@ -1,61 +1,61 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-import ErrorPage from 'src/pages/error'
+import ErrorPage from '../../pages/error';
 
 const Catch = (component: any) =>
 	class extends React.Component {
 		state = {
 			error: undefined,
-		}
+		};
 
 		static getDerivedStateFromError(error: any) {
-			return { error }
+			return { error };
 		}
 
 		removeError() {
-			this.setState({ error: undefined })
+			this.setState({ error: undefined });
 		}
 
 		componentDidCatch(error: any, info: any) {
-			console.log(error, info)
+			console.log(error, info);
 		}
 
 		render() {
-			return component(this.props, this.state.error, this.removeError.bind(this))
+			return component(this.props, this.state.error, this.removeError.bind(this));
 		}
-	}
+	};
 
 type IProps = {
-	removeError: any
-}
+	removeError: any;
+};
 
 const ErrorHandlerFallback: React.FC<IProps> = ({ removeError }) => {
 	// const navigate = useNavigate()
-	const { pathname } = useLocation()
-	const [currentPath, setCurrentPath] = useState('')
+	const { pathname } = useLocation();
+	const [currentPath, setCurrentPath] = useState('');
 
 	useEffect(() => {
-		setCurrentPath(pathname)
+		setCurrentPath(pathname);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+	}, []);
 
 	useEffect(() => {
-		if (!currentPath) return
+		if (!currentPath) return;
 		if (currentPath !== pathname) {
-			removeError()
+			removeError();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [pathname])
+	}, [pathname]);
 
-	return <ErrorPage />
-}
+	return <ErrorPage />;
+};
 
 const ErrorBoundary = Catch((props: any, error: any, removeError: any) => {
 	if (error) {
-		return <ErrorHandlerFallback removeError={removeError} />
+		return <ErrorHandlerFallback removeError={removeError} />;
 	}
-	return <>{props.children}</>
-})
+	return <>{props.children}</>;
+});
 
-export default ErrorBoundary
+export default ErrorBoundary;
