@@ -5,35 +5,24 @@ import React, { useState } from 'react';
 import apiService from '../../../api/service';
 import { TableHocProps } from './index';
 import { configDefaultState } from '../../../context/config';
-
-interface PaginatedListIResponse {
-	docs: any[];
-	totalDocs: number;
-	limit: number;
-	totalPages: number;
-	page: number;
-	pagingCounter: number;
-	hasPrevPage: boolean;
-	hasNextPage: boolean;
-	prevPage: number | null;
-	nextPage: number | null;
-}
-
-const defaultTableResponse: PaginatedListIResponse = {
-	docs: [],
-	totalDocs: 0,
-	limit: 15,
-	totalPages: 1,
-	page: 1,
-	pagingCounter: 1,
-	hasPrevPage: false,
-	hasNextPage: false,
-	prevPage: null,
-	nextPage: null,
-};
+import type { MODELS } from '@hmis/gatekeeper';
 
 const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
-	const [tableData, setTableData] = useState<PaginatedListIResponse>(defaultTableResponse);
+	const defaultTableResponse: MODELS.PaginatedListIResponse<RecordType> = {
+		docs: [],
+		totalDocs: 0,
+		limit: 15,
+		totalPages: 1,
+		page: 1,
+		pagingCounter: 1,
+		hasPrevPage: false,
+		hasNextPage: false,
+		prevPage: null,
+		nextPage: null,
+	};
+
+	const [tableData, setTableData] =
+		useState<MODELS.PaginatedListIResponse<RecordType>>(defaultTableResponse);
 
 	const { data: configResponse } = useQuery({
 		queryKey: ['config'],
