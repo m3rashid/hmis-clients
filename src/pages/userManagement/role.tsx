@@ -12,7 +12,7 @@ const RoleManagement = () => {
 	const [editPermission /* setEditPermission */] = useState<any>()
 
 	const columns: TableProps<any>['columns'] = [
-		{ title: 'Name', dataIndex: 'displayName', key: 'displayName' },
+		{ title: 'Name', dataIndex: 'displayName', key: 'displayName', width: 250 },
 		{ title: 'Description', dataIndex: 'description', key: 'description' },
 	]
 
@@ -50,12 +50,7 @@ const RoleManagement = () => {
 				modifyInfoDetails={(data) => {
 					if (!data) return {};
 					return Object.entries(data).reduce<Record<string, string>>((acc, [key, val]) => {
-						if (key === 'permissions') {
-							return {
-								...acc,
-								// [key]: val.map((v: any) => v.displayName).join(', '),
-							};
-						}
+						if (key === 'permissions') return { ...acc };
 						return { ...acc, [key]: val };
 					}, {});
 				}}

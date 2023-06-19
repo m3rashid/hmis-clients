@@ -9,18 +9,23 @@ import InventoryManagementContainer from 'src/pages/inventory'
 const Consumables = () => {
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name', width: 150 },
-		{ title: 'Quantity Left', dataIndex: 'quantityLeft', key: 'quantityLeft' },
-		{ title: 'Quantity Per Unit', dataIndex: 'quantityPerUnit', key: 'quantityPerUnit' },
+		{ title: 'Quantity Left', dataIndex: 'quantityLeft', key: 'quantityLeft', width: 150 },
+		{
+			title: 'Quantity Per Unit',
+			dataIndex: 'quantityPerUnit',
+			key: 'quantityPerUnit',
+			width: 150,
+		},
 		{ title: 'Batch Number', dataIndex: 'batchNumber', key: 'batchNumber' },
 		{
 			title: 'ExpiryDate',
 			dataIndex: 'expiryDate',
 			key: 'expiryDate',
-			render: t => dayjs(t).format('DD-MM-YYYY'),
+			render: (t) => dayjs(t).format('DD-MM-YYYY'),
 			width: 100,
 		},
 		{ title: 'Manufacturer', dataIndex: 'manufacturer', key: 'manufacturer' },
-	]
+	];
 
 	const formSchema: RJSFSchema = {
 		type: 'object',
