@@ -1,5 +1,5 @@
 import 'antd/dist/reset.css';
-import 'src/index.css';
+import './index.css';
 import { Typography } from 'antd';
 import { Fragment, Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
