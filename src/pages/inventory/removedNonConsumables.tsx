@@ -1,13 +1,13 @@
-import { RJSFSchema } from '@rjsf/utils';
 import { TableProps } from 'antd';
 import dayjs from 'dayjs';
 
 import apiService from '../../api/service';
 import TableHoc from '../../components/hocs/table';
 import InventoryManagementContainer from './index';
+import { MODELS } from '@hmis/gatekeeper';
 
 const RemovedNonConsumables = () => {
-	const columns: TableProps<any>['columns'] = [
+	const columns: TableProps<MODELS.INonConsumable>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name', width: 150 },
 		{ title: 'Quantity', dataIndex: 'quantityLeft', key: 'quantityLeft', width: 80 },
 		{
@@ -26,15 +26,9 @@ const RemovedNonConsumables = () => {
 		},
 	];
 
-	const formSchema: RJSFSchema = {
-		type: 'object',
-		required: [],
-		properties: {},
-	};
-
 	return (
 		<InventoryManagementContainer>
-			<TableHoc
+			<TableHoc<MODELS.INonConsumable>
 				title="Removed Non Consumables"
 				actionButtons={false}
 				tableProps={{
@@ -51,7 +45,6 @@ const RemovedNonConsumables = () => {
 					edit: apiService('/inventory/non-consumable/edit'),
 				}}
 				showTitle={false}
-				formSchema={formSchema}
 			/>
 		</InventoryManagementContainer>
 	);

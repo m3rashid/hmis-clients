@@ -5,9 +5,10 @@ import dayjs from 'dayjs';
 import apiService from '../../api/service';
 import TableHoc from '../../components/hocs/table';
 import InventoryManagementContainer from './index';
+import type { MODELS } from '@hmis/gatekeeper';
 
 const Consumables = () => {
-	const columns: TableProps<any>['columns'] = [
+	const columns: TableProps<MODELS.IConsumable>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name', width: 150 },
 		{ title: 'Quantity Left', dataIndex: 'quantityLeft', key: 'quantityLeft', width: 150 },
 		{
@@ -29,13 +30,22 @@ const Consumables = () => {
 
 	const formSchema: RJSFSchema = {
 		type: 'object',
-		required: [],
-		properties: {},
+		properties: {
+			name: { type: 'string', title: 'Name' },
+			quantityLeft: { type: 'number', title: 'Quantity' },
+			quantityPerUnit: { type: 'number', title: 'Qty Per Unit' },
+			batchNumber: { type: 'string', title: 'Batch Number' },
+			manufacturer: { type: 'string', title: 'Manufacturer' },
+			expiryDate: { type: 'string', title: 'Expiry Date', format:'date' },
+			lastOrderDate: { type: 'string', title: 'Last Servicing Date', format:'date' },
+			nextOrderDate: { type: 'string', title: 'Next Servicing Date', format:'date' },
+		},
+		required: ['name', 'quantityLeft', 'quantityPerUnit'],
 	};
 
 	return (
 		<InventoryManagementContainer>
-			<TableHoc
+			<TableHoc<MODELS.IConsumable>
 				title="Consumables"
 				addButtonLabel="Add Consumable"
 				tableProps={{

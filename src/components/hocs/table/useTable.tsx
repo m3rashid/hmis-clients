@@ -120,6 +120,7 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 		};
 
 	const onFinishFormValues = (values: any) => {
+		console.log({ values })
 		if (!props.onFinishFormValues) return;
 		// TODO: handle the form values
 		props.onFinishFormValues(values);

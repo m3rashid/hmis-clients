@@ -48,8 +48,8 @@ const Form: React.FC<IHocFormProps> = (props) => {
 				layout: 'horizontal',
 				size: 'middle',
 				labelAlign: 'left',
-				labelCol: { xs: { span: 24 }, sm: { span: 6 } },
-				wrapperCol: { xs: { span: 24 }, sm: { span: 18 } },
+				labelCol: { xs: { span: 24 }, sm: { span: 8 } },
+				wrapperCol: { xs: { span: 24 }, sm: { span: 16 } },
 				...props.formProps,
 			}}
 			{...props.formBaseProps}
