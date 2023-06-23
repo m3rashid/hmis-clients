@@ -1,32 +1,42 @@
-import { Button, TableProps } from 'antd';
-import { useState } from 'react';
+import { TableProps } from 'antd';
 
 import apiService from '../../api/service';
-import TableHoc from '../..//components/hocs/table';
-import RoleDrawer, { IPayload } from '../../components/permissions/drawer';
+import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../..//components/hocs/table';
+import RoleDrawer from '../../components/permissions/drawer';
 import UserManagementContainer from './index';
+import { atom, useRecoilState } from 'recoil';
+import { MODELS } from '@hmis/gatekeeper';
+
+const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IRole>>({
+	key: 'userManagementRole',
+	default: defaultTableAtomContents<MODELS.IRole>(),
+});
 
 const RoleManagement = () => {
-	const [editPermission /* setEditPermission */] = useState<any>();
-	const [payload, setPayload] = useState<IPayload | null>(null);
+	const [{ selectedRows }, setSelectedRows] = useRecoilState(selectedRowsAtom);
 
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Name', dataIndex: 'displayName', key: 'displayName', width: 250 },
 		{ title: 'Description', dataIndex: 'description', key: 'description' },
 	];
 
+	const { ActionButtons, FormContainer } = RoleDrawer({
+		closeModal: () => setSelectedRows((p) => ({ ...p, formModalOpen: false })),
+		editData: selectedRows[0],
+	});
+
 	return (
 		<UserManagementContainer>
-			<TableHoc
+			<TableHoc<MODELS.IRole>
 				title="Roles"
 				addButtonLabel="Add Role"
+				selectedRowsAtom={selectedRowsAtom}
 				drawerProps={{
 					width: '50vw',
+					footer: ActionButtons,
 				}}
-				formChildren={<RoleDrawer {...{ data: editPermission, payload, setPayload }} />}
-				onFinishFormValues={async () => {
-					console.log({ payload });
-				}}
+				editable
+				form={FormContainer}
 				popupType="drawer"
 				tableProps={{
 					columns: columns,
@@ -35,7 +45,6 @@ const RoleManagement = () => {
 				routes={{
 					list: apiService('/role/all', 'GET'),
 				}}
-				showTitle={false}
 				modifyInfoDetails={(data) => {
 					if (!data) return {};
 					return Object.entries(data).reduce<Record<string, string>>((acc, [key, val]) => {

@@ -1,10 +1,21 @@
 import { TableProps, Tag } from 'antd';
 
 import apiService from '../../api/service';
-import TableHoc from '../../components/hocs/table';
+import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/hocs/table';
 import UserManagementContainer from '../../pages/userManagement';
+import { atom, useRecoilState } from 'recoil';
+import { MODELS } from '@hmis/gatekeeper';
+
+const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IUser>>({
+	key: 'userManagementUser',
+	default: defaultTableAtomContents<MODELS.IUser>(),
+});
 
 const UserManagement = () => {
+	const [
+		// { selectedRows }, setSelectedRows
+	] = useRecoilState(selectedRowsAtom);
+
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name' },
 		{ title: 'Email', dataIndex: 'email', key: 'email' },
@@ -28,12 +39,12 @@ const UserManagement = () => {
 		},
 	];
 
-
 	return (
 		<UserManagementContainer>
-			<TableHoc
-			popupType='drawer'
+			<TableHoc<MODELS.IUser>
+				popupType="drawer"
 				title="Users"
+				selectedRowsAtom={selectedRowsAtom}
 				addButtonLabel="Add User"
 				tableProps={{
 					columns: columns,
@@ -42,9 +53,7 @@ const UserManagement = () => {
 				routes={{
 					list: apiService('/auth/user/all', 'GET'),
 					delete: apiService('/auth/user/delete'),
-					edit: apiService('/auth/user/edit'),
 				}}
-				showTitle={false}
 				modifyInfoDetails={(data) => {
 					if (!data) return {};
 					return Object.entries(data).reduce<Record<string, string>>((acc, [key, val]) => {

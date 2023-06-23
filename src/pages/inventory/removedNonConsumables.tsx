@@ -2,11 +2,22 @@ import { TableProps } from 'antd';
 import dayjs from 'dayjs';
 
 import apiService from '../../api/service';
-import TableHoc from '../../components/hocs/table';
+import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/hocs/table';
 import InventoryManagementContainer from './index';
 import { MODELS } from '@hmis/gatekeeper';
+import { atom, useRecoilState } from 'recoil';
+
+
+const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.INonConsumable>>({
+	key: 'inventoryRemovedNonConsumables',
+	default: defaultTableAtomContents<MODELS.INonConsumable>(),
+});
+
 
 const RemovedNonConsumables = () => {
+	const [
+		// { selectedRows }, setSelectedRows
+	] = useRecoilState(selectedRowsAtom);
 	const columns: TableProps<MODELS.INonConsumable>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name', width: 150 },
 		{ title: 'Quantity', dataIndex: 'quantityLeft', key: 'quantityLeft', width: 80 },
@@ -30,6 +41,8 @@ const RemovedNonConsumables = () => {
 		<InventoryManagementContainer>
 			<TableHoc<MODELS.INonConsumable>
 				title="Removed Non Consumables"
+				popupType='drawer'
+				selectedRowsAtom={selectedRowsAtom}
 				actionButtons={false}
 				tableProps={{
 					columns: columns,
@@ -38,13 +51,10 @@ const RemovedNonConsumables = () => {
 						defaultPageSize: 15,
 					},
 				}}
-				formBaseProps={{}}
 				routes={{
-					get: apiService('/inventory/non-consumable/removed', 'GET'),
-					delete: apiService('/inventory/non-consumable/delete'),
-					edit: apiService('/inventory/non-consumable/edit'),
+					list: apiService('/non-consumable/removed', 'GET'),
+					delete: apiService('/non-consumable/delete'),
 				}}
-				showTitle={false}
 			/>
 		</InventoryManagementContainer>
 	);

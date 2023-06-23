@@ -1,8 +1,7 @@
 import { Image, Typography } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-import { IConfig } from '../../context/config';
+import { IConfig } from '../../recoil/config';
 
 interface IProps {
 	onlyLogo?: boolean;

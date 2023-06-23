@@ -1,13 +1,15 @@
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Form } from 'antd';
-import React, { useState } from 'react';
 
 import apiService from '../../../api/service';
-import { TableHocProps } from './index';
-import { configDefaultState } from '../../../context/config';
+import { TableHocProps, defaultTableAtomContents } from './index';
 import type { MODELS } from '@hmis/gatekeeper';
+import { configDefaultState } from '../../../recoil/config';
+import { useRecoilState } from 'recoil';
 
-const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
+const useTable = <RecordType extends Record<string, any> & { _id: string }>(
+	props: TableHocProps<RecordType>
+) => {
 	const defaultTableResponse: MODELS.PaginatedListIResponse<RecordType> = {
 		docs: [],
 		totalDocs: 0,
@@ -31,47 +33,44 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 	});
 	const config = configResponse?.data || configDefaultState;
 
-	const [formModalVisible, setFormModalVisible] = useState(false);
+	useEffect(() => {
+		getData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	const [infoModalVisible, setInfoModalVisible] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [selectedRows, setSelectedRows] = useState<RecordType[]>([]);
-	const [form] = Form.useForm();
+	const [{ selectedRows, showEditAction,formModalOpen, showDeleteAction, showInfoAction }, setSelectedRows] =
+		useRecoilState(props.selectedRowsAtom);
 
-	const hideFormModal = () => setFormModalVisible(false);
-	const showFormModal = () => setFormModalVisible(true);
+	const hideFormModal = () => setSelectedRows((p) => ({ ...p, formModalOpen: false }));
+	const showFormModal = () => setSelectedRows((p) => ({ ...p, formModalOpen: true }));
 
 	const hideInfoModal = () => setInfoModalVisible(false);
 	const showInfoModal = () => setInfoModalVisible(true);
 
-	const showDeleteAction = selectedRows.length > 0;
-	const showEditAction = selectedRows.length === 1;
-	const showInfoAction = selectedRows.length === 1;
-
 	const onClickEdit = () => {
-		setSelectedRows([]);
+		showFormModal();
 	};
 
 	const onClickDelete = async () => {
-		// @ts-ignore
 		const promises = selectedRows.map((t) => deleteData(t._id));
 		const responses = await Promise.all(promises);
-
 		console.log({ responses });
-		setSelectedRows([]);
+		setSelectedRows((p) => ({ ...p, selectedRows: [] }));
 	};
 
 	const onClickInfoCancel = () => {
-		setSelectedRows([]);
 		hideInfoModal();
+		setSelectedRows((p) => ({ ...p, selectedRows: [] }));
 	};
 
 	const getData = async () => {
 		if (!props.routes?.list) return;
-		setLoading(true);
-
 		try {
+			setLoading(true);
 			const { data: response } = await props.routes.list();
-			console.log({ response });
+			// console.log({ response });
 			setTableData(response);
 		} catch (err) {
 			setTableData(defaultTableResponse);
@@ -80,23 +79,10 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 		}
 	};
 
-	const editData = async (data: any) => {
-		if (!props.routes?.edit) return;
-		setLoading(true);
-		try {
-			const { data: response } = await props.routes.edit({ data });
-			console.log({ response });
-		} catch (err) {
-		} finally {
-			setLoading(false);
-		}
-	};
-
 	const deleteData = async (id: string) => {
 		if (!props.routes?.delete) return;
-		setLoading(true);
-
 		try {
+			setLoading(true);
 			const { data: response } = await props.routes.delete({ data: id });
 			console.log({ response });
 		} catch (err) {
@@ -107,20 +93,14 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 
 	const handleCancelOnModal = () => {
 		hideFormModal();
-	};
-
-	const onFinishFormValues = () => {
-		if (!props.onFinishFormValues) return;
-		// TODO: handle the form values
-		props.onFinishFormValues();
+		setSelectedRows(defaultTableAtomContents<RecordType>())
 	};
 
 	return {
 		state: {
 			tableData,
-			formModalVisible,
+			formModalVisible: formModalOpen,
 			loading,
-			form,
 			selectedRows,
 
 			// constants
@@ -133,7 +113,6 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 
 		stateUpdater: {
 			setTableData,
-			setFormModalVisible,
 			setLoading,
 			setSelectedRows,
 			setInfoModalVisible,
@@ -145,10 +124,8 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 			hideInfoModal,
 			showInfoModal,
 			getData,
-			editData,
 			deleteData,
 			handleCancelOnModal,
-			onFinishFormValues,
 			onClickEdit,
 			onClickInfoCancel,
 			onClickDelete,

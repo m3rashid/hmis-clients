@@ -1,10 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
-import { Typography, message } from 'antd';
+// import { useQuery } from '@tanstack/react-query';
+import { Typography } from 'antd';
 import React from 'react';
 
-import apiService from '../../api/service';
-import { IConfigExposedState, configDefaultState } from '../../context/config';
-import { camelCaseToSentenceCase } from '../../helpers/strings';
+// import apiService from '../../api/service';
+// import { camelCaseToSentenceCase } from '../../helpers/strings';
+import { IConfigExposedState } from '../../recoil/config';
 
 // const convertToFormSchema = (config: any, widgetType?: string): RJSFSchema => {
 // 	const properties: RJSFSchema['properties'] = Object.entries(config).reduce(
@@ -50,22 +50,22 @@ interface IProps {
 }
 
 const ConfigContainer: React.FC<IProps> = (props) => {
-	const { data: configResponse } = useQuery({
-		queryKey: ['config'],
-		queryFn: () => apiService('/config', 'GET')(),
-		staleTime: 1000 * 60 * 60 * 24, // 24 hours
-	});
-	const config = configResponse?.data || configDefaultState;
+	// const { data: configResponse } = useQuery({
+	// 	queryKey: ['config'],
+	// 	queryFn: () => apiService('/config', 'GET')(),
+	// 	staleTime: 1000 * 60 * 60 * 24, // 24 hours
+	// });
+	// const config = configResponse?.data || configDefaultState;
 
-	const handleSave = (entryName: keyof IConfigExposedState) => (values: any) => {
-		console.log({ values, entryName });
+	// const handleSave = (entryName: keyof IConfigExposedState) => (values: any) => {
+		// console.log({ values, entryName });
 		// TODO: Handle Mutation
 		// setConfig({
 		// 	...configResponse?.data,
 		// 	[entryName]: values.formData,
 		// })
-		message.success('Config saved successfully');
-	};
+		// message.success('Config saved successfully');
+	// };
 
 	return (
 		<div className={`grid gap-10 grid-cols-1 md:grid-cols-2 ${props.className}`}>

@@ -3,10 +3,19 @@ import { TableProps } from 'antd';
 import { MODELS } from '@hmis/gatekeeper';
 
 import apiService from '../../api/service';
-import TableHoc from '../../components/hocs/table';
+import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/hocs/table';
 import InventoryManagementContainer from './index';
+import { atom, useRecoilState } from 'recoil';
+
+const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.INonConsumable>>({
+	key: 'inventoryNonConsumable',
+	default: defaultTableAtomContents<MODELS.INonConsumable>(),
+});
 
 const NonConsumables = () => {
+	const [
+		// { selectedRows }, setSelectedRows
+	] = useRecoilState(selectedRowsAtom);
 	const columns: TableProps<MODELS.INonConsumable>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name', width: 150 },
 		{ title: 'Quantity', dataIndex: 'quantityLeft', key: 'quantityLeft', width: 80 },
@@ -38,17 +47,16 @@ const NonConsumables = () => {
 			<TableHoc<MODELS.INonConsumable>
 				title="Non Consumables"
 				addButtonLabel="Add Non Consumable"
+				selectedRowsAtom={selectedRowsAtom}
 				tableProps={{
 					columns: columns,
 					scroll: { x: 1000 },
 				}}
 				popupType="drawer"
 				routes={{
-					list: apiService('/inventory/non-consumable/all', 'GET'),
-					delete: apiService('/inventory/non-consumable/delete'),
-					edit: apiService('/inventory/non-consumable/edit'),
+					list: apiService('/non-consumable/all', 'GET'),
+					delete: apiService('/non-consumable/delete'),
 				}}
-				showTitle={false}
 			/>
 		</InventoryManagementContainer>
 	);

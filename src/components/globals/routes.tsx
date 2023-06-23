@@ -21,8 +21,7 @@ import {
 	UsergroupAddOutlined,
 } from '@ant-design/icons';
 import React from 'react';
-
-import { IAuth } from '../../context/auth';
+import { IAuth } from '../../recoil/auth';
 
 const Home = React.lazy(() => import('../../pages/home'));
 const About = React.lazy(() => import('../../pages/about'));

@@ -1,20 +1,23 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 
-import { instance, serverRootUrl } from '../api/network';
+import {
+	instance,
+	// serverRootUrl
+} from '../api/network';
 
-export let socket = io(serverRootUrl, {
-	transports: ['websocket'],
-	autoConnect: false,
-	auth: { token: localStorage.getItem('refreshToken') },
-});
+// export let socket = io(serverRootUrl, {
+// 	transports: ['websocket'],
+// 	autoConnect: false,
+// 	auth: { token: localStorage.getItem('refreshToken') },
+// });
 
-window.setTimeout(() => {
-	socket = io(serverRootUrl, {
-		autoConnect: false,
-		auth: { token: localStorage.getItem('refreshToken') },
-	});
-}, 2000);
+// window.setTimeout(() => {
+// 	socket = io(serverRootUrl, {
+// 		autoConnect: false,
+// 		auth: { token: localStorage.getItem('refreshToken') },
+// 	});
+// }, 2000);
 
 export type ServiceHelper<Res, ReqData> = (
 	config?: AxiosRequestConfig<ReqData>

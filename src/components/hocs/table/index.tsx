@@ -1,12 +1,8 @@
-import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleOutlined } from '@ant-design/icons';
 import {
 	AutoComplete,
 	Button,
-	Divider,
 	Drawer,
 	DrawerProps,
-	Form,
-	FormProps,
 	Input,
 	Modal,
 	ModalProps,
@@ -17,13 +13,33 @@ import {
 	Typography,
 } from 'antd';
 import dayjs from 'dayjs';
-import React, { ReactNode, useEffect } from 'react';
+import React, { Fragment, ReactNode } from 'react';
+import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleOutlined } from '@ant-design/icons';
 
 import ObjectAsDetails from '../../../components/atoms/objectAsDetails';
 import useTable from './useTable';
+import { RecoilState } from 'recoil';
+
+export function defaultTableAtomContents<T>(): SelectedRowsAtom<T> {
+	return {
+		selectedRows: [],
+		showDeleteAction: false,
+		showEditAction: false,
+		showInfoAction: false,
+		formModalOpen: false,
+	};
+}
 
 export interface DefaultParams {
 	data?: any;
+}
+
+export interface SelectedRowsAtom<RecordType> {
+	selectedRows: RecordType[];
+	showEditAction: boolean;
+	showDeleteAction: boolean;
+	showInfoAction: boolean;
+	formModalOpen: boolean;
 }
 
 export interface TableHocProps<RecordType> {
@@ -31,39 +47,31 @@ export interface TableHocProps<RecordType> {
 	modalProps?: ModalProps;
 	title: string;
 	actionButtons?: ReactNode;
-	showTitle?: boolean;
+	hideTitle?: boolean;
 	addButtonLabel?: string;
 	showCreatedTime?: boolean;
 	showUpdatedTime?: boolean;
 	modifyInfoDetails?: (data: Record<string, any>) => Record<string, string>;
 	notToShowInInfo?: string[];
-	renderCustomForm?: ReactNode;
-	formChildren?: ReactNode;
-	formProps?: FormProps;
+	form?: ReactNode;
 	drawerProps?: DrawerProps;
-	onFinishFormValues?: () => Promise<any>;
-	hideFooter?: boolean;
 	popupType: 'modal' | 'drawer';
+	editable?: boolean;
+	selectedRowsAtom: RecoilState<SelectedRowsAtom<RecordType>>;
 	routes?: {
 		list?: (data?: DefaultParams) => Promise<any>;
-		edit?: (data?: DefaultParams) => Promise<any>;
 		delete?: (data?: DefaultParams) => Promise<any>;
 		details?: (data?: DefaultParams) => Promise<any>;
-		create?: (data?: DefaultParams) => Promise<any>;
 	};
 }
 
-const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<RecordType>) => {
-	const showTitle = props.showTitle || true;
+const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
+	props: TableHocProps<RecordType>
+) => {
 	const showCreatedTime = props.showCreatedTime ?? true;
 	const showUpdatedTime = props.showUpdatedTime ?? true;
 	const { actions, state, stateUpdater } = useTable<RecordType>(props);
 	const modifyInfoDetails = props.modifyInfoDetails ?? ((data: any) => data);
-
-	useEffect(() => {
-		actions.getData();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	const popConfirmButtonStyles: React.CSSProperties = {
 		height: 34,
@@ -71,87 +79,6 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 		paddingRight: 16,
 		borderRadius: 6,
 		marginTop: 10,
-	};
-
-	const TablePanel = (/* tableDataOnThisPage: any */) => {
-		return (
-			<div className={`flex flex-col sm:flex-row items-center justify-between`}>
-				{showTitle ? (
-					<Typography.Title level={4} className="sm:pl-2 m-0 pb-0">
-						{props.title}
-					</Typography.Title>
-				) : (
-					<div />
-				)}
-				<div className="flex items-center justify-center sm:justify-end flex-grow mr-2">
-					<div className="flex gap-2">
-						{state.showInfoAction && (
-							<Button
-								type="primary"
-								style={{ backgroundColor: state.config.colors.info }}
-								icon={<InfoCircleFilled />}
-								onClick={actions.showInfoModal}
-							>
-								Info
-							</Button>
-						)}
-
-						{props.routes?.edit && state.showEditAction && (
-							<Button
-								type="primary"
-								style={{ backgroundColor: state.config.colors.warning }}
-								icon={<EditFilled />}
-								onClick={actions.onClickEdit}
-							>
-								Edit
-							</Button>
-						)}
-						{props.routes?.delete && state.showDeleteAction && (
-							<Popconfirm
-								title={<Typography.Text className="text-lg">Delete item(s)</Typography.Text>}
-								description={
-									<Typography.Text className="text-base">
-										Are you sure you want to delete item(s) ?
-									</Typography.Text>
-								}
-								onConfirm={actions.onClickDelete}
-								overlayInnerStyle={{ padding: 20 }}
-								okText="Delete"
-								okButtonProps={{
-									style: { ...popConfirmButtonStyles, backgroundColor: state.config.colors.danger },
-								}}
-								cancelButtonProps={{ style: { ...popConfirmButtonStyles } }}
-							>
-								<Button
-									type="primary"
-									style={{ backgroundColor: state.config.colors.danger }}
-									icon={<DeleteFilled />}
-								>
-									Delete
-								</Button>
-							</Popconfirm>
-						)}
-					</div>
-				</div>
-
-				<div className="flex items-center justify-center mt-2 sm:mt-0">
-					{props.actionButtons ?? (
-						<Button
-							type="primary"
-							className="mx-3"
-							onClick={actions.showFormModal}
-							icon={<PlusCircleOutlined />}
-						>
-							{props.addButtonLabel}
-						</Button>
-					)}
-
-					<AutoComplete className="w-[200]" popupMatchSelectWidth={200}>
-						<Input.Search size="middle" placeholder={`Search in ${props.title}`} />
-					</AutoComplete>
-				</div>
-			</div>
-		);
 	};
 
 	const showTimeEntryInTable = (title: any, dataIndex: string): TableColumnsType<RecordType> => [
@@ -173,41 +100,101 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 		},
 	];
 
-	const PopupFormContent = (
-		<Form
-			{...{
-				form: state.form,
-				labelCol: { xs: { span: 24 }, sm: { span: 6 } },
-				wrapperCol: { xs: { span: 24 }, sm: { span: 18 } },
-				...props.formProps,
-			}}
-		>
-			{props.formChildren}
-		</Form>
-	);
+	const TablePanel = () => (
+		<div className={`flex flex-col sm:flex-row items-center justify-between`}>
+			{props.hideTitle ? (
+				<div />
+			) : (
+				<Typography.Title level={4} className="sm:pl-2 m-0 pb-0">
+					{props.title}
+				</Typography.Title>
+			)}
+			<div className="flex items-center justify-center sm:justify-end flex-grow mr-2">
+				<div className="flex gap-2">
+					{state.showInfoAction && (
+						<Button
+							type="primary"
+							style={{ backgroundColor: state.config.colors.info }}
+							icon={<InfoCircleFilled />}
+							onClick={actions.showInfoModal}
+						>
+							Info
+						</Button>
+					)}
 
-	const PopupFooter = (
-		<div className="flex gap-2 h-12 items-center justify-end">
-			<Button onClick={actions.handleCancelOnModal}>Cancel</Button>
-			<Button type="primary" onClick={actions.onFinishFormValues}>
-				Confirm Create Role
-			</Button>
+					{props.editable && state.showEditAction && (
+						<Button
+							type="primary"
+							style={{ backgroundColor: state.config.colors.warning }}
+							icon={<EditFilled />}
+							onClick={actions.onClickEdit}
+						>
+							Edit
+						</Button>
+					)}
+
+					{props.routes?.delete && state.showDeleteAction && (
+						<Popconfirm
+							title={<Typography.Text className="text-lg">Delete item(s)</Typography.Text>}
+							description={
+								<Typography.Text className="text-base">
+									Are you sure you want to delete item(s) ?
+								</Typography.Text>
+							}
+							onConfirm={actions.onClickDelete}
+							overlayInnerStyle={{ padding: 20 }}
+							okText="Delete"
+							okButtonProps={{
+								style: {
+									...popConfirmButtonStyles,
+									backgroundColor: state.config.colors.danger,
+								},
+							}}
+							cancelButtonProps={{ style: { ...popConfirmButtonStyles } }}
+						>
+							<Button
+								type="primary"
+								style={{ backgroundColor: state.config.colors.danger }}
+								icon={<DeleteFilled />}
+							>
+								Delete
+							</Button>
+						</Popconfirm>
+					)}
+				</div>
+			</div>
+
+			<div className="flex items-center justify-center mt-2 sm:mt-0">
+				{props.actionButtons ?? (
+					<Button
+						type="primary"
+						className="mx-3"
+						onClick={actions.showFormModal}
+						icon={<PlusCircleOutlined />}
+					>
+						{props.addButtonLabel}
+					</Button>
+				)}
+
+				<AutoComplete className="w-[200]" popupMatchSelectWidth={200}>
+					<Input.Search size="middle" placeholder={`Search in ${props.title}`} />
+				</AutoComplete>
+			</div>
 		</div>
 	);
 
 	return (
-		<>
+		<Fragment>
 			{props.popupType === 'modal' ? (
 				<Modal
 					destroyOnClose
 					open={state.formModalVisible}
 					onCancel={actions.handleCancelOnModal}
-					onOk={actions.onFinishFormValues}
 					title={props.title}
-					footer={props.hideFooter ? null : PopupFooter}
+					footer={null}
 					{...props.modalProps}
 				>
-					{PopupFormContent}
+					{props.form}
 				</Modal>
 			) : props.popupType === 'drawer' ? (
 				<Drawer
@@ -215,10 +202,10 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 					open={state.formModalVisible}
 					title={props.title}
 					onClose={actions.handleCancelOnModal}
-					footer={props.hideFooter ? null : PopupFooter}
+					footer={null}
 					{...props.drawerProps}
 				>
-					{PopupFormContent}
+					{props.form}
 				</Drawer>
 			) : null}
 
@@ -234,13 +221,6 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 					notToShow={props.notToShowInInfo ?? []}
 				/>
 			</Modal>
-
-			{props.showTitle && (
-				<>
-					<Typography.Title level={3}>{props.title}</Typography.Title>
-					<Divider className="m-0 p-0 mb-4" />
-				</>
-			)}
 
 			<Table<RecordType>
 				{...props.tableProps}
@@ -273,19 +253,41 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 					selectedRowKeys: state.selectedRows.map((t) => t._id),
 					hideSelectAll: true,
 					onChange: (_: React.Key[], rows: RecordType[]) => {
-						stateUpdater.setSelectedRows(rows);
+						stateUpdater.setSelectedRows({
+							selectedRows: rows,
+							showDeleteAction: rows.length > 0,
+							showEditAction: rows.length === 1,
+							showInfoAction: rows.length === 1,
+							formModalOpen: false,
+						});
 					},
 				}}
 				onRow={(data) => ({
 					onDoubleClick: () => {
 						const allOthers = state.selectedRows.filter((t) => t._id !== data._id);
+						const l = allOthers.length;
+
 						if (allOthers.length === state.selectedRows.length) {
-							stateUpdater.setSelectedRows((prev) => [...prev, data]);
-						} else stateUpdater.setSelectedRows(allOthers);
+							stateUpdater.setSelectedRows({
+								selectedRows: [...allOthers, data],
+								showDeleteAction: l > -1,
+								showEditAction: l == 0,
+								showInfoAction: l == 0,
+								formModalOpen: false,
+							});
+						} else {
+							stateUpdater.setSelectedRows({
+								selectedRows: allOthers,
+								showDeleteAction: l > 0,
+								showEditAction: l == 1,
+								showInfoAction: l == 1,
+								formModalOpen: false,
+							});
+						}
 					},
 				})}
 			/>
-		</>
+		</Fragment>
 	);
 };
 

@@ -7,8 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import App from './app';
 import AppLayout from './components/globals/layout';
-import { AuthContextProvider } from './context/auth';
-import { UiContextProvider } from './context/ui';
+import { RecoilRoot } from 'recoil';
 
 const queryClient = new QueryClient();
 
@@ -17,13 +16,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 		<BrowserRouter>
 			<QueryClientProvider client={queryClient}>
 				<ReactQueryDevtools initialIsOpen={false} />
-				<UiContextProvider>
-					<AuthContextProvider>
-						<AppLayout>
-							<App />
-						</AppLayout>
-					</AuthContextProvider>
-				</UiContextProvider>
+				<RecoilRoot>
+					<AppLayout>
+						<App />
+					</AppLayout>
+				</RecoilRoot>
 			</QueryClientProvider>
 		</BrowserRouter>
 	</React.StrictMode>

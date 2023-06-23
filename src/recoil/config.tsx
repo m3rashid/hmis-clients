@@ -33,7 +33,7 @@ export const configDefaultState: IConfig = {
 	app: {
 		name: 'HMIS',
 		version: '1.0.0',
-		fullName: 'Health Management and Informatics System',
+		fullName: 'Hospital Management and Informatics System',
 		theme: 'light',
 	},
 	appColors: {

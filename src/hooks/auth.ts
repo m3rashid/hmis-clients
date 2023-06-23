@@ -1,10 +1,11 @@
 import { message } from 'antd';
-import { useCallback, useContext } from 'react';
+import { useCallback,  } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { instance } from '../api/network';
-import apiService, { socket } from '..//api/service';
-import { authContext, authDefaultState } from '../context/auth';
+import apiService from '..//api/service';
+import { useRecoilState } from 'recoil';
+import { authAtom, authDefaultState } from '../recoil/auth';
 
 export interface Login {
 	email: string;
@@ -13,7 +14,7 @@ export interface Login {
 
 const useAuth = () => {
 	const navigate = useNavigate();
-	const [auth, setAuth] = useContext(authContext);
+	const [auth, setAuth] = useRecoilState(authAtom);
 	const revalidateApi = apiService('/auth/revalidate');
 	const loginUser = apiService<any, Login>('/auth/login');
 
@@ -37,7 +38,7 @@ const useAuth = () => {
 		localStorage.removeItem('refreshToken');
 		instance.defaults.headers.common['Authorization'] = '';
 		navigate('/');
-		socket.disconnect();
+		// socket.disconnect();
 		setAuth(authDefaultState);
 	}, [navigate, setAuth]);
 
@@ -51,8 +52,8 @@ const useAuth = () => {
 			localStorage.setItem('refreshToken', refreshToken);
 			instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 			// @ts-ignore
-			socket.io.opts.auth.token = accessToken;
-			socket.disconnect().connect();
+			// socket.io.opts.auth.token = accessToken;
+			// socket.disconnect().connect();
 			if (msg) message.success({ content: 'login Successful', key: 'auth/login' });
 		} catch (err) {
 			console.log(err);

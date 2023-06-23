@@ -2,11 +2,24 @@ import { TableProps } from 'antd';
 import dayjs from 'dayjs';
 
 import apiService from '../../api/service';
-import TableHoc from '../../components/hocs/table';
+import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/hocs/table';
 import InventoryManagementContainer from './index';
 import type { MODELS } from '@hmis/gatekeeper';
+import { atom, useRecoilState } from 'recoil';
+
+
+const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IConsumable>>({
+	key: 'inventoryConsumable',
+	default: defaultTableAtomContents<MODELS.IConsumable>(),
+});
+
+
 
 const Consumables = () => {
+	const [
+		// { selectedRows }, setSelectedRows
+	] = useRecoilState(selectedRowsAtom);
+
 	const columns: TableProps<MODELS.IConsumable>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name', width: 150 },
 		{ title: 'Quantity Left', dataIndex: 'quantityLeft', key: 'quantityLeft', width: 150 },
@@ -41,6 +54,7 @@ const Consumables = () => {
 		<InventoryManagementContainer>
 			<TableHoc<MODELS.IConsumable>
 				title="Consumables"
+				selectedRowsAtom={selectedRowsAtom}
 				addButtonLabel="Add Consumable"
 				tableProps={{
 					columns: columns,
@@ -48,11 +62,9 @@ const Consumables = () => {
 				}}
 				popupType='drawer'
 				routes={{
-					list: apiService('/inventory/consumable/all', 'GET'),
-					delete: apiService('/inventory/consumable/delete'),
-					edit: apiService('/inventory/consumable/edit'),
+					list: apiService('/consumable/all', 'GET'),
+					delete: apiService('/consumable/delete'),
 				}}
-				showTitle={false}
 			/>
 		</InventoryManagementContainer>
 	);
