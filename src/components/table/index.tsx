@@ -16,7 +16,7 @@ import dayjs from 'dayjs';
 import React, { Fragment, ReactNode } from 'react';
 import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleOutlined } from '@ant-design/icons';
 
-import ObjectAsDetails from '../../../components/atoms/objectAsDetails';
+import ObjectAsDetails from '../atoms/objectAsDetails';
 import useTable from './useTable';
 import { RecoilState } from 'recoil';
 

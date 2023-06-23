@@ -3,9 +3,10 @@ import { TableProps } from 'antd';
 import { MODELS } from '@hmis/gatekeeper';
 
 import apiService from '../../api/service';
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/hocs/table';
+import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/table';
 import InventoryManagementContainer from './index';
 import { atom, useRecoilState } from 'recoil';
+import NonConsumableForm from '../../components/nonConsumableForm';
 
 const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.INonConsumable>>({
 	key: 'inventoryNonConsumable',
@@ -14,7 +15,7 @@ const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.INonConsumable>>({
 
 const NonConsumables = () => {
 	const [
-		// { selectedRows }, setSelectedRows
+		{ selectedRows }, setSelectedRows
 	] = useRecoilState(selectedRowsAtom);
 	const columns: TableProps<MODELS.INonConsumable>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name', width: 150 },
@@ -35,12 +36,10 @@ const NonConsumables = () => {
 		},
 	];
 
-	// 		name: { type: 'string', title: 'Name' },
-	// 		quantityLeft: { type: 'number', title: 'Quantity' },
-	// 		manufacturer: { type: 'string', title: 'Manufacturer' },
-	// 		lastServicingDate: { type: 'string', title: 'Last Servicing Date', format: 'date' },
-	// 		nextServicingDate: { type: 'string', title: 'Next Servicing Date', format: 'date' },
-	// 	required: ['name', 'quantityLeft'],
+		const { ActionButtons, FormContainer } = NonConsumableForm({
+			closeModal: () => setSelectedRows((p) => ({ ...p, formModalOpen: false })),
+			editData: selectedRows[0],
+		});
 
 	return (
 		<InventoryManagementContainer>
@@ -52,6 +51,11 @@ const NonConsumables = () => {
 					columns: columns,
 					scroll: { x: 1000 },
 				}}
+				drawerProps={{
+					footer: ActionButtons,
+				}}
+				form={FormContainer}
+				editable
 				popupType="drawer"
 				routes={{
 					list: apiService('/non-consumable/all', 'GET'),

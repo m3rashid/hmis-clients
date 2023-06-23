@@ -1,5 +1,5 @@
 import { atom, useRecoilState } from "recoil";
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from "../../components/hocs/table";
+import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from "../../components/table";
 import { MODELS } from "@hmis/gatekeeper";
 import { Fragment } from "react";
 import apiService from "../../api/service";

@@ -1,7 +1,7 @@
 import { TableProps } from 'antd';
 
 import apiService from '../../api/service';
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../..//components/hocs/table';
+import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/table';
 import RoleDrawer from '../../components/permissions/drawer';
 import UserManagementContainer from './index';
 import { atom, useRecoilState } from 'recoil';

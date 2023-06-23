@@ -1,7 +1,7 @@
 import { TableProps, Tag } from 'antd';
 
 import apiService from '../../api/service';
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/hocs/table';
+import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/table';
 import UserManagementContainer from '../../pages/userManagement';
 import { atom, useRecoilState } from 'recoil';
 import { MODELS } from '@hmis/gatekeeper';

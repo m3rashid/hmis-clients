@@ -2,23 +2,19 @@ import { TableProps } from 'antd';
 import dayjs from 'dayjs';
 
 import apiService from '../../api/service';
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/hocs/table';
+import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/table';
 import InventoryManagementContainer from './index';
 import type { MODELS } from '@hmis/gatekeeper';
 import { atom, useRecoilState } from 'recoil';
-
+import ConsumableForm from '../../components/consumableForm';
 
 const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IConsumable>>({
 	key: 'inventoryConsumable',
 	default: defaultTableAtomContents<MODELS.IConsumable>(),
 });
 
-
-
 const Consumables = () => {
-	const [
-		// { selectedRows }, setSelectedRows
-	] = useRecoilState(selectedRowsAtom);
+	const [{ selectedRows }, setSelectedRows] = useRecoilState(selectedRowsAtom);
 
 	const columns: TableProps<MODELS.IConsumable>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name', width: 150 },
@@ -40,15 +36,10 @@ const Consumables = () => {
 		{ title: 'Manufacturer', dataIndex: 'manufacturer', key: 'manufacturer' },
 	];
 
-	// 		name: { type: 'string', title: 'Name' },
-	// 		quantityLeft: { type: 'number', title: 'Quantity' },
-	// 		quantityPerUnit: { type: 'number', title: 'Qty Per Unit' },
-	// 		batchNumber: { type: 'string', title: 'Batch Number' },
-	// 		manufacturer: { type: 'string', title: 'Manufacturer' },
-	// 		expiryDate: { type: 'string', title: 'Expiry Date', format:'date' },
-	// 		lastOrderDate: { type: 'string', title: 'Last Servicing Date', format:'date' },
-	// 		nextOrderDate: { type: 'string', title: 'Next Servicing Date', format:'date' },
-	// 	required: ['name', 'quantityLeft', 'quantityPerUnit'],
+	const { ActionButtons, FormContainer } = ConsumableForm({
+		closeModal: () => setSelectedRows((p) => ({ ...p, formModalOpen: false })),
+		editData: selectedRows[0],
+	});
 
 	return (
 		<InventoryManagementContainer>
@@ -60,7 +51,12 @@ const Consumables = () => {
 					columns: columns,
 					scroll: { x: 1000 },
 				}}
-				popupType='drawer'
+				drawerProps={{
+					footer: ActionButtons,
+				}}
+				form={FormContainer}
+				editable
+				popupType="drawer"
 				routes={{
 					list: apiService('/consumable/all', 'GET'),
 					delete: apiService('/consumable/delete'),

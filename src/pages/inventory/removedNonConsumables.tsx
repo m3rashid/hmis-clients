@@ -2,7 +2,7 @@ import { TableProps } from 'antd';
 import dayjs from 'dayjs';
 
 import apiService from '../../api/service';
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/hocs/table';
+import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/table';
 import InventoryManagementContainer from './index';
 import { MODELS } from '@hmis/gatekeeper';
 import { atom, useRecoilState } from 'recoil';

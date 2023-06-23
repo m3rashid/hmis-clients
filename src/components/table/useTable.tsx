@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
-import apiService from '../../../api/service';
+import apiService from '../../api/service';
 import { TableHocProps, defaultTableAtomContents } from './index';
 import type { MODELS } from '@hmis/gatekeeper';
-import { configDefaultState } from '../../../recoil/config';
+import { configDefaultState } from '../../recoil/config';
 import { useRecoilState } from 'recoil';
 
 const useTable = <RecordType extends Record<string, any> & { _id: string }>(
