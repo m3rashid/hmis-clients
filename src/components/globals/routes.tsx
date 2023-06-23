@@ -29,6 +29,7 @@ const Settings = React.lazy(() => import('../../pages/settings'));
 const Payments = React.lazy(() => import('../../pages/payments'));
 const LabManagement = React.lazy(() => import('../../pages/lab'));
 const Dashboard = React.lazy(() => import('../../pages/dashboard'));
+const Appointments = React.lazy(() => import('../../pages/appointment'));
 const PatientManagement = React.lazy(() => import('../../pages/patient'));
 const Notifications = React.lazy(() => import('../../pages/notifications'));
 const InPatientDepartment = React.lazy(() => import('../../pages/inPatient'));
@@ -128,6 +129,13 @@ const routes: Array<IRoute> = [
 				label: 'Patient Home',
 				link: '/patient/home',
 				Component: PatientManagement,
+				permission: { resource: 'USER', action: 'READ' },
+			},
+			{
+				icon: <UsergroupAddOutlined />,
+				label: 'Patient Home',
+				link: '/patient/appointments',
+				Component: Appointments,
 				permission: { resource: 'USER', action: 'READ' },
 			},
 			{

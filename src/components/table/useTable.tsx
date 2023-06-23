@@ -40,8 +40,10 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 
 	const [infoModalVisible, setInfoModalVisible] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [{ selectedRows, showEditAction,formModalOpen, showDeleteAction, showInfoAction }, setSelectedRows] =
-		useRecoilState(props.selectedRowsAtom);
+	const [
+		{ selectedRows, showEditAction, formModalOpen, showDeleteAction, showInfoAction },
+		setSelectedRows,
+	] = useRecoilState(props.selectedRowsAtom);
 
 	const hideFormModal = () => setSelectedRows((p) => ({ ...p, formModalOpen: false }));
 	const showFormModal = () => setSelectedRows((p) => ({ ...p, formModalOpen: true }));
@@ -83,7 +85,7 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 		if (!props.routes?.delete) return;
 		try {
 			setLoading(true);
-			const { data: response } = await props.routes.delete({ data: id });
+			const { data: response } = await props.routes.delete({ data: { _id: id } });
 			console.log({ response });
 		} catch (err) {
 		} finally {
@@ -93,7 +95,7 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 
 	const handleCancelOnModal = () => {
 		hideFormModal();
-		setSelectedRows(defaultTableAtomContents<RecordType>())
+		setSelectedRows(defaultTableAtomContents<RecordType>());
 	};
 
 	return {
