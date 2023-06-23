@@ -1,4 +1,3 @@
-import { RJSFSchema } from '@rjsf/utils';
 import { TableProps } from 'antd';
 
 import apiService from '../../api/service';
@@ -10,25 +9,11 @@ const Notifications = () => {
 		{ title: 'Description', dataIndex: 'description', key: 'description' },
 	];
 
-	const formSchema: RJSFSchema = {
-		type: 'object',
-		properties: {
-			title: {
-				type: 'string',
-				title: 'Title',
-			},
-			description: {
-				type: 'string',
-				title: 'Description',
-				format: 'textarea',
-			},
-		},
-		required: ['title', 'description'],
-	};
+	// 		title: { type: 'string', title: 'Title' },
+	// 		description: { type: 'string', title: 'Description', format: 'textarea'	},
+	// 	required: ['title', 'description'],
 
-	const handleFormSubmit = (data: any) => {
-		const { title, description } = data.formData;
-		console.log({ title, description });
+	const handleFormSubmit = async () => {
 	};
 
 	return (
@@ -40,19 +25,16 @@ const Notifications = () => {
 					title: 'New Notification',
 					width: 600,
 				}}
-				submitText="Save and Release"
-				cancelText="Save as Draft"
 				onFinishFormValues={handleFormSubmit}
 				tableProps={{
 					columns: columns,
 					scroll: { x: 1000 },
 				}}
-				formBaseProps={{}}
+				popupType="drawer"
 				routes={{
-					get: apiService('/notification/all', 'GET'),
+					list: apiService('/notification/all', 'GET'),
 					create: apiService('/notification'),
 				}}
-				formSchema={formSchema}
 			/>
 		</>
 	);

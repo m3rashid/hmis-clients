@@ -37,9 +37,9 @@ export const configDefaultState: IConfig = {
 		theme: 'light',
 	},
 	appColors: {
-		primary: '#00BDC1',
-		primaryHoverLight: '#E6FFFB',
-		primaryHoverDark: '#2a7b9744',
+		primary: '#6366f1',
+		primaryHoverLight: '#818cf8',
+		primaryHoverDark: '#312e81',
 	},
 	colors: {
 		success: '#22C55E',

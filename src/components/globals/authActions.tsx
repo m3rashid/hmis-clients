@@ -2,7 +2,6 @@ import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Dropdown, Modal } from 'antd';
 import React, { useState } from 'react';
 
-import Form from '../../components/form';
 import useAuth from '../../hooks/auth';
 
 interface IProps {
@@ -32,7 +31,7 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 					onOk={handleLogin}
 					onCancel={closeModal}
 				>
-					<Form
+					{/* <Form
 						formSchema={{
 							type: 'object',
 							required: ['email', 'password'],
@@ -44,7 +43,7 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 						onFinishFormValues={handleLogin}
 						submitText="Login"
 						onCancel={closeModal}
-					/>
+					/> */}
 				</Modal>
 			</>
 		);

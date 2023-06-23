@@ -3,6 +3,10 @@ import {
 	AutoComplete,
 	Button,
 	Divider,
+	Drawer,
+	DrawerProps,
+	Form,
+	FormProps,
 	Input,
 	Modal,
 	ModalProps,
@@ -16,14 +20,13 @@ import dayjs from 'dayjs';
 import React, { ReactNode, useEffect } from 'react';
 
 import ObjectAsDetails from '../../../components/atoms/objectAsDetails';
-import Form, { IHocFormProps } from '../../../components/form';
 import useTable from './useTable';
 
 export interface DefaultParams {
 	data?: any;
 }
 
-export interface TableHocProps<RecordType> extends IHocFormProps {
+export interface TableHocProps<RecordType> {
 	tableProps: TableProps<RecordType>;
 	modalProps?: ModalProps;
 	title: string;
@@ -35,8 +38,13 @@ export interface TableHocProps<RecordType> extends IHocFormProps {
 	modifyInfoDetails?: (data: Record<string, any>) => Record<string, string>;
 	notToShowInInfo?: string[];
 	renderCustomForm?: ReactNode;
+	formChildren?: ReactNode;
+	formProps?: FormProps;
+	drawerProps?: DrawerProps;
+	onFinishFormValues?: () => Promise<any>;
+	hideFooter?: boolean;
+	popupType: 'modal' | 'drawer';
 	routes?: {
-		get?: (data?: DefaultParams) => Promise<any>;
 		list?: (data?: DefaultParams) => Promise<any>;
 		edit?: (data?: DefaultParams) => Promise<any>;
 		delete?: (data?: DefaultParams) => Promise<any>;
@@ -165,33 +173,54 @@ const TableHoc = <RecordType extends Record<string, any>>(props: TableHocProps<R
 		},
 	];
 
+	const PopupFormContent = (
+		<Form
+			{...{
+				form: state.form,
+				labelCol: { xs: { span: 24 }, sm: { span: 6 } },
+				wrapperCol: { xs: { span: 24 }, sm: { span: 18 } },
+				...props.formProps,
+			}}
+		>
+			{props.formChildren}
+		</Form>
+	);
+
+	const PopupFooter = (
+		<div className="flex gap-2 h-12 items-center justify-end">
+			<Button onClick={actions.handleCancelOnModal}>Cancel</Button>
+			<Button type="primary" onClick={actions.onFinishFormValues}>
+				Confirm Create Role
+			</Button>
+		</div>
+	);
+
 	return (
 		<>
-			<Modal
-				destroyOnClose
-				open={state.formModalVisible}
-				onCancel={actions.handleCancelOnModal}
-				onOk={actions.handleOkOnModal}
-				title={props.title}
-				style={{ ...props.modalProps?.style }}
-				footer={null}
-				{...props.modalProps}
-			>
-				{props.renderCustomForm ?? (
-					<Form
-						{...{
-							formProps: props.formProps,
-							formSchema: props.formSchema,
-							formUiSchema: props.formUiSchema,
-							onFinishFormValues: actions.onFinishFormValues,
-							formBaseProps: props.formBaseProps,
-							cancelText: props.cancelText,
-							onCancel: actions.handleCancelOnModal,
-							submitText: props.submitText,
-						}}
-					/>
-				)}
-			</Modal>
+			{props.popupType === 'modal' ? (
+				<Modal
+					destroyOnClose
+					open={state.formModalVisible}
+					onCancel={actions.handleCancelOnModal}
+					onOk={actions.onFinishFormValues}
+					title={props.title}
+					footer={props.hideFooter ? null : PopupFooter}
+					{...props.modalProps}
+				>
+					{PopupFormContent}
+				</Modal>
+			) : props.popupType === 'drawer' ? (
+				<Drawer
+					destroyOnClose
+					open={state.formModalVisible}
+					title={props.title}
+					onClose={actions.handleCancelOnModal}
+					footer={props.hideFooter ? null : PopupFooter}
+					{...props.drawerProps}
+				>
+					{PopupFormContent}
+				</Drawer>
+			) : null}
 
 			<Modal
 				destroyOnClose

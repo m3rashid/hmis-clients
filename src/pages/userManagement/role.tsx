@@ -1,52 +1,41 @@
-import { RJSFSchema } from '@rjsf/utils';
-import { TableProps } from 'antd';
+import { Button, TableProps } from 'antd';
 import { useState } from 'react';
 
 import apiService from '../../api/service';
 import TableHoc from '../..//components/hocs/table';
-import RoleDrawer from '../../components/permissions/drawer';
+import RoleDrawer, { IPayload } from '../../components/permissions/drawer';
 import UserManagementContainer from './index';
 
 const RoleManagement = () => {
-	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 	const [editPermission /* setEditPermission */] = useState<any>();
+	const [payload, setPayload] = useState<IPayload | null>(null);
 
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Name', dataIndex: 'displayName', key: 'displayName', width: 250 },
 		{ title: 'Description', dataIndex: 'description', key: 'description' },
 	];
 
-	const formSchema: RJSFSchema = {
-		type: 'object',
-		required: [],
-		properties: {},
-	};
-
 	return (
 		<UserManagementContainer>
 			<TableHoc
 				title="Roles"
-				actionButtons={
-					<RoleDrawer
-						{...{
-							isOpen: isDrawerOpen,
-							setIsOpen: setIsDrawerOpen,
-							data: editPermission,
-							isEdit: Object.keys(editPermission ?? {}).length > 0,
-							onDrawerClose: () => {},
-						}}
-					/>
-				}
+				addButtonLabel="Add Role"
+				drawerProps={{
+					width: '50vw',
+				}}
+				formChildren={<RoleDrawer {...{ data: editPermission, payload, setPayload }} />}
+				onFinishFormValues={async () => {
+					console.log({ payload });
+				}}
+				popupType="drawer"
 				tableProps={{
 					columns: columns,
 					scroll: { x: 1000 },
 				}}
-				formBaseProps={{}}
 				routes={{
-					get: apiService('/role/all', 'GET'),
+					list: apiService('/role/all', 'GET'),
 				}}
 				showTitle={false}
-				formSchema={formSchema}
 				modifyInfoDetails={(data) => {
 					if (!data) return {};
 					return Object.entries(data).reduce<Record<string, string>>((acc, [key, val]) => {

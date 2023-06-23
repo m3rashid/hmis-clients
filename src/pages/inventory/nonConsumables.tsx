@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import { TableProps } from 'antd';
-import { RJSFSchema } from '@rjsf/utils';
 import { MODELS } from '@hmis/gatekeeper';
 
 import apiService from '../../api/service';
@@ -27,17 +26,12 @@ const NonConsumables = () => {
 		},
 	];
 
-	const formSchema: RJSFSchema = {
-		type: 'object',
-		properties: {
-			name: { type: 'string', title: 'Name' },
-			quantityLeft: { type: 'number', title: 'Quantity' },
-			manufacturer: { type: 'string', title: 'Manufacturer' },
-			lastServicingDate: { type: 'string', title: 'Last Servicing Date', format: 'date' },
-			nextServicingDate: { type: 'string', title: 'Next Servicing Date', format: 'date' },
-		},
-		required: ['name', 'quantityLeft'],
-	};
+	// 		name: { type: 'string', title: 'Name' },
+	// 		quantityLeft: { type: 'number', title: 'Quantity' },
+	// 		manufacturer: { type: 'string', title: 'Manufacturer' },
+	// 		lastServicingDate: { type: 'string', title: 'Last Servicing Date', format: 'date' },
+	// 		nextServicingDate: { type: 'string', title: 'Next Servicing Date', format: 'date' },
+	// 	required: ['name', 'quantityLeft'],
 
 	return (
 		<InventoryManagementContainer>
@@ -48,14 +42,13 @@ const NonConsumables = () => {
 					columns: columns,
 					scroll: { x: 1000 },
 				}}
-				formBaseProps={{}}
+				popupType="drawer"
 				routes={{
-					get: apiService('/inventory/non-consumable/all', 'GET'),
+					list: apiService('/inventory/non-consumable/all', 'GET'),
 					delete: apiService('/inventory/non-consumable/delete'),
 					edit: apiService('/inventory/non-consumable/edit'),
 				}}
 				showTitle={false}
-				formSchema={formSchema}
 			/>
 		</InventoryManagementContainer>
 	);

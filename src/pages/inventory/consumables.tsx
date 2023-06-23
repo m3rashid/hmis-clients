@@ -1,4 +1,3 @@
-import { RJSFSchema } from '@rjsf/utils';
 import { TableProps } from 'antd';
 import dayjs from 'dayjs';
 
@@ -28,20 +27,15 @@ const Consumables = () => {
 		{ title: 'Manufacturer', dataIndex: 'manufacturer', key: 'manufacturer' },
 	];
 
-	const formSchema: RJSFSchema = {
-		type: 'object',
-		properties: {
-			name: { type: 'string', title: 'Name' },
-			quantityLeft: { type: 'number', title: 'Quantity' },
-			quantityPerUnit: { type: 'number', title: 'Qty Per Unit' },
-			batchNumber: { type: 'string', title: 'Batch Number' },
-			manufacturer: { type: 'string', title: 'Manufacturer' },
-			expiryDate: { type: 'string', title: 'Expiry Date', format:'date' },
-			lastOrderDate: { type: 'string', title: 'Last Servicing Date', format:'date' },
-			nextOrderDate: { type: 'string', title: 'Next Servicing Date', format:'date' },
-		},
-		required: ['name', 'quantityLeft', 'quantityPerUnit'],
-	};
+	// 		name: { type: 'string', title: 'Name' },
+	// 		quantityLeft: { type: 'number', title: 'Quantity' },
+	// 		quantityPerUnit: { type: 'number', title: 'Qty Per Unit' },
+	// 		batchNumber: { type: 'string', title: 'Batch Number' },
+	// 		manufacturer: { type: 'string', title: 'Manufacturer' },
+	// 		expiryDate: { type: 'string', title: 'Expiry Date', format:'date' },
+	// 		lastOrderDate: { type: 'string', title: 'Last Servicing Date', format:'date' },
+	// 		nextOrderDate: { type: 'string', title: 'Next Servicing Date', format:'date' },
+	// 	required: ['name', 'quantityLeft', 'quantityPerUnit'],
 
 	return (
 		<InventoryManagementContainer>
@@ -52,14 +46,13 @@ const Consumables = () => {
 					columns: columns,
 					scroll: { x: 1000 },
 				}}
-				formBaseProps={{}}
+				popupType='drawer'
 				routes={{
-					get: apiService('/inventory/consumable/all', 'GET'),
+					list: apiService('/inventory/consumable/all', 'GET'),
 					delete: apiService('/inventory/consumable/delete'),
 					edit: apiService('/inventory/consumable/edit'),
 				}}
 				showTitle={false}
-				formSchema={formSchema}
 			/>
 		</InventoryManagementContainer>
 	);

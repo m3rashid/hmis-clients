@@ -66,11 +66,11 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 	};
 
 	const getData = async () => {
-		if (!props.routes?.get) return;
+		if (!props.routes?.list) return;
 		setLoading(true);
 
 		try {
-			const { data: response } = await props.routes.get();
+			const { data: response } = await props.routes.list();
 			console.log({ response });
 			setTableData(response);
 		} catch (err) {
@@ -105,25 +105,14 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 		}
 	};
 
-	const handleOkOnModal = () =>
-		// e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-		{
-			// TODO: axios call to create the entry
-			hideFormModal();
-		};
+	const handleCancelOnModal = () => {
+		hideFormModal();
+	};
 
-	const handleCancelOnModal: React.MouseEventHandler<HTMLAnchorElement> &
-		React.MouseEventHandler<HTMLButtonElement> = () =>
-		// e
-		{
-			hideFormModal();
-		};
-
-	const onFinishFormValues = (values: any) => {
-		console.log({ values })
+	const onFinishFormValues = () => {
 		if (!props.onFinishFormValues) return;
 		// TODO: handle the form values
-		props.onFinishFormValues(values);
+		props.onFinishFormValues();
 	};
 
 	return {
@@ -158,7 +147,6 @@ const useTable = <RecordType,>(props: TableHocProps<RecordType>) => {
 			getData,
 			editData,
 			deleteData,
-			handleOkOnModal,
 			handleCancelOnModal,
 			onFinishFormValues,
 			onClickEdit,

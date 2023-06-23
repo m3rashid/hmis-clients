@@ -1,4 +1,3 @@
-import { RJSFSchema } from '@rjsf/utils';
 import { TableProps, Tag } from 'antd';
 
 import apiService from '../../api/service';
@@ -29,29 +28,23 @@ const UserManagement = () => {
 		},
 	];
 
-	const formSchema: RJSFSchema = {
-		type: 'object',
-		required: [],
-		properties: {},
-	};
 
 	return (
 		<UserManagementContainer>
 			<TableHoc
+			popupType='drawer'
 				title="Users"
 				addButtonLabel="Add User"
 				tableProps={{
 					columns: columns,
 					scroll: { x: 1000 },
 				}}
-				formBaseProps={{}}
 				routes={{
-					get: apiService('/auth/user/all', 'GET'),
+					list: apiService('/auth/user/all', 'GET'),
 					delete: apiService('/auth/user/delete'),
 					edit: apiService('/auth/user/edit'),
 				}}
 				showTitle={false}
-				formSchema={formSchema}
 				modifyInfoDetails={(data) => {
 					if (!data) return {};
 					return Object.entries(data).reduce<Record<string, string>>((acc, [key, val]) => {

@@ -1,149 +1,56 @@
-import { Collapse, List, Steps, Typography } from 'antd';
 import Lottie from 'react-lottie';
-
 import allServices from '../animations/hmis-services.json';
-
-const featuresData = [
-	{
-		key: '1',
-		header: 'OPD (Out Patient Department)',
-		features: [
-			['Come', 'Consult', 'Go'],
-			'Appointments/ Single-Time interactions',
-			'Discrete History Management',
-		],
-	},
-	{
-		key: '2',
-		header: 'IPD (In Patient Department)',
-		features: [
-			['Admit', 'Treat', 'Discharge', 'Follow-up'],
-			'Continuous Patient Journey',
-			'Department Specific',
-			'Operations and surgeries management',
-		],
-	},
-	{
-		key: '3',
-		header: 'Inventory Management',
-		features: [
-			'Centralized Inventory Management',
-			'Consumables (Medicines, Syringes, etc.)',
-			'Non-Consumables (Equipment, Beds, etc.)',
-		],
-	},
-	{
-		key: '4',
-		header: 'Lab Management',
-		features: [
-			'Centralized Lab Management',
-			'Scannable Test Reports to generate E-Docs',
-			'Easy integration with testing machines',
-			'Test Reports and Analysis',
-		],
-	},
-	{
-		key: '5',
-		header: 'Dashboards (Insights and Analytics)',
-		features: [
-			'How is your hospital performing?',
-			'How are your assets and resources being utilized?',
-		],
-	},
-	{
-		key: '6',
-		header: 'Patient Management',
-		features: [
-			'Patient Navigation',
-			'Patient Behavior',
-			'Patient Journey',
-			'Patient Satisfaction',
-			'Tracking and Behavior',
-		],
-	},
-	{
-		key: '7',
-		header: 'Payments',
-		features: ['Payment Integration', 'Skip/Configurable Payments'],
-	},
-	{
-		key: '8',
-		header: 'Hospital Package Creator',
-		features: ['Health Checkups', 'Operations and surgeries', 'Cost Analysis'],
-	},
-	{
-		key: '9',
-		header: 'Health Insurance',
-		features: [
-			'Integration with Health Insurance Companies',
-			'Integration with Govt. for Health IDs',
-		],
-	},
-	{
-		key: '10',
-		header: 'Other Features',
-		features: ['Patient options for nearest hospital selection (tenant based)'],
-	},
-];
+import { featuresData } from '../components/atoms/features';
+import { configDefaultState } from '../context/config';
 
 const Home = () => {
 	return (
 		<>
-			<div className="flex flex-col-reverse sm:flex-row gap-10 items-center justify-between">
-				<div className="flex-grow">
-					<Typography.Title level={2}>Welcome to HMIS</Typography.Title>
-					<Typography.Text>HMIS powers the Hospitals for all administrative needs</Typography.Text>
-					<br />
-					<br />
-					<br />
+			<div className="bg-white py-0 sm:py-16">
+				<div className="isolate mx-auto max-w-7xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-center sm:gap-8">
+					<div className="text-center">
+						<h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+							{configDefaultState.app.fullName}
+						</h1>
+						<p className="mt-6 text-lg leading-8 text-gray-600">
+							A complete one stop solution for all your hospital needs. Make your hospital digital
+							and manage all your hospital needs from one centralized place.
+						</p>
+					</div>
 
-					<Typography.Title level={3}>Features</Typography.Title>
-					<Collapse
-						accordion
-						expandIconPosition="end"
-						ghost
-						defaultActiveKey={[featuresData[0].key]}
-						className="bg-white border-0 p-0 m-0"
-						bordered={false}
-					>
-						{featuresData.map((feature) => (
-							<Collapse.Panel
-								className="m-0 p-0"
-								key={feature.key}
-								header={
-									<Typography.Text className="font-semibold">{feature.header}</Typography.Text>
-								}
-							>
-								<List
-									bordered={false}
-									className="ml-2"
-									dataSource={feature.features}
-									renderItem={(item, index) => {
-										if (typeof item === 'string')
-											return (
-												<List.Item className="border-0" key={feature.key + index + item}>
-													{item}
-												</List.Item>
-											);
-										return (
-											<List.Item key={feature.key + index}>
-												<Steps
-													size="small"
-													className="border-0"
-													current={item.length}
-													items={item.map((t) => ({ title: t, key: t + index }))}
-												/>
-											</List.Item>
-										);
-									}}
-								/>
-							</Collapse.Panel>
-						))}
-					</Collapse>
+					<Lottie options={{ animationData: allServices }} />
 				</div>
+			</div>
 
-				<div>
-					<Lottie options={{ animationData: allServices }} height={500} />
+			<div className="bg-white py-6 sm:py-16">
+				<div className="mx-auto max-w-7xl px-6 lg:px-8">
+					<div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-6 sm:gap-y-14 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+						<div>
+							<h2 className="text-base font-semibold leading-7 text-indigo-600">
+								Everything you need
+							</h2>
+							<p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+								All-in-one platform
+							</p>
+							<p className="mt-6 text-base leading-7 text-gray-600">
+								A short description of all the services in the platform
+							</p>
+						</div>
+						<dl className="col-span-2 grid grid-cols-1 gap-x-8 gap-y-10 text-base leading-7 text-gray-600 sm:grid-cols-2 lg:gap-y-16">
+							{featuresData.map((feat) => (
+								<div key={feat.key} className="relative pl-9">
+									<dt className="font-semibold text-gray-900">
+										<feat.icon
+											size={24}
+											className="absolute left-0 top-1 h-5 w-5 text-indigo-500"
+										/>
+										{feat.title}
+									</dt>
+									<dd className="mt-2">{feat.description}</dd>
+								</div>
+							))}
+						</dl>
+					</div>
 				</div>
 			</div>
 		</>
