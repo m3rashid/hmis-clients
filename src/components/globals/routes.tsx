@@ -26,22 +26,22 @@ import { IAuth } from '../../recoil/auth';
 const Home = React.lazy(() => import('../../pages/home'));
 const About = React.lazy(() => import('../../pages/about'));
 const Settings = React.lazy(() => import('../../pages/settings'));
-const Payments = React.lazy(() => import('../../pages/payments'));
 const LabManagement = React.lazy(() => import('../../pages/lab'));
 const Dashboard = React.lazy(() => import('../../pages/dashboard'));
-const Appointments = React.lazy(() => import('../../pages/appointment'));
-const PatientManagement = React.lazy(() => import('../../pages/patient'));
-const Notifications = React.lazy(() => import('../../pages/notifications'));
-const InPatientDepartment = React.lazy(() => import('../../pages/inPatient'));
-const AttendanceManagement = React.lazy(() => import('../../pages/attendance'));
-const OutPatientDepartment = React.lazy(() => import('../../pages/outPatient'));
+const Payments = React.lazy(() => import('../../pages/services/payments'));
+const Announcements = React.lazy(() => import('../../pages/announcements'));
 const HospitalPackage = React.lazy(() => import('../../pages/hospitalPackage'));
 const Consumables = React.lazy(() => import('../../pages/inventory/consumables'));
 const UserManagement = React.lazy(() => import('../../pages/userManagement/user'));
 const RoleManagement = React.lazy(() => import('../../pages/userManagement/role'));
 const NonConsumables = React.lazy(() => import('../../pages/inventory/nonConsumables'));
-const HealthInsuranceManagement = React.lazy(() => import('../../pages/healthInsurance'));
+const AttendanceManagement = React.lazy(() => import('../../pages/services/attendance'));
+const Appointments = React.lazy(() => import('../../pages/patientManagement/appointment'));
+const PatientManagement = React.lazy(() => import('../../pages/patientManagement/patient'));
 const RemovedConsumables = React.lazy(() => import('../../pages/inventory/removedConsumables'));
+const InPatientDepartment = React.lazy(() => import('../../pages/patientManagement/inPatient'));
+const OutPatientDepartment = React.lazy(() => import('../../pages/patientManagement/outPatient'));
+const HealthInsuranceManagement = React.lazy(() => import('../../pages/services/healthInsurance'));
 const RemovedNonConsumables = React.lazy(
 	() => import('../../pages/inventory/removedNonConsumables')
 );
@@ -99,8 +99,15 @@ const routes: Array<IRoute> = [
 		Component: Home,
 	},
 	{
+		icon: <FundOutlined />,
+		label: 'Dashboards',
+		link: '/dashboards',
+		Component: Dashboard,
+		permission: { resource: 'USER', action: 'READ' },
+	},
+	{
 		icon: <TeamOutlined />,
-		label: 'Permission Management',
+		label: 'User Management',
 		link: '/users',
 		nestedLinks: [
 			{
@@ -133,7 +140,7 @@ const routes: Array<IRoute> = [
 			},
 			{
 				icon: <UsergroupAddOutlined />,
-				label: 'Patient Home',
+				label: 'Appointments',
 				link: '/patient/appointments',
 				Component: Appointments,
 				permission: { resource: 'USER', action: 'READ' },
@@ -141,14 +148,14 @@ const routes: Array<IRoute> = [
 			{
 				icon: <UserSwitchOutlined />,
 				label: 'Out Patient Department',
-				link: '/patient/opd',
+				link: '/patient/out-patient',
 				Component: OutPatientDepartment,
 				permission: { resource: 'USER', action: 'READ' },
 			},
 			{
 				icon: <UsergroupAddOutlined />,
 				label: 'In Patient Department',
-				link: '/patient/ipd',
+				link: '/patient/in-patient',
 				Component: InPatientDepartment,
 				permission: { resource: 'USER', action: 'READ' },
 			},
@@ -201,44 +208,37 @@ const routes: Array<IRoute> = [
 	{
 		icon: <CustomerServiceOutlined />,
 		label: 'Services',
-		link: '/services',
+		link: '/service',
 		nestedLinks: [
 			{
 				icon: <DollarCircleOutlined />,
 				label: 'Payments',
-				link: '/services/payments',
+				link: '/service/payments',
 				Component: Payments,
 				permission: { resource: 'USER', action: 'READ' },
 			},
 			{
 				icon: <PlusCircleOutlined />,
 				label: 'Health Insurance',
-				link: '/services/health',
+				link: '/service/health-insurance',
 				Component: HealthInsuranceManagement,
-				permission: { resource: 'USER', action: 'READ' },
-			},
-			{
-				icon: <FundOutlined />,
-				label: 'Dashboards',
-				link: '/services/dashboards',
-				Component: Dashboard,
 				permission: { resource: 'USER', action: 'READ' },
 			},
 			{
 				icon: <UserOutlined />,
 				label: 'Attendance',
-				link: '/services/attendance',
+				link: '/service/attendance',
 				Component: AttendanceManagement,
 				permission: { resource: 'ATTENDANCE', action: 'READ' },
 			},
-			{
-				icon: <NotificationOutlined />,
-				label: 'Notice and Circulars',
-				link: '/services/notices',
-				Component: Notifications,
-				permission: { resource: 'USER', action: 'READ' },
-			},
 		],
+	},
+	{
+		icon: <NotificationOutlined />,
+		label: 'Announcements',
+		link: '/announcements',
+		Component: Announcements,
+		permission: { resource: 'USER', action: 'READ' },
 	},
 	{
 		icon: <SolutionOutlined />,

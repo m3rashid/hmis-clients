@@ -1,16 +1,10 @@
 import { Tabs } from 'antd';
 import React, { PropsWithChildren } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import { toSentenceCase } from '../../helpers/strings';
 
-const InventoryManagementContainer: React.FC<PropsWithChildren> = ({ children }) => {
-	const items = [
-		'consumables',
-		'non-consumables',
-		'consumables-removed',
-		'non-consumables-removed',
-	];
+const PatientManagementContainer: React.FC<PropsWithChildren> = ({ children }) => {
+	const items = ['home', 'appointments', 'in-patient', 'out-patient'];
 	const paths = useLocation().pathname.split('/');
 	const current = paths[paths.length - 1];
 	const navigate = useNavigate();
@@ -20,7 +14,7 @@ const InventoryManagementContainer: React.FC<PropsWithChildren> = ({ children })
 			<Tabs
 				centered
 				defaultActiveKey={current}
-				onChange={(d) => navigate(`/inventory/${d}`)}
+				onChange={(d) => navigate(`/patient/${d}`)}
 				items={items.map((t) => ({ key: t, label: toSentenceCase(t, '-') }))}
 			/>
 			{children}
@@ -28,4 +22,4 @@ const InventoryManagementContainer: React.FC<PropsWithChildren> = ({ children })
 	);
 };
 
-export default InventoryManagementContainer;
+export default PatientManagementContainer;
