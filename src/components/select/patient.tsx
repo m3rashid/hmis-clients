@@ -1,6 +1,8 @@
 import React from 'react'
 
-interface IProps {}
+interface IProps {
+	props: any;
+}
 
 const PatientSelector: React.FC<IProps> = () => {
 	return (
