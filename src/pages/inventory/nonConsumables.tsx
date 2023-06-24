@@ -1,22 +1,28 @@
 import dayjs from 'dayjs';
 import { TableProps } from 'antd';
-import { MODELS } from '@hmis/gatekeeper';
+import { MODELS, inventoryValidator } from '@hmis/gatekeeper';
 
 import apiService from '../../api/service';
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/table';
+import TableHoc from '../../components/table';
 import InventoryManagementContainer from './index';
-import { atom, useRecoilState } from 'recoil';
 import NonConsumableForm from '../../components/nonConsumableForm';
-
-const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.INonConsumable>>({
-	key: 'inventoryNonConsumable',
-	default: defaultTableAtomContents<MODELS.INonConsumable>(),
-});
+import { INonConsumable } from '@hmis/gatekeeper/dist/models/index';
+import useTableForm from '../../components/form/useTableForm';
 
 const NonConsumables = () => {
-	const [
-		{ selectedRows }, setSelectedRows
-	] = useRecoilState(selectedRowsAtom);
+	const { ActionButtons, editData, form, isEdit, selectedRowsAtom } = useTableForm<INonConsumable>({
+		add: {
+			endpoint: '/non-consumable/add',
+			validatorSchema: inventoryValidator.createNonConsumableSchema,
+		},
+		update: {
+			endpoint: '/non-consumable/edit',
+			validatorSchema: inventoryValidator.updateNonConsumableSchema,
+		},
+		atomKey: 'inventoryNonConsumable',
+		okActionButtonLabel: 'Confirm Non-Consumable',
+	});
+
 	const columns: TableProps<MODELS.INonConsumable>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name', width: 150 },
 		{ title: 'Quantity', dataIndex: 'quantityLeft', key: 'quantityLeft', width: 80 },
@@ -36,11 +42,6 @@ const NonConsumables = () => {
 		},
 	];
 
-		const { ActionButtons, FormContainer } = NonConsumableForm({
-			closeModal: () => setSelectedRows((p) => ({ ...p, formModalOpen: false })),
-			editData: selectedRows[0],
-		});
-
 	return (
 		<InventoryManagementContainer>
 			<TableHoc<MODELS.INonConsumable>
@@ -54,7 +55,7 @@ const NonConsumables = () => {
 				drawerProps={{
 					footer: ActionButtons,
 				}}
-				form={FormContainer}
+				form={<NonConsumableForm editData={editData} form={form} isEdit={isEdit} />}
 				editable
 				popupType="drawer"
 				routes={{

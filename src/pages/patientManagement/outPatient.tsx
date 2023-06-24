@@ -1,21 +1,16 @@
-import { atom, useRecoilState } from "recoil";
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from "../../components/table";
-import { MODELS } from "@hmis/gatekeeper";
-import { Fragment } from "react";
-import apiService from "../../api/service";
-import { TableProps } from "antd";
-import dayjs from "dayjs";
-import PatientManagementContainer from ".";
-
-const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IOpd>>({
-	key: 'patientOpd',
-	default: defaultTableAtomContents<MODELS.IOpd>(),
-});
+import TableHoc from '../../components/table';
+import { MODELS } from '@hmis/gatekeeper';
+import apiService from '../../api/service';
+import { TableProps } from 'antd';
+import dayjs from 'dayjs';
+import PatientManagementContainer from '.';
+import useTableForm from '../../components/form/useTableForm';
 
 const OutPatientDepartment = () => {
-	const [
-		// { selectedRows }, setSelectedRows
-	] = useRecoilState(selectedRowsAtom);
+	const { selectedRowsAtom } = useTableForm<MODELS.IOpd>({
+		atomKey: 'patientOpd',
+		okActionButtonLabel: 'Add OPD',
+	});
 
 	const columns: TableProps<any>['columns'] = [
 		{
@@ -46,9 +41,11 @@ const OutPatientDepartment = () => {
 				title="OPD"
 				addButtonLabel="Add OPD"
 				selectedRowsAtom={selectedRowsAtom}
-				drawerProps={{
-					// width: '50vw',
-				}}
+				drawerProps={
+					{
+						// width: '50vw',
+					}
+				}
 				editable
 				popupType="drawer"
 				tableProps={{

@@ -1,12 +1,7 @@
-import { Form, FormInstance, Input } from 'antd';
+import { Form, Input } from 'antd';
+import { IFormProps } from './form/useTableForm';
 
-interface IProps {
-	editData: any;
-	form: FormInstance<any>;
-	isEdit: boolean;
-}
-
-const NoticeForm = ({ form, isEdit, editData }: IProps) => {
+const NoticeForm = ({ form, isEdit, editData }: IFormProps) => {
 	return (
 		<Form form={form} layout="vertical" {...(isEdit ? { initialValues: editData } : {})}>
 			<Form.Item

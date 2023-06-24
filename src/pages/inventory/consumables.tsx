@@ -2,19 +2,26 @@ import { TableProps } from 'antd';
 import dayjs from 'dayjs';
 
 import apiService from '../../api/service';
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/table';
+import TableHoc from '../../components/table';
 import InventoryManagementContainer from './index';
-import type { MODELS } from '@hmis/gatekeeper';
-import { atom, useRecoilState } from 'recoil';
+import { inventoryValidator, type MODELS } from '@hmis/gatekeeper';
 import ConsumableForm from '../../components/consumableForm';
-
-const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IConsumable>>({
-	key: 'inventoryConsumable',
-	default: defaultTableAtomContents<MODELS.IConsumable>(),
-});
+import useTableForm from '../../components/form/useTableForm';
+import { IConsumable } from '@hmis/gatekeeper/dist/models/index';
 
 const Consumables = () => {
-	const [{ selectedRows }, setSelectedRows] = useRecoilState(selectedRowsAtom);
+	const { ActionButtons, editData, form, isEdit, selectedRowsAtom } = useTableForm<IConsumable>({
+		add: {
+			endpoint: '/consumable/add',
+			validatorSchema: inventoryValidator.createConsumableSchema,
+		},
+		update: {
+			endpoint: '/consumable/edit',
+			validatorSchema: inventoryValidator.updateConsumableSchema,
+		},
+		atomKey: 'inventoryConsumable',
+		okActionButtonLabel: 'Confirm Consumable',
+	});
 
 	const columns: TableProps<MODELS.IConsumable>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name', width: 150 },
@@ -36,11 +43,6 @@ const Consumables = () => {
 		{ title: 'Manufacturer', dataIndex: 'manufacturer', key: 'manufacturer' },
 	];
 
-	const { ActionButtons, FormContainer } = ConsumableForm({
-		closeModal: () => setSelectedRows((p) => ({ ...p, formModalOpen: false })),
-		editData: selectedRows[0],
-	});
-
 	return (
 		<InventoryManagementContainer>
 			<TableHoc<MODELS.IConsumable>
@@ -54,7 +56,7 @@ const Consumables = () => {
 				drawerProps={{
 					footer: ActionButtons,
 				}}
-				form={FormContainer}
+				form={<ConsumableForm editData={editData} form={form} isEdit={isEdit} />}
 				editable
 				popupType="drawer"
 				routes={{

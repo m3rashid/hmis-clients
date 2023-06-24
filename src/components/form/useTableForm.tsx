@@ -2,11 +2,21 @@ import { atom, useRecoilState } from 'recoil';
 import { SelectedRowsAtom, defaultTableAtomContents } from '../table';
 import { z } from 'zod';
 import apiService from '../../api/service';
-import { Button, Form, message } from 'antd';
+import { Button, Form, FormInstance, message } from 'antd';
 import { useMutation } from '@tanstack/react-query';
 import { Validator } from '@hmis/gatekeeper';
 
 const defaultValidator = z.object({});
+
+export interface IFormProps {
+	editData: any;
+	form: FormInstance<any>;
+	isEdit: boolean;
+}
+
+export type DataTransformer = (
+		values: Record<string, any>
+	) => Record<string, any> | Promise<Record<string, any>>;
 
 interface IProps {
 	add?: {
@@ -47,11 +57,10 @@ const useTableForm = <T extends { _id: string }>(props: IProps) => {
 		setSelectedRows((p) => ({ ...p, formModalOpen: false }));
 	};
 
-	const handleCreateUpdateService = async (otherValues: Record<string, any> = {}) => {
+	const handleCreateUpdateService = async () => {
 		form.validateFields();
 		const values = {
 			...form.getFieldsValue(),
-			...otherValues,
 			...(isEdit ? { _id: editData._id } : {}),
 		};
 
@@ -88,13 +97,13 @@ const useTableForm = <T extends { _id: string }>(props: IProps) => {
 	return {
 		form,
 		isEdit,
-		selectedRows,
-		selectedRowsAtom,
 		editData,
 		mutation,
 		closeModal,
-		handleCreateUpdateService,
+		selectedRows,
 		ActionButtons,
+		selectedRowsAtom,
+		handleCreateUpdateService,
 	};
 };
 

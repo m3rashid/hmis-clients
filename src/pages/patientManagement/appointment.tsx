@@ -1,20 +1,27 @@
 import React from 'react';
-import { atom, useRecoilState } from 'recoil';
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/table';
-import { MODELS } from '@hmis/gatekeeper';
+import TableHoc from '../../components/table';
+import { MODELS, appointmentValidator } from '@hmis/gatekeeper';
 import { TableProps } from 'antd';
 import apiService from '../../api/service';
 import dayjs from 'dayjs';
 import PatientManagementContainer from '.';
 import AppointmentForm from '../../components/appointmentForm';
-
-const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IAppointment>>({
-	key: 'patientAppointment',
-	default: defaultTableAtomContents<MODELS.IAppointment>(),
-});
+import useTableForm from '../../components/form/useTableForm';
+import { IAppointment } from '@hmis/gatekeeper/dist/models/index';
 
 const Appointments: React.FC = () => {
-	const [{ selectedRows }, setSelectedRows] = useRecoilState(selectedRowsAtom);
+	const { selectedRowsAtom, ActionButtons, editData, isEdit, form } = useTableForm<IAppointment>({
+		add: {
+			endpoint: '/appointment/add',
+			validatorSchema: appointmentValidator.createAppointmentSchema,
+		},
+		update: {
+			endpoint: '/appointment/edit',
+			validatorSchema: appointmentValidator.updateAppointmentSchema,
+		},
+		atomKey: 'patientAppointment',
+		okActionButtonLabel: 'Confirm Appointment',
+	});
 
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Doctor', dataIndex: 'doctor', key: 'doctor', render: (doctor) => doctor.name },
@@ -30,11 +37,6 @@ const Appointments: React.FC = () => {
 		},
 	];
 
-	const { ActionButtons, FormContainer } = AppointmentForm({
-		closeModal: () => setSelectedRows((p) => ({ ...p, formModalOpen: false })),
-		editData: selectedRows[0],
-	});
-
 	return (
 		<PatientManagementContainer>
 			<TableHoc<MODELS.IAppointment>
@@ -45,7 +47,7 @@ const Appointments: React.FC = () => {
 					footer: ActionButtons,
 				}}
 				editable
-				form={FormContainer}
+				form={<AppointmentForm editData={editData} form={form} isEdit={isEdit} />}
 				popupType="drawer"
 				tableProps={{
 					columns: columns,

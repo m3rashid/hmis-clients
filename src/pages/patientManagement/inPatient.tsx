@@ -1,20 +1,16 @@
-import { atom, useRecoilState } from 'recoil';
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/table';
+import TableHoc from '../../components/table';
 import { MODELS } from '@hmis/gatekeeper';
 import apiService from '../../api/service';
 import { TableProps } from 'antd';
 import dayjs from 'dayjs';
 import PatientManagementContainer from '.';
-
-const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IIpd>>({
-	key: 'patientIpd',
-	default: defaultTableAtomContents<MODELS.IIpd>(),
-});
+import useTableForm from '../../components/form/useTableForm';
 
 const InPatientDepartment = () => {
-	const [
-		// { selectedRows }, setSelectedRows
-	] = useRecoilState(selectedRowsAtom);
+	const {selectedRowsAtom} = useTableForm<MODELS.IIpd>({
+		atomKey: 'patientIpd',
+		okActionButtonLabel: 'Add IPD'
+	});
 
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Patient', dataIndex: 'patient', key: 'patient', render: (patient) => patient.name },
