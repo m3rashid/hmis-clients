@@ -23,11 +23,14 @@ import {
 import React from 'react';
 import { IAuth } from '../../recoil/auth';
 
+
 const Home = React.lazy(() => import('../../pages/home'));
 const About = React.lazy(() => import('../../pages/about'));
 const Settings = React.lazy(() => import('../../pages/settings'));
 const LabManagement = React.lazy(() => import('../../pages/lab'));
+const Profile = React.lazy(() => import('../../pages/me/profile'));
 const Dashboard = React.lazy(() => import('../../pages/dashboard'));
+const MySettings = React.lazy(() => import('../../pages/me/settings'));
 const Payments = React.lazy(() => import('../../pages/services/payments'));
 const Announcements = React.lazy(() => import('../../pages/announcements'));
 const HospitalPackage = React.lazy(() => import('../../pages/hospitalPackage'));
@@ -97,6 +100,25 @@ const routes: Array<IRoute> = [
 		label: 'Home',
 		link: '/',
 		Component: Home,
+	},
+	{
+		icon: <HomeOutlined />,
+		label: 'Me Home',
+		link: '/me',
+		nestedLinks: [
+			{
+				icon: <UserOutlined />,
+				label: 'Profile',
+				link: '/me/profile',
+				Component: Profile,
+			},
+			{
+				icon: <SettingOutlined />,
+				label: 'Settings',
+				link: '/me/settings',
+				Component: MySettings,
+			},
+		],
 	},
 	{
 		icon: <FundOutlined />,
