@@ -1,25 +1,17 @@
-import { useQuery } from '@tanstack/react-query';
 import { ConfigProvider, theme } from 'antd';
 import enUs from 'antd/locale/en_US';
 import React, { PropsWithChildren, useLayoutEffect } from 'react';
 
-import apiService from '../../api/service';
 import AuthActions from './authActions';
 import Brand from './brand';
 import GlobalSearch from './globalSearch';
 import NavigationMenu from './navigationMenu';
-import { useRecoilState } from 'recoil';
-import { uiAtom } from '../../recoil/ui';
-import { configDefaultState } from '../../recoil/config';
+import { useUi } from '../../recoil/ui';
+import { useGetConfig } from '../../recoil/config';
 
 const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
-	const { data: configResponse } = useQuery({
-		queryKey: ['config'],
-		queryFn: apiService('/config', 'GET'),
-	});
-
-	const config = configResponse?.data || configDefaultState;
-	const [{ isMobile }, setIsMobile] = useRecoilState(uiAtom);
+	const config = useGetConfig()
+	const [{ isMobile }, setIsMobile] = useUi();
 	const isDarkMode = config.app.theme === 'dark';
 
 	useLayoutEffect(() => {
@@ -57,7 +49,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 						isDarkMode ? 'bg-neutral-800' : 'bg-neutral-200'
 					}`}
 				>
-					<Brand onlyLogo={isMobile} config={config} />
+					<Brand />
 					<div className="flex-1 all-center">
 						<NavigationMenu />
 						<GlobalSearch />

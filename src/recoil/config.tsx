@@ -1,3 +1,6 @@
+import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import apiService from "../api/service";
+
 type Developers = {
 	name: string;
 	github: string;
@@ -34,7 +37,7 @@ export const configDefaultState: IConfig = {
 		name: 'HMIS',
 		version: '1.0.0',
 		fullName: 'Hospital Management and Informatics System',
-		theme: 'light',
+		theme: 'dark',
 	},
 	appColors: {
 		primary: '#6366f1',
@@ -49,3 +52,27 @@ export const configDefaultState: IConfig = {
 	},
 	developers: [],
 };
+
+export const configAtom = atom<IConfig>({
+	key: 'config',
+	default: configDefaultState,
+});
+
+export const useConfig = () => useRecoilState(configAtom)
+export const useGetConfig = () => useRecoilValue(configAtom)
+export const useSetConfig = () => useSetRecoilState(configAtom)
+
+
+export const useInitConfig = () => {
+	const configApi = apiService('/config', 'GET');
+	const setConfig = useSetConfig()
+
+	const getConfig = async () => {
+		const { data } = await configApi();
+		setConfig(data)
+	};
+
+	return getConfig
+}
+
+

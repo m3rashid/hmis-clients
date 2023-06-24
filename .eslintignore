@@ -30,4 +30,3 @@ tailwind.config.js
 tsconfig.json
 tsconfig.build.json
 src-tauri
-animations

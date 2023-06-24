@@ -10,6 +10,7 @@ import routes from './components/globals/routes';
 import ErrorPage from './pages/error';
 
 import useAuth from './hooks/auth';
+import { useInitConfig } from './recoil/config';
 
 const FullPageLoading = () => (
 	<Loading classNames="min-h-[80vh] flex-col" spinProps={{ size: 'large' }}>
@@ -19,8 +20,10 @@ const FullPageLoading = () => (
 
 const App = () => {
 	const { revalidateJWT } = useAuth();
+	const getConfig = useInitConfig();
 
 	useEffect(() => {
+		getConfig().then().catch(console.log);
 		revalidateJWT({ msg: true });
 		const timeout = setTimeout(() => {
 			revalidateJWT({});

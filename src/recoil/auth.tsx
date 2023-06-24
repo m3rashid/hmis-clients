@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 export type IUser = any;
 
@@ -22,3 +22,7 @@ export const authAtom = atom<IAuth>({
 	key: 'auth',
 	default: authDefaultState,
 });
+
+export const useAuth = () => useRecoilState(authAtom);
+export const useGetAuth = () => useRecoilValue(authAtom);
+export const useSetAuth = () => useSetRecoilState(authAtom)

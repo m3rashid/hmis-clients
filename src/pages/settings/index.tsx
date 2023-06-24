@@ -1,11 +1,10 @@
 import { Tabs } from 'antd';
 
 import * as configs from './configs';
-import { useRecoilValue } from 'recoil';
-import { uiAtom } from '../../recoil/ui';
+import { useGetUi } from '../../recoil/ui';
 
 const Settings = () => {
-	const { isMobile } = useRecoilValue(uiAtom);
+	const { isMobile } = useGetUi();
 
 	return (
 		<>

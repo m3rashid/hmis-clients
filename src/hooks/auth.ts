@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { instance } from '../api/network';
 import apiService from '..//api/service';
-import { useRecoilState } from 'recoil';
-import { authAtom, authDefaultState } from '../recoil/auth';
+import { authDefaultState, useAuth as useAuthHook } from '../recoil/auth';
 
 export interface Login {
 	email: string;
@@ -14,7 +13,7 @@ export interface Login {
 
 const useAuth = () => {
 	const navigate = useNavigate();
-	const [auth, setAuth] = useRecoilState(authAtom);
+	const [auth, setAuth] = useAuthHook();
 	const revalidateApi = apiService('/auth/revalidate');
 	const loginUser = apiService<any, Login>('/auth/login');
 

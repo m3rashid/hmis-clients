@@ -5,11 +5,12 @@ import { TableProps } from 'antd';
 import dayjs from 'dayjs';
 import PatientManagementContainer from '.';
 import useTableForm from '../../components/form/useTableForm';
+import IpdForm from '../../components/ipdForm';
 
 const InPatientDepartment = () => {
-	const {selectedRowsAtom} = useTableForm<MODELS.IIpd>({
+	const { selectedRowsAtom, ActionButtons, editData, form, isEdit } = useTableForm<MODELS.IIpd>({
 		atomKey: 'patientIpd',
-		okActionButtonLabel: 'Add IPD'
+		okActionButtonLabel: 'Add IPD',
 	});
 
 	const columns: TableProps<any>['columns'] = [
@@ -37,10 +38,10 @@ const InPatientDepartment = () => {
 				selectedRowsAtom={selectedRowsAtom}
 				drawerProps={{
 					width: '50vw',
-					// footer: ActionButtons,
+					footer: ActionButtons,
 				}}
 				editable
-				// form={FormContainer}
+				form={<IpdForm editData={editData} form={form} isEdit={isEdit} />}
 				popupType="drawer"
 				tableProps={{
 					columns: columns,

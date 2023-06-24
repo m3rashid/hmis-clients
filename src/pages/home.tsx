@@ -1,60 +1,87 @@
-import Lottie from 'react-lottie';
-import allServices from '../animations/hmis-services.json';
+import { Fragment } from 'react';
+import { Image, Typography } from 'antd';
 import { featuresData } from '../components/atoms/features';
-import { configDefaultState } from '../recoil/config';
+import { configDefaultState, useGetConfig } from '../recoil/config';
 
 const Home = () => {
+	const config = useGetConfig();
+	const isDark = config.app.theme === 'dark';
+
 	return (
-		<>
-			<div className="bg-white py-20 sm:py-16">
+		<Fragment>
+			<div className={`${isDark ? '' : 'bg-white'} py-20 sm:py-40`}>
 				<div className="isolate mx-auto max-w-7xl px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-center sm:gap-8">
 					<div className="text-center">
-						<h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+						<Typography.Title className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
 							{configDefaultState.app.fullName}
-						</h1>
-						<p className="mt-6 text-lg leading-8 text-gray-600">
+						</Typography.Title>
+						<Typography.Text
+							className={`mt-6 text-lg leading-8 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+						>
 							We aim to build world class smart digital hospitals. Connected, reliable and integral
 							healthcare softwares for all your needs
-						</p>
+						</Typography.Text>
 					</div>
 
-					<Lottie options={{ animationData: allServices }} />
+					<Image preview={false} src="/images/hospital.png" />
 				</div>
 			</div>
 
-			<div className="bg-white py-6 sm:py-16">
+			<div className={`${isDark ? '' : 'bg-white'} py-6 sm:py-16`}>
 				<div className="mx-auto max-w-7xl px-6 lg:px-8">
 					<div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-6 sm:gap-y-14 lg:mx-0 lg:max-w-none lg:grid-cols-3">
 						<div>
-							<h2 className="text-base font-semibold leading-7 text-indigo-600">
+							<Typography.Title
+								level={3}
+								className={`text-base font-semibold leading-7 ${
+									isDark ? 'text-gray-400' : 'text-gray-600'
+								}`}
+							>
 								Everything you need
-							</h2>
-							<p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+							</Typography.Title>
+							<Typography.Text
+								className={`mt-2 text-3xl font-bold tracking-tight ${
+									isDark ? 'text-gray-100' : 'text-gray-900'
+								} sm:text-4xl`}
+							>
 								All-in-one platform
-							</p>
-							<p className="mt-6 text-base leading-7 text-gray-600">
+							</Typography.Text>
+
+							<br />
+							<br />
+
+							<Typography.Text
+								className={`mt-6 text-base leading-7 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+							>
 								A complete one stop solution for all your hospital needs. Make your hospital digital
 								and manage all your hospital needs from one centralized place.
-							</p>
+							</Typography.Text>
 						</div>
 						<dl className="col-span-2 grid grid-cols-1 gap-x-8 gap-y-10 text-base leading-7 text-gray-600 sm:grid-cols-2 lg:gap-y-16">
 							{featuresData.map((feat) => (
 								<div key={feat.key} className="relative pl-9">
-									<dt className="font-semibold text-gray-900">
+									<dt className={`font-semibold ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>
 										<feat.icon
 											size={24}
 											className="absolute left-0 top-1 h-5 w-5 text-indigo-500"
 										/>
-										{feat.title}
+										<Typography.Text className={`${isDark ? 'text-gray-100' : 'text-gray-900'}`}>
+											{feat.title}
+										</Typography.Text>
 									</dt>
-									<dd className="mt-2">{feat.description}</dd>
+
+									<dd className="mt-2">
+										<Typography.Text className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+											{feat.description}
+										</Typography.Text>
+									</dd>
 								</div>
 							))}
 						</dl>
 					</div>
 				</div>
 			</div>
-		</>
+		</Fragment>
 	);
 };
 

@@ -5,9 +5,10 @@ import { TableProps } from 'antd';
 import dayjs from 'dayjs';
 import PatientManagementContainer from '.';
 import useTableForm from '../../components/form/useTableForm';
+import OpdForm from '../../components/opdForm';
 
 const OutPatientDepartment = () => {
-	const { selectedRowsAtom } = useTableForm<MODELS.IOpd>({
+	const { selectedRowsAtom, ActionButtons, form, editData, isEdit } = useTableForm<MODELS.IOpd>({
 		atomKey: 'patientOpd',
 		okActionButtonLabel: 'Add OPD',
 	});
@@ -41,11 +42,10 @@ const OutPatientDepartment = () => {
 				title="OPD"
 				addButtonLabel="Add OPD"
 				selectedRowsAtom={selectedRowsAtom}
-				drawerProps={
-					{
-						// width: '50vw',
-					}
-				}
+				drawerProps={{
+					footer: ActionButtons,
+				}}
+				form={<OpdForm editData={editData} form={form} isEdit={isEdit} />}
 				editable
 				popupType="drawer"
 				tableProps={{

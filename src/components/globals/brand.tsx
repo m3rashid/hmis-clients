@@ -1,34 +1,29 @@
 import { Image, Typography } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { IConfig } from '../../recoil/config';
+import { useGetConfig } from '../../recoil/config';
+import { useGetUi } from '../../recoil/ui';
 
-interface IProps {
-	onlyLogo?: boolean;
-	config: IConfig;
-}
-
-const Brand: React.FC<IProps> = ({ config, onlyLogo = false }) => {
-	const title = config.app.name;
-	const subTitle = `v${config.app.version}`;
-	const logo = '/images/logo.png';
+const Brand: React.FC = () => {
+	const config = useGetConfig();
+	const ui = useGetUi()
 
 	return (
 		<div className="flex gap-x-2">
 			<Link to="/" className="all-center">
 				<Image
 					preview={false}
-					height={40}
-					width={40}
-					src={logo}
-					alt={`${title} Logo`}
+					height={50}
+					width={50}
+					src="/images/logo.png"
+					alt={`${config.app.name} Logo`}
 					className="mr-2 cursor-pointer"
 				/>
 			</Link>
-			{!onlyLogo && (
+			{!ui.isMobile && (
 				<div className="flex flex-col justify-center">
-					<Typography.Text strong>{title}</Typography.Text>
-					{subTitle && <Typography.Text type="secondary">{subTitle}</Typography.Text>}
+					<Typography.Text strong>{config.app.name}</Typography.Text>
+					<Typography.Text type="secondary">{`v${config.app.version}`}</Typography.Text>
 				</div>
 			)}
 		</div>
