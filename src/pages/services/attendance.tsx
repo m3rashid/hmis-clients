@@ -1,9 +1,9 @@
+import { TableProps } from 'antd';
 import { MODELS } from '@hmis/gatekeeper';
 import ServiceManagementContainer from '.';
+import apiService from '../../api/service';
 import TableHoc from '../../components/table';
 import useTableForm from '../../components/form/useTableForm';
-import { TableProps } from 'antd';
-import apiService from '../../api/service';
 
 const AttendanceManagement = () => {
 	const { selectedRowsAtom } = useTableForm<MODELS.IAttendance>({

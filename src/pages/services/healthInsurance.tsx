@@ -16,7 +16,7 @@ const HealthInsuranceManagement = () => {
 	return (
 		<ServiceManagementContainer>
 			<TableHoc<MODELS.IAttendance>
-				title="Attendance"
+				title="Health Insurance"
 				selectedRowsAtom={selectedRowsAtom}
 				drawerProps={{
 					width: '50vw',

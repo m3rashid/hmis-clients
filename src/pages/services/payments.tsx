@@ -16,7 +16,7 @@ const Payments = () => {
 	return (
 		<ServiceManagementContainer>
 			<TableHoc<MODELS.IPayment>
-				title="Attendance"
+				title="Payments"
 				selectedRowsAtom={selectedRowsAtom}
 				drawerProps={{
 					width: '50vw',

@@ -23,7 +23,12 @@ const Notifications = () => {
 
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Title', dataIndex: 'title', key: 'title', width: 320 },
-		{ title: 'Description', dataIndex: 'description', key: 'description', render: (announcement) => announcement?.slice(0, 150) + '...' },
+		{
+			title: 'Description',
+			dataIndex: 'description',
+			key: 'description',
+			render: (announcement) => announcement?.slice(0, 100) + ' ...',
+		},
 	];
 
 	return (
@@ -36,7 +41,7 @@ const Notifications = () => {
 					footer: ActionButtons,
 				}}
 				infoModalProps={{
-					width: 1000
+					width: 1000,
 				}}
 				form={<NoticeForm editData={editData} form={form} isEdit={isEdit} />}
 				tableProps={{

@@ -5,28 +5,18 @@ import apiService from '../../api/service';
 import { TableHocProps, defaultTableAtomContents } from './index';
 import { IConfig, configDefaultState } from '../../recoil/config';
 import { useRecoilState } from 'recoil';
-
-interface ITableOptions {
-	page: number;
-	limit: number;
-}
-
-const defaultTableOptions: ITableOptions = {
-	limit: 15,
-	page: 1,
-};
+import { useUi } from '../../recoil/ui';
 
 const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 	props: TableHocProps<RecordType>
 ) => {
-	const tableDefaultOptions = window.localStorage.getItem('tableOptions');
-	const [tableOptions, setTableOptions] = useState<ITableOptions>(
-		tableDefaultOptions ? JSON.parse(tableDefaultOptions) : defaultTableOptions
-	);
+	const [{ table }, setUi] = useUi();
+	const onPageNumberChange = (page: number) => {
+		setUi((p) => ({ ...p, table: { ...p.table, page } }));
+	};
 
-	const onPageNumberChange = (page: number) => setTableOptions((p) => ({ ...p, page }));
 	const onPageSizeChange = (page: number, limit: number) => {
-		setTableOptions({ page, limit });
+		setUi((p) => ({ ...p, table: { page, limit } }));
 		window.localStorage.setItem('tableOptions', JSON.stringify({ page, limit }));
 	};
 
@@ -38,12 +28,12 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 	const config: IConfig = configResponse?.data || configDefaultState;
 
 	const tableQuery = useQuery({
-		queryKey: [props.title, tableOptions.limit, tableOptions.page],
+		queryKey: [props.title, table.limit, table.page],
 		queryFn: () =>
 			props.routes?.list({
 				params: {
-					pageSize: tableOptions.limit,
-					pageNumber: tableOptions.page,
+					pageSize: table.limit,
+					pageNumber: table.page,
 				},
 			}),
 	});
@@ -107,7 +97,7 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 			formModalVisible: formModalOpen,
 			loading,
 			selectedRows,
-			tableOptions,
+			tableOptions: table,
 			// constants
 			showDeleteAction,
 			showEditAction,
@@ -121,7 +111,6 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 			setLoading,
 			setSelectedRows,
 			setInfoModalVisible,
-			setTableOptions,
 		},
 
 		actions: {

@@ -25,7 +25,7 @@ const PatientManagement = () => {
 	return (
 		<PatientManagementContainer>
 			<TableHoc<MODELS.IProfile>
-				title="Attendance"
+				title="Patients"
 				selectedRowsAtom={selectedRowsAtom}
 				drawerProps={{
 					width: '50vw',

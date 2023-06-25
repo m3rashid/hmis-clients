@@ -1,6 +1,7 @@
 import React from 'react';
 import apiService from '../../api/service';
 import { useQuery } from '@tanstack/react-query';
+import { Typography } from 'antd';
 
 const Profile: React.FC = () => {
 	const query = useQuery({
@@ -14,8 +15,9 @@ const Profile: React.FC = () => {
 
 	return (
 		<>
-			<div>Profile</div>
-			<pre>{JSON.stringify(query.data?.data, null, 2)}</pre>
+			<Typography.Text>
+				<pre>{JSON.stringify(query.data?.data, null, 2)}</pre>
+			</Typography.Text>
 		</>
 	);
 };

@@ -13,12 +13,12 @@ import {
 	Typography,
 } from 'antd';
 import dayjs from 'dayjs';
+import { RecoilState } from 'recoil';
 import React, { Fragment, ReactNode } from 'react';
 import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleOutlined } from '@ant-design/icons';
 
-import ObjectAsDetails from '../atoms/objectAsDetails';
 import useTable from './useTable';
-import { RecoilState } from 'recoil';
+import ObjectAsDetails from '../atoms/objectAsDetails';
 
 export function defaultTableAtomContents<T>(): SelectedRowsAtom<T> {
 	return {
@@ -52,6 +52,7 @@ export interface TableHocProps<RecordType> {
 	addButtonLabel?: string;
 	showCreatedTime?: boolean;
 	showUpdatedTime?: boolean;
+	showSerialNo?: boolean;
 	modifyInfoDetails?: (data: Record<string, any>) => Record<string, string>;
 	notToShowInInfo?: string[];
 	form?: ReactNode;
@@ -72,6 +73,7 @@ const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
 ) => {
 	const showCreatedTime = props.showCreatedTime ?? true;
 	const showUpdatedTime = props.showUpdatedTime ?? true;
+	const showSerialNo = props.showSerialNo ?? true;
 	const { actions, state, stateUpdater } = useTable<RecordType>(props);
 	const modifyInfoDetails = props.modifyInfoDetails ?? ((data: any) => data);
 
@@ -245,6 +247,20 @@ const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
 					...props.tableProps.pagination,
 				}}
 				columns={[
+					...(showSerialNo
+						? [
+								{
+									width: 100,
+									key: 'slNo',
+									title: 'Sl. No',
+									render: (_: any, __: any, index: number) => (
+										<div className="pl-4">
+											{index + 1 + state.tableOptions.limit * (state.tableOptions.page - 1)}
+										</div>
+									),
+								},
+						  ]
+						: []),
 					...(props.tableProps.columns ?? []),
 					...(showCreatedTime ? showTimeEntryInTable('Time Created', 'createdAt') : []),
 					...(showUpdatedTime ? showTimeEntryInTable('Time Updated', 'updatedAt') : []),

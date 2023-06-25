@@ -1,9 +1,8 @@
-import { Typography } from 'antd';
+import { Descriptions } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 
 import { camelCaseToSentenceCase } from '../../helpers/strings';
-import { useGetUi } from '../../recoil/ui';
 
 interface IProps {
 	data: Record<string, any>;
@@ -13,7 +12,6 @@ interface IProps {
 const dateKeys = ['createdAt', 'updatedAt'];
 
 const ObjectAsDetails: React.FC<IProps> = (props) => {
-	const { isMobile } = useGetUi();
 	const notToShow = [
 		'_id',
 		'key',
@@ -51,19 +49,11 @@ const ObjectAsDetails: React.FC<IProps> = (props) => {
 
 	return (
 		<div className="flex flex-col gap-2">
-			{parsedData.map(({ key, value }) => {
-				return (
-					<div
-						className="grid gap-2"
-						style={{
-							gridTemplateColumns: isMobile ? '1fr' : '1fr 2fr',
-						}}
-					>
-						<Typography.Text className="font-bold">{key}</Typography.Text>
-						<Typography.Text className="">{value}</Typography.Text>
-					</div>
-				);
-			})}
+			<Descriptions column={1}>
+				{parsedData.map(({ key, value }) => {
+					return <Descriptions.Item label={key}>{value}</Descriptions.Item>;
+				})}
+			</Descriptions>
 		</div>
 	);
 };

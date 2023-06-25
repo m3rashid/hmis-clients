@@ -269,7 +269,7 @@ const RoleDrawer = ({ editData, closeModal }: IRoleDrawerProps) => {
 											permissionName,
 											// actions
 										]) => (
-											<div className="bg-gray-100 rounded-md p-2 mb-2 flex items-center justify-between">
+											<div className="rounded-md mb-2 flex items-center justify-between">
 												<Typography.Text strong>{toSentenceCase(permissionName)}</Typography.Text>
 
 												<div className="">
@@ -290,7 +290,7 @@ const RoleDrawer = ({ editData, closeModal }: IRoleDrawerProps) => {
 									</div>
 
 									{Object.keys(resPermissions.actions).map((permissionName) => (
-										<div className="bg-gray-100 rounded-md p-2 mb-3">
+										<div className="rounded-md mb-3">
 											<ResourceSearch
 												{...{
 													payload,
