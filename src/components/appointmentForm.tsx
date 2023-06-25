@@ -3,6 +3,8 @@ import { ENUMS } from '@hmis/gatekeeper';
 import { DatePicker, Form, Select } from 'antd';
 import { toSentenceCase } from '../helpers/strings';
 import { IFormProps } from './form/useTableForm';
+import DoctorSelector from './select/doctor';
+import PatientSelector from './select/patient';
 
 const AppointmentForm = ({ form, isEdit, editData }: IFormProps) => {
 	return (
@@ -18,9 +20,9 @@ const AppointmentForm = ({ form, isEdit, editData }: IFormProps) => {
 				  }
 				: {})}
 		>
-			{/* TODO: Doctor Selector */}
+			<DoctorSelector />
 
-			{/* Registered Patient Selector */}
+			<PatientSelector  />
 
 			<Form.Item name="status" label="Status">
 				<Select

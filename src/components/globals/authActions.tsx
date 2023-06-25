@@ -1,8 +1,9 @@
-import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Dropdown, Form, Input, Modal } from 'antd';
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
+import { Button, Dropdown, Form, Input, Modal } from 'antd';
+import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 
 import useAuth from '../../hooks/auth';
+import { useNavigate } from 'react-router-dom';
 
 interface IProps {
 	isMobile: boolean;
@@ -13,6 +14,7 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 	const closeModal = () => setAuthModalVisible(false);
 	const openModal = () => setAuthModalVisible(true);
 	const { auth, login, logout } = useAuth();
+	const navigate = useNavigate();
 
 	const handleLogin = async (values: any) => {
 		await login(values, closeModal);
@@ -20,8 +22,13 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 
 	if (!auth.isLoggedIn) {
 		return (
-			<>
-				<Button type="primary" className="all-center" icon={<UserOutlined />} onClick={openModal}>
+			<Fragment>
+				<Button
+					type="primary"
+					className="all-center rounded-full"
+					icon={<UserOutlined />}
+					onClick={openModal}
+				>
 					{!isMobile ? 'Login' : ''}
 				</Button>
 				<Modal title="Login" open={authModalVisible} footer={null}>
@@ -47,26 +54,41 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 
 						<div className="flex gap-2 items-center justify-end">
 							<Button onClick={closeModal}>Cancel</Button>
-							<Button type="primary" htmlType='submit' onClick={handleLogin}>
+							<Button type="primary" htmlType="submit" onClick={handleLogin}>
 								Login
 							</Button>
 						</div>
 					</Form>
 				</Modal>
-			</>
+			</Fragment>
 		);
 	}
 
 	return (
 		<Dropdown
-			overlayStyle={{ minWidth: 200 }}
+			overlayStyle={{ borderRadius: 0 }}
 			menu={{
 				items: [
+					...(auth.isLoggedIn && auth.user
+						? [
+								{ key: 'name', label: auth.user?.name ?? '', disabled: true },
+								{ key: 'email', label: auth.user.email ?? '', disabled: true },
+						  ]
+						: []),
+					{ type: 'divider' },
 					{
-						key: 'name',
-						label: auth.user?.name ?? '',
-						disabled: true,
+						key: 'profile',
+						icon: <UserOutlined />,
+						label: 'Profile',
+						onClick: () => navigate('/me/profile'),
 					},
+					{
+						key: 'settings',
+						icon: <SettingOutlined />,
+						label: 'Personal Settings',
+						onClick: () => navigate('/me/settings'),
+					},
+					{ type: 'divider' },
 					{
 						key: 'logout',
 						icon: <LogoutOutlined />,
@@ -80,13 +102,7 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 			<Button
 				type="text"
 				className={`all-center rounded-full sm:gap-2`}
-				icon={
-					<Avatar
-						size="small"
-						src={`https://api.dicebear.com/5.x/pixel-art/svg?seed=${auth.user?.name}`}
-						className="mx-1 sm:mx-0"
-					/>
-				}
+				icon={<UserOutlined className="mx-1 sm:mx-0" />}
 			>
 				{(!isMobile && auth.user?.name) ?? ''}
 			</Button>

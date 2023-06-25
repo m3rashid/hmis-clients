@@ -271,7 +271,7 @@ const routes: Array<IRoute> = [
 	},
 	{
 		icon: <SettingOutlined />,
-		label: 'Settings',
+		label: 'App Settings',
 		link: '/settings',
 		permission: { resource: 'USER', action: 'READ' },
 		Component: Settings,

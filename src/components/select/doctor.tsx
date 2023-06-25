@@ -9,7 +9,7 @@ const DoctorSelector: React.FC<IProps> = (props) => {
 	// const onSearch = (value: string) => {}
 
 	return (
-		<Form.Item name="doctor" {...props}>
+		<Form.Item name="doctor" label="Select Doctor" {...props}>
 			<Select
 				showSearch
 				placeholder="Select Doctor"
