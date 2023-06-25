@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import apiService from '../../api/service';
 import { TableHocProps, defaultTableAtomContents } from './index';
 import type { MODELS } from '@hmis/gatekeeper';
-import { configDefaultState } from '../../recoil/config';
+import { IConfig, configDefaultState } from '../../recoil/config';
 import { useRecoilState } from 'recoil';
 
 const useTable = <RecordType extends Record<string, any> & { _id: string }>(
@@ -31,12 +31,19 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 		queryFn: () => apiService('/config', 'GET')(),
 		staleTime: 1000 * 60 * 60 * 24, // 24 hours
 	});
-	const config = configResponse?.data || configDefaultState;
+	const config: IConfig = configResponse?.data || configDefaultState;
 
 	useEffect(() => {
 		getData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	const resetModalValues = {
+		selectedRows: [],
+		showDeleteAction: false,
+		showEditAction: false,
+		showInfoAction: false,
+	};
 
 	const [infoModalVisible, setInfoModalVisible] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -59,12 +66,12 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 		const promises = selectedRows.map((t) => deleteData(t._id));
 		const responses = await Promise.all(promises);
 		console.log({ responses });
-		setSelectedRows((p) => ({ ...p, selectedRows: [] }));
+		setSelectedRows((p) => ({ ...p, ...resetModalValues }));
 	};
 
 	const onClickInfoCancel = () => {
 		hideInfoModal();
-		setSelectedRows((p) => ({ ...p, selectedRows: [] }));
+		setSelectedRows((p) => ({ ...p, ...resetModalValues }));
 	};
 
 	const getData = async () => {

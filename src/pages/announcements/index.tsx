@@ -5,7 +5,7 @@ import TableHoc from '../../components/table';
 import NoticeForm from '../../components/announcementForm';
 import { Fragment } from 'react';
 import useTableForm from '../../components/form/useTableForm';
-import { notificationValidator } from '@hmis/gatekeeper';
+import { announcementValidator } from '@hmis/gatekeeper';
 
 const Notifications = () => {
 	const { form, selectedRowsAtom, ActionButtons, editData, isEdit } = useTableForm({
@@ -13,11 +13,11 @@ const Notifications = () => {
 		okActionButtonLabel: 'Confirm Notification',
 		add: {
 			endpoint: '/notification/add',
-			validatorSchema: notificationValidator.createNotificationSchema,
+			validatorSchema: announcementValidator.createAnnouncementSchema,
 		},
 		update: {
 			endpoint: '/notification/update',
-			validatorSchema: notificationValidator.updateNotificationSchema,
+			validatorSchema: announcementValidator.updateAnnouncementSchema,
 		},
 	});
 

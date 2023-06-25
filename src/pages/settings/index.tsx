@@ -1,6 +1,5 @@
 import { Tabs } from 'antd';
 
-import * as configs from './configs';
 import { useGetUi } from '../../recoil/ui';
 
 const Settings = () => {
@@ -18,13 +17,7 @@ const Settings = () => {
 					justifyContent: 'stretch',
 					minHeight: 'calc(100vh - 200px)',
 				}}
-				items={[
-					{
-						key: '1',
-						label: 'App Config',
-						children: <configs.App />,
-					},
-				]}
+				items={[]}
 			/>
 		</>
 	);

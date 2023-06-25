@@ -1,5 +1,5 @@
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Dropdown, Modal } from 'antd';
+import { Avatar, Button, Dropdown, Form, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 
 import useAuth from '../../hooks/auth';
@@ -15,7 +15,7 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 	const { auth, login, logout } = useAuth();
 
 	const handleLogin = async (values: any) => {
-		await login(values.formData, closeModal);
+		await login(values, closeModal);
 	};
 
 	if (!auth.isLoggedIn) {
@@ -24,26 +24,34 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 				<Button type="primary" className="all-center" icon={<UserOutlined />} onClick={openModal}>
 					{!isMobile ? 'Login' : ''}
 				</Button>
-				<Modal
-					title="Login"
-					footer={null}
-					open={authModalVisible}
-					onOk={handleLogin}
-					onCancel={closeModal}
-				>
-					{/* <Form
-						formSchema={{
-							type: 'object',
-							required: ['email', 'password'],
-							properties: {
-								email: { type: 'string', title: 'Email', format: 'email' },
-								password: { type: 'string', format: 'password', title: 'Password' },
-							},
-						}}
-						onFinishFormValues={handleLogin}
-						submitText="Login"
-						onCancel={closeModal}
-					/> */}
+				<Modal title="Login" open={authModalVisible} footer={null}>
+					<Form onFinish={handleLogin}>
+						<Form.Item
+							name="email"
+							label="Email"
+							rules={[
+								{ required: true, message: 'Email is required' },
+								{ type: 'email', message: 'Must be a valid email' },
+							]}
+						>
+							<Input placeholder="Enter your email" />
+						</Form.Item>
+
+						<Form.Item
+							name="password"
+							label="Password"
+							rules={[{ required: true, message: 'Email is required' }]}
+						>
+							<Input.Password placeholder="Enter your password" />
+						</Form.Item>
+
+						<div className="flex gap-2 items-center justify-end">
+							<Button onClick={closeModal}>Cancel</Button>
+							<Button type="primary" htmlType='submit' onClick={handleLogin}>
+								Login
+							</Button>
+						</div>
+					</Form>
 				</Modal>
 			</>
 		);
@@ -51,7 +59,7 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 
 	return (
 		<Dropdown
-			overlayStyle={{ minWidth: 150 }}
+			overlayStyle={{ minWidth: 200 }}
 			menu={{
 				items: [
 					{

@@ -5,7 +5,7 @@ import { configDefaultState, useGetConfig } from '../recoil/config';
 
 const Home = () => {
 	const config = useGetConfig();
-	const isDark = config.app.theme === 'dark';
+	const isDark = config.theme.mode === 'dark';
 
 	return (
 		<Fragment>

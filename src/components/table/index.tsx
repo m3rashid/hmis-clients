@@ -114,7 +114,7 @@ const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
 					{state.showInfoAction && (
 						<Button
 							type="primary"
-							style={{ backgroundColor: state.config.colors.info }}
+							style={{ backgroundColor: state.config.theme.info }}
 							icon={<InfoCircleFilled />}
 							onClick={actions.showInfoModal}
 						>
@@ -125,7 +125,7 @@ const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
 					{props.editable && state.showEditAction && (
 						<Button
 							type="primary"
-							style={{ backgroundColor: state.config.colors.warning }}
+							style={{ backgroundColor: state.config.theme.warning }}
 							icon={<EditFilled />}
 							onClick={actions.onClickEdit}
 						>
@@ -147,14 +147,14 @@ const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
 							okButtonProps={{
 								style: {
 									...popConfirmButtonStyles,
-									backgroundColor: state.config.colors.danger,
+									backgroundColor: state.config.theme.danger,
 								},
 							}}
 							cancelButtonProps={{ style: { ...popConfirmButtonStyles } }}
 						>
 							<Button
 								type="primary"
-								style={{ backgroundColor: state.config.colors.danger }}
+								style={{ backgroundColor: state.config.theme.danger }}
 								icon={<DeleteFilled />}
 							>
 								Delete

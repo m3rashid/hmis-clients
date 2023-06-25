@@ -10,9 +10,9 @@ import { useUi } from '../../recoil/ui';
 import { useGetConfig } from '../../recoil/config';
 
 const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
-	const config = useGetConfig()
+	const config = useGetConfig();
 	const [{ isMobile }, setIsMobile] = useUi();
-	const isDarkMode = config.app.theme === 'dark';
+	const isDarkMode = config.theme.mode === 'dark';
 
 	useLayoutEffect(() => {
 		const setWindowWidth = () => {
@@ -32,11 +32,9 @@ const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
 				theme={{
 					token: {
 						fontFamily: 'Poppins, sans-serif',
-						colorPrimary: config.appColors.primary,
-						colorBgTextHover: isDarkMode
-							? config.appColors.primaryHoverDark
-							: config.appColors.primaryHoverLight,
-						colorFill: config.appColors.primary,
+						colorPrimary: config.theme.primaryColor,
+						colorBgTextHover:config.theme.primaryColor,
+						colorFill: config.theme.primaryColor,
 						controlOutline: 'none',
 					},
 					algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,

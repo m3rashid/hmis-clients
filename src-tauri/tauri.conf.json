@@ -29,7 +29,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "hmis.m3rashid.in",
       "longDescription": "",
       "macOS": {
         "entitlements": null,

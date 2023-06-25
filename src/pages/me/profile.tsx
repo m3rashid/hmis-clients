@@ -1,20 +1,23 @@
-import React, { useEffect } from 'react'
+import React from 'react';
 import apiService from '../../api/service';
+import { useQuery } from '@tanstack/react-query';
 
-interface IProps {}
+const Profile: React.FC = () => {
+	const query = useQuery({
+		queryKey: ['profile'],
+		queryFn: apiService('/user/me-details', 'GET'),
+	});
 
-const Profile: React.FC<IProps> = () => {
-	const getProfile = apiService('/user//me-details');
-
-	useEffect(() => {
-		getProfile().then(console.log).catch(console.log);
-	}, [])
+	if (query.isLoading) {
+		return <div>Loading</div>;
+	}
 
 	return (
 		<>
 			<div>Profile</div>
+			<pre>{JSON.stringify(query.data?.data, null, 2)}</pre>
 		</>
 	);
-}
+};
 
-export default Profile
+export default Profile;

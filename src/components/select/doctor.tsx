@@ -6,7 +6,7 @@ type IProps = FormItemProps & {
 }
 
 const DoctorSelector: React.FC<IProps> = (props) => {
-	const onSearch = (value: string) => {}
+	// const onSearch = (value: string) => {}
 
 	return (
 		<Form.Item name="doctor" {...props}>
