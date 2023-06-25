@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 
 import { camelCaseToSentenceCase } from '../../helpers/strings';
+import { useGetUi } from '../../recoil/ui';
 
 interface IProps {
 	data: Record<string, any>;
@@ -12,12 +13,12 @@ interface IProps {
 const dateKeys = ['createdAt', 'updatedAt'];
 
 const ObjectAsDetails: React.FC<IProps> = (props) => {
+	const { isMobile } = useGetUi();
 	const notToShow = [
 		'_id',
 		'key',
 		'__v',
 		'deleted',
-		'actualName',
 		'password',
 		'createdBy',
 		'lastUpdatedBy',
@@ -52,7 +53,12 @@ const ObjectAsDetails: React.FC<IProps> = (props) => {
 		<div className="flex flex-col gap-2">
 			{parsedData.map(({ key, value }) => {
 				return (
-					<div className="grid gap-2" style={{ gridTemplateColumns: '1fr 2fr' }}>
+					<div
+						className="grid gap-2"
+						style={{
+							gridTemplateColumns: isMobile ? '1fr' : '1fr 2fr',
+						}}
+					>
 						<Typography.Text className="font-bold">{key}</Typography.Text>
 						<Typography.Text className="">{value}</Typography.Text>
 					</div>

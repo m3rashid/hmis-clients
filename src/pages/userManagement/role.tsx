@@ -16,7 +16,7 @@ const RoleManagement = () => {
 	const [{ selectedRows }, setSelectedRows] = useRecoilState(selectedRowsAtom);
 
 	const columns: TableProps<any>['columns'] = [
-		{ title: 'Name', dataIndex: 'displayName', key: 'displayName', width: 250 },
+		{ title: 'Name', dataIndex: 'name', key: 'name', width: 250 },
 		{ title: 'Description', dataIndex: 'description', key: 'description' },
 	];
 

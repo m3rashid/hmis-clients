@@ -1,30 +1,34 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import apiService from '../../api/service';
 import { TableHocProps, defaultTableAtomContents } from './index';
-import type { MODELS } from '@hmis/gatekeeper';
 import { IConfig, configDefaultState } from '../../recoil/config';
 import { useRecoilState } from 'recoil';
+
+interface ITableOptions {
+	page: number;
+	limit: number;
+}
+
+const defaultTableOptions: ITableOptions = {
+	limit: 15,
+	page: 1,
+};
 
 const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 	props: TableHocProps<RecordType>
 ) => {
-	const defaultTableResponse: MODELS.PaginatedListIResponse<RecordType> = {
-		docs: [],
-		totalDocs: 0,
-		limit: 15,
-		totalPages: 1,
-		page: 1,
-		pagingCounter: 1,
-		hasPrevPage: false,
-		hasNextPage: false,
-		prevPage: null,
-		nextPage: null,
-	};
+	const tableDefaultOptions = window.localStorage.getItem('tableOptions');
+	const [tableOptions, setTableOptions] = useState<ITableOptions>(
+		tableDefaultOptions ? JSON.parse(tableDefaultOptions) : defaultTableOptions
+	);
 
-	const [tableData, setTableData] =
-		useState<MODELS.PaginatedListIResponse<RecordType>>(defaultTableResponse);
+	const onPageNumberChange = (page: number) => setTableOptions((p) => ({ ...p, page }));
+	const onPageSizeChange = (page: number, limit: number) => {
+		setTableOptions({ page, limit });
+		window.localStorage.setItem('tableOptions', JSON.stringify({ page, limit }));
+	};
 
 	const { data: configResponse } = useQuery({
 		queryKey: ['config'],
@@ -33,10 +37,16 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 	});
 	const config: IConfig = configResponse?.data || configDefaultState;
 
-	useEffect(() => {
-		getData();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	const tableQuery = useQuery({
+		queryKey: [props.title, tableOptions.limit, tableOptions.page],
+		queryFn: () =>
+			props.routes?.list({
+				params: {
+					pageSize: tableOptions.limit,
+					pageNumber: tableOptions.page,
+				},
+			}),
+	});
 
 	const resetModalValues = {
 		selectedRows: [],
@@ -74,20 +84,6 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 		setSelectedRows((p) => ({ ...p, ...resetModalValues }));
 	};
 
-	const getData = async () => {
-		if (!props.routes?.list) return;
-		try {
-			setLoading(true);
-			const { data: response } = await props.routes.list();
-			// console.log({ response });
-			setTableData(response);
-		} catch (err) {
-			setTableData(defaultTableResponse);
-		} finally {
-			setLoading(false);
-		}
-	};
-
 	const deleteData = async (id: string) => {
 		if (!props.routes?.delete) return;
 		try {
@@ -107,11 +103,11 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 
 	return {
 		state: {
-			tableData,
+			tableQuery,
 			formModalVisible: formModalOpen,
 			loading,
 			selectedRows,
-
+			tableOptions,
 			// constants
 			showDeleteAction,
 			showEditAction,
@@ -121,10 +117,11 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 		},
 
 		stateUpdater: {
-			setTableData,
+			// setTableData,
 			setLoading,
 			setSelectedRows,
 			setInfoModalVisible,
+			setTableOptions,
 		},
 
 		actions: {
@@ -132,12 +129,14 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 			showFormModal,
 			hideInfoModal,
 			showInfoModal,
-			getData,
+			// getData,
 			deleteData,
 			handleCancelOnModal,
 			onClickEdit,
 			onClickInfoCancel,
 			onClickDelete,
+			onPageNumberChange,
+			onPageSizeChange,
 		},
 	};
 };

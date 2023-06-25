@@ -11,7 +11,16 @@ const PatientManagement = () => {
 		okActionButtonLabel: '',
 	});
 
-	const columns: TableProps<any>['columns'] = [];
+	const columns: TableProps<any>['columns'] = [
+		{ title: 'Name', dataIndex: 'name', key: 'name' },
+		{ title: 'Email', dataIndex: 'email', key: 'email' },
+		{
+			title: 'Email Verified',
+			dataIndex: 'emailVerified',
+			key: 'emailVerified',
+			render: (entry) => (entry ? 'Yes' : 'No'),
+		},
+	];
 
 	return (
 		<PatientManagementContainer>

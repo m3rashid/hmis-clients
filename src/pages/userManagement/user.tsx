@@ -26,16 +26,10 @@ const UserManagement = () => {
 			render: (entry) => (entry ? 'Yes' : 'No'),
 		},
 		{
-			title: 'Roles',
-			dataIndex: 'roles',
-			key: 'roles',
-			render: (entry) => (
-				<div className="flex gap-2">
-					{entry.map((t: any) => (
-						<Tag>{t.displayName}</Tag>
-					))}
-				</div>
-			),
+			title: 'Role',
+			dataIndex: 'role',
+			key: 'role',
+			render: (entry) => <Tag>{entry.name}</Tag>,
 		},
 	];
 
@@ -51,8 +45,8 @@ const UserManagement = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/auth/user/all', 'GET'),
-					delete: apiService('/auth/user/delete'),
+					list: apiService('/user/all', 'GET'),
+					delete: apiService('/user/delete'),
 				}}
 				modifyInfoDetails={(data) => {
 					if (!data) return {};

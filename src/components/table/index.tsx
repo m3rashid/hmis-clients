@@ -32,6 +32,7 @@ export function defaultTableAtomContents<T>(): SelectedRowsAtom<T> {
 
 export interface DefaultParams {
 	data?: any;
+	params?: { pageSize: number; pageNumber: number };
 }
 
 export interface SelectedRowsAtom<RecordType> {
@@ -58,8 +59,9 @@ export interface TableHocProps<RecordType> {
 	popupType: 'modal' | 'drawer';
 	editable?: boolean;
 	selectedRowsAtom: RecoilState<SelectedRowsAtom<RecordType>>;
-	routes?: {
-		list?: (data?: DefaultParams) => Promise<any>;
+	infoModalProps?: ModalProps;
+	routes: {
+		list: (data?: DefaultParams) => Promise<any>;
 		delete?: (data?: DefaultParams) => Promise<any>;
 		details?: (data?: DefaultParams) => Promise<any>;
 	};
@@ -215,6 +217,7 @@ const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
 				onCancel={actions.onClickInfoCancel}
 				onOk={actions.onClickInfoCancel}
 				title={props.title + ' ' + 'Details'}
+				{...props.infoModalProps}
 			>
 				<ObjectAsDetails
 					data={modifyInfoDetails(state.selectedRows[0])}
@@ -231,11 +234,14 @@ const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
 				rowKey={(data) => data._id}
 				pagination={{
 					position: ['bottomRight'],
-					defaultPageSize: state.tableData.limit,
-					defaultCurrent: state.tableData.pagingCounter,
-					total: state.tableData.totalDocs,
+					defaultPageSize: state.tableOptions.limit,
+					defaultCurrent: state.tableOptions.page,
+					total: state.tableQuery.isLoading ? [] : state.tableQuery.data.data.totalDocs,
 					hideOnSinglePage: true,
 					size: 'default',
+					onChange: actions.onPageNumberChange,
+					pageSizeOptions: ['10', '15', '20', '25', '30'],
+					onShowSizeChange: actions.onPageSizeChange,
 					...props.tableProps.pagination,
 				}}
 				columns={[
@@ -244,7 +250,10 @@ const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
 					...(showUpdatedTime ? showTimeEntryInTable('Time Updated', 'updatedAt') : []),
 				]}
 				style={{ height: '100%', minHeight: '500px', ...props.tableProps.style }}
-				dataSource={(props.tableProps.dataSource || state.tableData.docs).map((t) => ({
+				dataSource={(props.tableProps.dataSource || state.tableQuery.isLoading
+					? []
+					: state.tableQuery.data.data.docs
+				).map((t: any) => ({
 					...t,
 					key: t._id,
 				}))}
