@@ -238,7 +238,7 @@ const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
 					position: ['bottomRight'],
 					defaultPageSize: state.tableOptions.limit,
 					defaultCurrent: state.tableOptions.page,
-					total: state.tableQuery.isLoading ? [] : state.tableQuery.data.data.totalDocs,
+					total: state.tableQuery.isLoading ? 0 : state.tableQuery.data.data.totalDocs,
 					hideOnSinglePage: true,
 					size: 'default',
 					onChange: actions.onPageNumberChange,
