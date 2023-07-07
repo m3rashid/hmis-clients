@@ -2,10 +2,11 @@ import { TableProps } from 'antd';
 import dayjs from 'dayjs';
 
 import apiService from '../../api/service';
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/table';
+import TableHoc, { defaultTableAtomContents } from '../../components/table';
 import InventoryManagementContainer from './index';
 import { MODELS } from '@hmis/gatekeeper';
 import { atom, useRecoilState } from 'recoil';
+import { SelectedRowsAtom } from '../../components/table/types';
 
 
 const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IConsumable>>({
@@ -44,7 +45,7 @@ const RemovedConsumables = () => {
 		<InventoryManagementContainer>
 			<TableHoc<MODELS.IConsumable>
 				title="Removed Consumables"
-				popupType='drawer'
+				popupType="drawer"
 				selectedRowsAtom={selectedRowsAtom}
 				actionButtons={false}
 				tableProps={{
@@ -55,8 +56,15 @@ const RemovedConsumables = () => {
 					},
 				}}
 				routes={{
-					list: apiService('/consumable/removed', 'GET'),
+					list: apiService('/consumable/all'),
 					delete: apiService('/consumable/delete'),
+				}}
+				listBody={{
+					query: { deleted: true },
+					options: {
+						$sort: { createdAt: -1 },
+						lean: true,
+					},
 				}}
 			/>
 		</InventoryManagementContainer>

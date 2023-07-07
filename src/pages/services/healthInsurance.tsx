@@ -28,7 +28,14 @@ const HealthInsuranceManagement = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/healthInsurance/all', 'GET'),
+					list: apiService('/healthInsurance/all'),
+				}}
+				listBody={{
+					query: { deleted: false },
+					options: {
+						$sort: { createdAt: -1 },
+						lean: true,
+					},
 				}}
 			/>
 		</ServiceManagementContainer>

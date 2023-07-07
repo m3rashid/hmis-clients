@@ -14,9 +14,12 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 	const closeModal = () => setAuthModalVisible(false);
 	const openModal = () => setAuthModalVisible(true);
 	const { auth, login, logout } = useAuth();
+	const [form] = Form.useForm()
 	const navigate = useNavigate();
 
-	const handleLogin = async (values: any) => {
+	const handleLogin = async () => {
+		await form.validateFields();
+		const values = form.getFieldsValue();
 		await login(values, closeModal);
 	};
 
@@ -32,7 +35,7 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 					{!isMobile ? 'Login' : ''}
 				</Button>
 				<Modal title="Login" open={authModalVisible} footer={null}>
-					<Form onFinish={handleLogin}>
+					<Form form={form} onFinish={handleLogin}>
 						<Form.Item
 							name="email"
 							label="Email"
@@ -54,7 +57,7 @@ const AuthActions: React.FC<IProps> = ({ isMobile }) => {
 
 						<div className="flex gap-2 items-center justify-end">
 							<Button onClick={closeModal}>Cancel</Button>
-							<Button type="primary" htmlType="submit" onClick={handleLogin}>
+							<Button type="primary" onClick={handleLogin}>
 								Login
 							</Button>
 						</div>

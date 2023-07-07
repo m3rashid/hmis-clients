@@ -48,7 +48,14 @@ const InPatientDepartment = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/ipd/all', 'GET'),
+					list: apiService('/ipd/all'),
+				}}
+				listBody={{
+					query: { deleted: false },
+					options: {
+						$sort: { createdAt: -1 },
+						lean: true,
+					},
 				}}
 			/>
 		</PatientManagementContainer>

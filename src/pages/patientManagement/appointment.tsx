@@ -54,7 +54,15 @@ const Appointments: React.FC = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/appointment/all', 'GET'),
+					list: apiService('/appointment/all'),
+				}}
+				listBody={{
+					query: { deleted: false },
+					options: {
+						$sort: { createdAt: -1 },
+						lean: true,
+						populate: ['doctor', 'patient'],
+					},
 				}}
 			/>
 		</PatientManagementContainer>

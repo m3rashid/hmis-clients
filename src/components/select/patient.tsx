@@ -21,6 +21,7 @@ const PatientSelector: React.FC<IProps> = (props) => {
 		const { data } = await searchPatient({ data: { text: text || '' } });
 		setPatients(data);
 	};
+	getData("hello")
 
 	return (
 		<Form.Item name="patient" label="Select Patient" {...props}>

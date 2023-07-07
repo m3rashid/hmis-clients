@@ -7,7 +7,7 @@
 		"dev": "vite --port 3000",
 		"build": "tsc && vite build",
 		"lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-		"preview": "vite preview",
+		"preview": "vite preview  --port 3000",
 		"tauri": "tauri",
 		"bundle": "tauri build",
 		"lint:fix": "eslint --fix \"**/!(node_modules|dist)/*.{js,jsx,ts,tsx}\"",
@@ -15,6 +15,7 @@
 		"prepare": "husky install"
 	},
 	"dependencies": {
+		"@ant-design/charts": "^1.4.2",
 		"@ant-design/icons": "^5.1.4",
 		"@grammarly/editor-sdk-react": "^2.5.1",
 		"@hmis/gatekeeper": "workspace:*",

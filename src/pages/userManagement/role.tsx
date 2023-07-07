@@ -1,11 +1,12 @@
 import { TableProps } from 'antd';
 
 import apiService from '../../api/service';
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/table';
+import TableHoc, {  defaultTableAtomContents } from '../../components/table';
 import RoleDrawer from '../../components/permissions/drawer';
 import UserManagementContainer from './index';
 import { atom, useRecoilState } from 'recoil';
 import { MODELS } from '@hmis/gatekeeper';
+import { SelectedRowsAtom } from '../../components/table/types';
 
 const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IRole>>({
 	key: 'userManagementRole',
@@ -17,7 +18,6 @@ const RoleManagement = () => {
 
 	const columns: TableProps<any>['columns'] = [
 		{ title: 'Name', dataIndex: 'name', key: 'name', width: 250 },
-		{ title: 'Description', dataIndex: 'description', key: 'description' },
 	];
 
 	const { ActionButtons, FormContainer } = RoleDrawer({
@@ -43,7 +43,7 @@ const RoleManagement = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/role/all', 'GET'),
+					list: apiService('/role/all'),
 				}}
 				modifyInfoDetails={(data) => {
 					if (!data) return {};
@@ -51,6 +51,14 @@ const RoleManagement = () => {
 						if (key === 'permissions') return { ...acc };
 						return { ...acc, [key]: val };
 					}, {});
+				}}
+				listBody={{
+					query: {},
+					options: {
+						$sort: { createdAt: -1 },
+						lean: true,
+						populate: ['permissions'],
+					},
 				}}
 			/>
 		</UserManagementContainer>

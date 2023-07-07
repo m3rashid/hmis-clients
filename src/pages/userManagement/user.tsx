@@ -1,10 +1,11 @@
 import { TableProps, Tag } from 'antd';
 
 import apiService from '../../api/service';
-import TableHoc, { SelectedRowsAtom, defaultTableAtomContents } from '../../components/table';
+import TableHoc, {  defaultTableAtomContents } from '../../components/table';
 import UserManagementContainer from '../../pages/userManagement';
 import { atom, useRecoilState } from 'recoil';
 import { MODELS } from '@hmis/gatekeeper';
+import { SelectedRowsAtom } from '../../components/table/types';
 
 const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IUser>>({
 	key: 'userManagementUser',
@@ -45,7 +46,7 @@ const UserManagement = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/user/all', 'GET'),
+					list: apiService('/user/all'),
 					delete: apiService('/user/delete'),
 				}}
 				modifyInfoDetails={(data) => {
@@ -56,6 +57,17 @@ const UserManagement = () => {
 						}
 						return { ...acc, [key]: val };
 					}, {});
+				}}
+				listBody={{
+					query: {
+						deleted: false,
+						origin: 'INTERNAL',
+					},
+					options: {
+						$sort: { createdAt: -1 },
+						lean: true,
+						populate: 'role',
+					},
 				}}
 			/>
 		</UserManagementContainer>

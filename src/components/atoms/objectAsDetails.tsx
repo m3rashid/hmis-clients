@@ -48,8 +48,8 @@ const ObjectAsDetails: React.FC<IProps> = (props) => {
 	);
 
 	return (
-		<div className="flex flex-col gap-2">
-			<Descriptions column={1}>
+		<div className="">
+			<Descriptions bordered size='small' column={1}>
 				{parsedData.map(({ key, value }) => {
 					return <Descriptions.Item label={key}>{value}</Descriptions.Item>;
 				})}

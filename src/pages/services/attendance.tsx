@@ -28,7 +28,14 @@ const AttendanceManagement = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/attendance/all', 'GET'),
+					list: apiService('/attendance/all'),
+				}}
+				listBody={{
+					query: { deleted: false },
+					options: {
+						$sort: { createdAt: -1 },
+						lean: true,
+					},
 				}}
 			/>
 		</ServiceManagementContainer>

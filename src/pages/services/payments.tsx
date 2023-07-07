@@ -28,7 +28,14 @@ const Payments = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/payment/all', 'GET'),
+					list: apiService('/payment/all'),
+				}}
+				listBody={{
+					query: { deleted: false },
+					options: {
+						$sort: { createdAt: -1 },
+						lean: true,
+					},
 				}}
 			/>
 		</ServiceManagementContainer>

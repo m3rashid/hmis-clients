@@ -51,8 +51,15 @@ const Notifications = () => {
 				popupType="modal"
 				editable
 				routes={{
-					list: apiService('/notification/all', 'GET'),
-					delete: apiService('/notification/delete'),
+					list: apiService('/announcement/all'),
+					delete: apiService('/announcement/delete'),
+				}}
+				listBody={{
+					query: { deleted: false },
+					options: {
+						$sort: { createdAt: -1 },
+						lean: true,
+					},
 				}}
 			/>
 		</Fragment>

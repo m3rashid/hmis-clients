@@ -53,7 +53,14 @@ const OutPatientDepartment = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/opd/all', 'GET'),
+					list: apiService('/opd/all'),
+				}}
+				listBody={{
+					query: { deleted: false },
+					options: {
+						$sort: { createdAt: -1 },
+						lean: true,
+					},
 				}}
 			/>
 		</PatientManagementContainer>

@@ -37,7 +37,17 @@ const PatientManagement = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/patient/all', 'GET'),
+					list: apiService('/patient/all'),
+				}}
+				listBody={{
+					query: {
+						deleted: false,
+						origin: 'EXTERNAL',
+					},
+					options: {
+						$sort: { createdAt: -1 },
+						lean: true,
+					},
 				}}
 			/>
 		</PatientManagementContainer>

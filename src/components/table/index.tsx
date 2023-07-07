@@ -2,23 +2,20 @@ import {
 	AutoComplete,
 	Button,
 	Drawer,
-	DrawerProps,
 	Input,
 	Modal,
-	ModalProps,
 	Popconfirm,
 	Table,
 	TableColumnsType,
-	TableProps,
 	Typography,
 } from 'antd';
 import dayjs from 'dayjs';
-import { RecoilState } from 'recoil';
-import React, { Fragment, ReactNode } from 'react';
+import React, { Fragment } from 'react';
 import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleOutlined } from '@ant-design/icons';
 
 import useTable from './useTable';
 import ObjectAsDetails from '../atoms/objectAsDetails';
+import { SelectedRowsAtom, TableHocProps } from './types';
 
 export function defaultTableAtomContents<T>(): SelectedRowsAtom<T> {
 	return {
@@ -27,44 +24,6 @@ export function defaultTableAtomContents<T>(): SelectedRowsAtom<T> {
 		showEditAction: false,
 		showInfoAction: false,
 		formModalOpen: false,
-	};
-}
-
-export interface DefaultParams {
-	data?: any;
-	params?: { pageSize: number; pageNumber: number };
-}
-
-export interface SelectedRowsAtom<RecordType> {
-	selectedRows: RecordType[];
-	showEditAction: boolean;
-	showDeleteAction: boolean;
-	showInfoAction: boolean;
-	formModalOpen: boolean;
-}
-
-export interface TableHocProps<RecordType> {
-	tableProps: TableProps<RecordType>;
-	modalProps?: ModalProps;
-	title: string;
-	actionButtons?: ReactNode;
-	hideTitle?: boolean;
-	addButtonLabel?: string;
-	showCreatedTime?: boolean;
-	showUpdatedTime?: boolean;
-	showSerialNo?: boolean;
-	modifyInfoDetails?: (data: Record<string, any>) => Record<string, string>;
-	notToShowInInfo?: string[];
-	form?: ReactNode;
-	drawerProps?: DrawerProps;
-	popupType: 'modal' | 'drawer';
-	editable?: boolean;
-	selectedRowsAtom: RecoilState<SelectedRowsAtom<RecordType>>;
-	infoModalProps?: ModalProps;
-	routes: {
-		list: (data?: DefaultParams) => Promise<any>;
-		delete?: (data?: DefaultParams) => Promise<any>;
-		details?: (data?: DefaultParams) => Promise<any>;
 	};
 }
 
@@ -242,7 +201,7 @@ const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
 					hideOnSinglePage: true,
 					size: 'default',
 					onChange: actions.onPageNumberChange,
-					pageSizeOptions: ['10', '15', '20', '25', '30'],
+					pageSizeOptions: ['10', '15', '20', '25'],
 					onShowSizeChange: actions.onPageSizeChange,
 					...props.tableProps.pagination,
 				}}
@@ -269,10 +228,7 @@ const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
 				dataSource={(props.tableProps.dataSource || state.tableQuery.isLoading
 					? []
 					: state.tableQuery.data.data.docs
-				).map((t: any) => ({
-					...t,
-					key: t._id,
-				}))}
+				).map((t: any) => ({ ...t, key: t._id }))}
 				rowSelection={{
 					type: 'checkbox',
 					selectedRowKeys: state.selectedRows.map((t) => t._id),

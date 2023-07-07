@@ -1,23 +1,22 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
-import apiService from '../../api/service';
-import { TableHocProps, defaultTableAtomContents } from './index';
-import { IConfig, configDefaultState } from '../../recoil/config';
 import { useRecoilState } from 'recoil';
-import { useUi } from '../../recoil/ui';
+import apiService from '../../api/service';
+import { defaultTableAtomContents } from './index';
+import { ITableOptions, TableHocProps } from './types';
+import { IConfig, configDefaultState } from '../../recoil/config';
 
 const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 	props: TableHocProps<RecordType>
 ) => {
-	const [{ table }, setUi] = useUi();
+	const [table, setTable] = useState<ITableOptions>({ limit: 10, page: 1 });
 	const onPageNumberChange = (page: number) => {
-		setUi((p) => ({ ...p, table: { ...p.table, page } }));
+		setTable((p) => ({ ...p, page }));
 	};
 
 	const onPageSizeChange = (page: number, limit: number) => {
-		setUi((p) => ({ ...p, table: { page, limit } }));
-		window.localStorage.setItem('tableOptions', JSON.stringify({ page, limit }));
+		setTable({ page, limit });
 	};
 
 	const { data: configResponse } = useQuery({
@@ -28,12 +27,22 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 	const config: IConfig = configResponse?.data || configDefaultState;
 
 	const tableQuery = useQuery({
-		queryKey: [props.title, table.limit, table.page],
+		queryKey: [
+			props.title,
+			table.limit,
+			table.page,
+			props.listBody?.options,
+			props.listBody?.query,
+		],
 		queryFn: () =>
 			props.routes?.list({
-				params: {
-					pageSize: table.limit,
-					pageNumber: table.page,
+				data: {
+					query: props.listBody?.query,
+					options: {
+						...props.listBody?.options,
+						page: table.page,
+						limit: table.limit,
+					},
 				},
 			}),
 	});
