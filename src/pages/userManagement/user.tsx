@@ -1,11 +1,10 @@
 import { TableProps, Tag } from 'antd';
-
-import apiService from '../../api/service';
-import TableHoc, {  defaultTableAtomContents } from '../../components/table';
-import UserManagementContainer from '../../pages/userManagement';
-import { atom, useRecoilState } from 'recoil';
 import { MODELS } from '@hmis/gatekeeper';
+import apiService from '../../api/service';
+import { atom, useRecoilState } from 'recoil';
 import { SelectedRowsAtom } from '../../components/table/types';
+import UserManagementContainer from '../../pages/userManagement';
+import TableHoc, {  defaultTableAtomContents } from '../../components/table';
 
 const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IUser>>({
 	key: 'userManagementUser',
