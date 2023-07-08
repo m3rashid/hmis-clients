@@ -45,8 +45,8 @@ const UserManagement = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/user/all'),
-					delete: apiService('/user/delete'),
+					list: apiService('/user/user/all'),
+					delete: apiService('/user/user/delete'),
 				}}
 				modifyInfoDetails={(data) => {
 					if (!data) return {};

@@ -37,7 +37,7 @@ const PatientManagement = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/patient/all'),
+					list: apiService('/user/patient/all'),
 				}}
 				listBody={{
 					query: {

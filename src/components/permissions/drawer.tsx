@@ -57,7 +57,7 @@ const RoleDrawer = ({ editData, closeModal }: IRoleDrawerProps) => {
 	const [payload, setPayload] = useState<IPayload | null>(null);
 	const [currentResourceType, setCurrentResourceType] = useState<IResourceType | null>(null);
 	const [allResourceTypes, setAllResourceTypes] = useState<IResourceType[]>([]);
-	const getResources = apiService<IResourceType[]>('/resource/all', 'GET');
+	const getResources = apiService<IResourceType[]>('/role/resource/all', 'GET');
 	const isEdit = Object.keys(editData ?? {}).length > 0;
 
 	useEffect(() => {

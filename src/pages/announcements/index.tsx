@@ -51,8 +51,8 @@ const Notifications = () => {
 				popupType="modal"
 				editable
 				routes={{
-					list: apiService('/announcement/all'),
-					delete: apiService('/announcement/delete'),
+					list: apiService('/misc/announcement/all'),
+					delete: apiService('/misc/announcement/delete'),
 				}}
 				listBody={{
 					query: { deleted: false },

@@ -1,9 +1,8 @@
 import { message } from 'antd';
 import { useCallback,  } from 'react';
-import { useNavigate } from 'react-router-dom';
-
 import apiService from '..//api/service';
 import { instance } from '../api/network';
+import { useNavigate } from 'react-router-dom';
 import { authDefaultState, useAuth as useAuthHook } from '../recoil/auth';
 
 export interface Login {
@@ -14,8 +13,8 @@ export interface Login {
 const useAuth = () => {
 	const navigate = useNavigate();
 	const [auth, setAuth] = useAuthHook();
-	const revalidateApi = apiService('/auth/revalidate');
-	const loginUser = apiService<any, Login>('/auth/login');
+	const revalidateApi = apiService('/user/auth/revalidate');
+	const loginUser = apiService<any, Login>('/user/auth/login');
 
 	const loginFailed = () => message.error({ content: 'login Failed', key: 'auth/login' });
 
@@ -50,7 +49,6 @@ const useAuth = () => {
 			setAuth((prev) => ({ ...prev, isLoggedIn: true, token: `Bearer ${accessToken}`, user }));
 			localStorage.setItem('refreshToken', refreshToken);
 			instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-			// @ts-ignore
 			// socket.io.opts.auth.token = accessToken;
 			// socket.disconnect().connect();
 			if (msg) message.success({ content: 'login Successful', key: 'auth/login' });

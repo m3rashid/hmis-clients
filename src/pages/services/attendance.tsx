@@ -28,7 +28,7 @@ const AttendanceManagement = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/attendance/all'),
+					list: apiService('/user/attendance/all'),
 				}}
 				listBody={{
 					query: { deleted: false },

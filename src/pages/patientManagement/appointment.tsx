@@ -54,7 +54,7 @@ const Appointments: React.FC = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/appointment/all'),
+					list: apiService('/checkup/appointment/all'),
 				}}
 				listBody={{
 					query: { deleted: false },

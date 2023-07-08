@@ -43,7 +43,7 @@ const RoleManagement = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/role/all'),
+					list: apiService('/role/role/all'),
 				}}
 				modifyInfoDetails={(data) => {
 					if (!data) return {};

@@ -1,9 +1,9 @@
+import { TableProps } from 'antd';
 import { MODELS } from '@hmis/gatekeeper';
 import ServiceManagementContainer from '.';
+import apiService from '../../api/service';
 import TableHoc from '../../components/table';
 import useTableForm from '../../components/form/useTableForm';
-import { TableProps } from 'antd';
-import apiService from '../../api/service';
 
 const Payments = () => {
 	const { selectedRowsAtom } = useTableForm<MODELS.IPayment>({
@@ -28,7 +28,7 @@ const Payments = () => {
 					scroll: { x: 1000 },
 				}}
 				routes={{
-					list: apiService('/payment/all'),
+					list: apiService('/misc/payment/all'),
 				}}
 				listBody={{
 					query: { deleted: false },

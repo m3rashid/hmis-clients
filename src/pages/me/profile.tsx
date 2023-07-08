@@ -6,7 +6,7 @@ import { Typography } from 'antd';
 const Profile: React.FC = () => {
 	const query = useQuery({
 		queryKey: ['profile'],
-		queryFn: apiService('/user/me-details', 'GET'),
+		queryFn: apiService('/user/user/me-details', 'GET'),
 	});
 
 	if (query.isLoading) {
