@@ -65,10 +65,7 @@ const Consumables = () => {
 				}}
 				listBody={{
 					query: { deleted: false },
-					options: {
-						$sort: { createdAt: -1 },
-						lean: true
-					}
+					options: { $sort: { createdAt: -1 }, lean: true },
 				}}
 			/>
 		</InventoryManagementContainer>

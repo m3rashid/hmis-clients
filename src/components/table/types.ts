@@ -1,6 +1,7 @@
+import { z } from 'zod';
 import { ReactNode } from 'react';
 import { RecoilState } from 'recoil';
-import { DrawerProps, ModalProps, TableProps } from 'antd';
+import { DrawerProps, FormInstance, ModalProps, TableProps } from 'antd';
 
 export interface DefaultParams {
 	data?: any;
@@ -44,4 +45,27 @@ export interface TableHocProps<RecordType> {
 export interface ITableOptions {
 	page: number;
 	limit: number;
+}
+
+export interface IFormProps {
+	editData: any;
+	form: FormInstance<any>;
+	isEdit: boolean;
+}
+
+export type DataTransformer = (
+	values: Record<string, any>
+) => Record<string, any> | Promise<Record<string, any>>;
+
+export interface IUseTableProps {
+	add?: {
+		endpoint: string;
+		validatorSchema: z.AnyZodObject;
+	};
+	update?: {
+		endpoint: string;
+		validatorSchema: z.AnyZodObject;
+	};
+	atomKey: string;
+	okActionButtonLabel: string;
 }

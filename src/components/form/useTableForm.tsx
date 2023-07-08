@@ -1,37 +1,15 @@
-import { atom, useRecoilState } from 'recoil';
-import { SelectedRowsAtom, defaultTableAtomContents } from '../table';
 import { z } from 'zod';
 import apiService from '../../api/service';
-import { Button, Form, FormInstance, message } from 'antd';
-import { useMutation } from '@tanstack/react-query';
 import { Validator } from '@hmis/gatekeeper';
+import { Button, Form, message } from 'antd';
+import { atom, useRecoilState } from 'recoil';
+import { defaultTableAtomContents } from '../table';
+import { useMutation } from '@tanstack/react-query';
+import { IUseTableProps, SelectedRowsAtom } from '../table/types';
 
 const defaultValidator = z.object({});
 
-export interface IFormProps {
-	editData: any;
-	form: FormInstance<any>;
-	isEdit: boolean;
-}
-
-export type DataTransformer = (
-		values: Record<string, any>
-	) => Record<string, any> | Promise<Record<string, any>>;
-
-interface IProps {
-	add?: {
-		endpoint: string;
-		validatorSchema: z.AnyZodObject;
-	};
-	update?: {
-		endpoint: string;
-		validatorSchema: z.AnyZodObject;
-	};
-	atomKey: string;
-	okActionButtonLabel: string;
-}
-
-const useTableForm = <T extends { _id: string }>(props: IProps) => {
+const useTableForm = <T extends { _id: string }>(props: IUseTableProps) => {
 	const [form] = Form.useForm();
 
 	const selectedRowsAtom = atom<SelectedRowsAtom<T>>({
