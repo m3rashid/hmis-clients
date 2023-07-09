@@ -49,9 +49,13 @@ const ObjectAsDetails: React.FC<IProps> = (props) => {
 
 	return (
 		<div className="">
-			<Descriptions bordered size='small' column={1}>
+			<Descriptions bordered size="small" column={1}>
 				{parsedData.map(({ key, value }) => {
-					return <Descriptions.Item label={key}>{value}</Descriptions.Item>;
+					return (
+						<Descriptions.Item key={key} label={key}>
+							{value}
+						</Descriptions.Item>
+					);
 				})}
 			</Descriptions>
 		</div>

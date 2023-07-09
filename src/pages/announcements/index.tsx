@@ -52,7 +52,7 @@ const Notifications = () => {
 				editable
 				routes={{
 					list: apiService('/misc/announcement/all'),
-					delete: apiService('/misc/announcement/delete'),
+					delete: apiService('/misc/announcement/remove'),
 				}}
 				listBody={{
 					query: { deleted: false },

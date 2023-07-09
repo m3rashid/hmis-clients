@@ -60,7 +60,7 @@ const NonConsumables = () => {
 				popupType="drawer"
 				routes={{
 					list: apiService('/inventory/non-consumable/all'),
-					delete: apiService('/inventory/non-consumable/delete'),
+					delete: apiService('/inventory/non-consumable/remove'),
 				}}
 				listBody={{
 					query: { deleted: false },

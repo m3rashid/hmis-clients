@@ -4,7 +4,7 @@ import apiService from '../../api/service';
 import { atom, useRecoilState } from 'recoil';
 import { SelectedRowsAtom } from '../../components/table/types';
 import UserManagementContainer from '../../pages/userManagement';
-import TableHoc, {  defaultTableAtomContents } from '../../components/table';
+import TableHoc, { defaultTableAtomContents } from '../../components/table';
 
 const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IUser>>({
 	key: 'userManagementUser',
@@ -46,17 +46,17 @@ const UserManagement = () => {
 				}}
 				routes={{
 					list: apiService('/user/user/all'),
-					delete: apiService('/user/user/delete'),
+					delete: apiService('/user/user/remove'),
 				}}
-				modifyInfoDetails={(data) => {
-					if (!data) return {};
-					return Object.entries(data).reduce<Record<string, string>>((acc, [key, val]) => {
-						if (key === 'roles') {
-							return { ...acc, [key]: val.map((v: any) => v.displayName).join(', ') };
-						}
-						return { ...acc, [key]: val };
-					}, {});
-				}}
+				modifyInfoDetails={(data) =>
+					Object.entries((data || {})).reduce(
+						(acc, [key, val]) => ({
+							...acc,
+							[key]: key === 'role' ? val.name : val,
+						}),
+						{}
+					)
+				}
 				listBody={{
 					query: {
 						deleted: false,

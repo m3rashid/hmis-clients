@@ -1,12 +1,12 @@
 import { TableProps } from 'antd';
-
 import apiService from '../../api/service';
-import TableHoc, {  defaultTableAtomContents } from '../../components/table';
-import RoleDrawer from '../../components/permissions/drawer';
 import UserManagementContainer from './index';
 import { atom, useRecoilState } from 'recoil';
-import { MODELS } from '@hmis/gatekeeper';
+import { toSentenceCase } from '../../helpers/strings';
+import RoleDrawer from '../../components/permissions/drawer';
+import { MODELS, transformPermission } from '@hmis/gatekeeper';
 import { SelectedRowsAtom } from '../../components/table/types';
+import TableHoc, { defaultTableAtomContents } from '../../components/table';
 
 const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IRole>>({
 	key: 'userManagementRole',
@@ -21,7 +21,7 @@ const RoleManagement = () => {
 	];
 
 	const { ActionButtons, FormContainer } = RoleDrawer({
-		closeModal: () => setSelectedRows((p) => ({ ...p, formModalOpen: false })),
+		closeModal: () => setSelectedRows((p) => ({ ...p, formModalOpen: false, selectedRows: [] })),
 		editData: selectedRows[0],
 	});
 
@@ -45,13 +45,18 @@ const RoleManagement = () => {
 				routes={{
 					list: apiService('/role/role/all'),
 				}}
-				modifyInfoDetails={(data) => {
-					if (!data) return {};
-					return Object.entries(data).reduce<Record<string, string>>((acc, [key, val]) => {
-						if (key === 'permissions') return { ...acc };
-						return { ...acc, [key]: val };
-					}, {});
-				}}
+				modifyInfoDetails={(data) =>
+					Object.entries(data?.permissions || {}).reduce<Record<string, string>>(
+						(acc, [key, val]) => ({
+							...acc,
+							[toSentenceCase(key)]: transformPermission(val as any)
+								.map((t) => toSentenceCase(t))
+								.join(' + '),
+						}),
+						{}
+					)
+				}
+				infoModalProps={{ title: 'Role Permissions' }}
 				listBody={{
 					query: {},
 					options: {

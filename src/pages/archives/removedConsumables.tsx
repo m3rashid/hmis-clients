@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 
 import apiService from '../../api/service';
 import TableHoc, { defaultTableAtomContents } from '../../components/table';
-import InventoryManagementContainer from './index';
 import { MODELS } from '@hmis/gatekeeper';
 import { atom, useRecoilState } from 'recoil';
 import { SelectedRowsAtom } from '../../components/table/types';
@@ -42,7 +41,7 @@ const RemovedConsumables = () => {
 
 
 	return (
-		<InventoryManagementContainer>
+		<>
 			<TableHoc<MODELS.IConsumable>
 				title="Removed Consumables"
 				popupType="drawer"
@@ -57,7 +56,7 @@ const RemovedConsumables = () => {
 				}}
 				routes={{
 					list: apiService('/inventory/consumable/all'),
-					delete: apiService('/inventory/consumable/delete'),
+					delete: apiService('/inventory/consumable/remove'),
 				}}
 				listBody={{
 					query: { deleted: true },
@@ -67,7 +66,7 @@ const RemovedConsumables = () => {
 					},
 				}}
 			/>
-		</InventoryManagementContainer>
+		</>
 	);
 };
 

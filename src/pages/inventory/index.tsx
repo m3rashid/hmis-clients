@@ -5,12 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { toSentenceCase } from '../../helpers/strings';
 
 const InventoryManagementContainer: React.FC<PropsWithChildren> = ({ children }) => {
-	const items = [
-		'consumables',
-		'non-consumables',
-		'consumables-removed',
-		'non-consumables-removed',
-	];
+	const items = ['consumables', 'non-consumables'];
 	const paths = useLocation().pathname.split('/');
 	const current = paths[paths.length - 1];
 	const navigate = useNavigate();

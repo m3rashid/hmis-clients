@@ -87,7 +87,9 @@ const useTable = <RecordType extends Record<string, any> & { _id: string }>(
 		if (!props.routes?.delete) return;
 		try {
 			setLoading(true);
-			const { data: response } = await props.routes.delete({ data: { _id: id } });
+			const { data: response } = await props.routes.delete({
+				data: {	query: { _id: id },},
+			});
 			console.log({ response });
 		} catch (err) {
 		} finally {

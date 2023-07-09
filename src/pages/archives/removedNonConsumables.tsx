@@ -1,19 +1,15 @@
-import { TableProps } from 'antd';
 import dayjs from 'dayjs';
-
-import apiService from '../../api/service';
-import TableHoc, {  defaultTableAtomContents } from '../../components/table';
-import InventoryManagementContainer from './index';
+import { TableProps } from 'antd';
 import { MODELS } from '@hmis/gatekeeper';
+import apiService from '../../api/service';
 import { atom, useRecoilState } from 'recoil';
 import { SelectedRowsAtom } from '../../components/table/types';
-
+import TableHoc, { defaultTableAtomContents } from '../../components/table';
 
 const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.INonConsumable>>({
 	key: 'inventoryRemovedNonConsumables',
 	default: defaultTableAtomContents<MODELS.INonConsumable>(),
 });
-
 
 const RemovedNonConsumables = () => {
 	const [
@@ -39,7 +35,7 @@ const RemovedNonConsumables = () => {
 	];
 
 	return (
-		<InventoryManagementContainer>
+		<>
 			<TableHoc<MODELS.INonConsumable>
 				title="Removed Non Consumables"
 				popupType="drawer"
@@ -54,7 +50,7 @@ const RemovedNonConsumables = () => {
 				}}
 				routes={{
 					list: apiService('/inventory/non-consumable/all'),
-					delete: apiService('/inventory/non-consumable/delete'),
+					delete: apiService('/inventory/non-consumable/remove'),
 				}}
 				listBody={{
 					query: { deleted: true },
@@ -64,7 +60,7 @@ const RemovedNonConsumables = () => {
 					},
 				}}
 			/>
-		</InventoryManagementContainer>
+		</>
 	);
 };
 

@@ -61,7 +61,7 @@ const Consumables = () => {
 				popupType="drawer"
 				routes={{
 					list: apiService('/inventory/consumable/all'),
-					delete: apiService('/inventory/consumable/delete'),
+					delete: apiService('/inventory/consumable/remove'),
 				}}
 				listBody={{
 					query: { deleted: false },
