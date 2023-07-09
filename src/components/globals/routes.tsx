@@ -38,16 +38,14 @@ const Consumables = React.lazy(() => import('../../pages/inventory/consumables')
 const UserManagement = React.lazy(() => import('../../pages/userManagement/user'));
 const RoleManagement = React.lazy(() => import('../../pages/userManagement/role'));
 const NonConsumables = React.lazy(() => import('../../pages/inventory/nonConsumables'));
+const RemovedConsumables = React.lazy(() => import('../../pages/archives/consumables'));
 const AttendanceManagement = React.lazy(() => import('../../pages/services/attendance'));
 const Appointments = React.lazy(() => import('../../pages/patientManagement/appointment'));
 const PatientManagement = React.lazy(() => import('../../pages/patientManagement/patient'));
-const RemovedConsumables = React.lazy(() => import('../../pages/archives/removedConsumables'));
+const RemovedNonConsumables = React.lazy(() => import('../../pages/archives/nonConsumables'));
 const InPatientDepartment = React.lazy(() => import('../../pages/patientManagement/inPatient'));
 const OutPatientDepartment = React.lazy(() => import('../../pages/patientManagement/outPatient'));
 const HealthInsuranceManagement = React.lazy(() => import('../../pages/services/healthInsurance'));
-const RemovedNonConsumables = React.lazy(
-	() => import('../../pages/archives/removedNonConsumables')
-);
 
 export const resourceTypes = [
 	'USER',
