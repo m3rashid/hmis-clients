@@ -65,7 +65,7 @@ const UserManagement = () => {
 					options: {
 						$sort: { createdAt: -1 },
 						lean: true,
-						populate: 'role',
+						populate: ['role'],
 					},
 				}}
 			/>
