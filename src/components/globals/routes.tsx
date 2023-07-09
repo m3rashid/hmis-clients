@@ -37,6 +37,7 @@ const HospitalPackage = React.lazy(() => import('../../pages/hospitalPackage'));
 const Consumables = React.lazy(() => import('../../pages/inventory/consumables'));
 const UserManagement = React.lazy(() => import('../../pages/userManagement/user'));
 const RoleManagement = React.lazy(() => import('../../pages/userManagement/role'));
+const CreateWidget = React.lazy(() => import('../../pages/dashboard/createWidget'));
 const NonConsumables = React.lazy(() => import('../../pages/inventory/nonConsumables'));
 const RemovedConsumables = React.lazy(() => import('../../pages/archives/consumables'));
 const AttendanceManagement = React.lazy(() => import('../../pages/services/attendance'));
@@ -120,10 +121,25 @@ const routes: Array<IRoute> = [
 	},
 	{
 		icon: <FundOutlined />,
-		label: 'Dashboards',
-		link: '/dashboards',
+		label: 'Dashboard Widgets',
+		link: '/widgets',
 		Component: Dashboard,
 		permission: { resource: 'USER', action: 'READ' },
+		nestedLinks: [
+			{
+				icon: <FundOutlined />,
+				label: 'Widgets',
+				link: '/widgets/all',
+				Component: Dashboard,
+			},
+			{
+				icon: <FundOutlined />,
+				label: 'Add Widgets',
+				link: '/widgets/add',
+				Component: CreateWidget,
+				showInNav: false,
+			},
+		],
 	},
 	{
 		icon: <TeamOutlined />,
