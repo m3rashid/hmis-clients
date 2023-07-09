@@ -1,18 +1,16 @@
-import { TableProps } from 'antd';
 import dayjs from 'dayjs';
-
-import apiService from '../../api/service';
-import TableHoc, { defaultTableAtomContents } from '../../components/table';
+import ArchiveContainer from '.';
+import { TableProps } from 'antd';
 import { MODELS } from '@hmis/gatekeeper';
+import apiService from '../../api/service';
 import { atom, useRecoilState } from 'recoil';
 import { SelectedRowsAtom } from '../../components/table/types';
-
+import TableHoc, { defaultTableAtomContents } from '../../components/table';
 
 const selectedRowsAtom = atom<SelectedRowsAtom<MODELS.IConsumable>>({
 	key: 'inventoryRemovedConsumable',
 	default: defaultTableAtomContents<MODELS.IConsumable>(),
 });
-
 
 const RemovedConsumables = () => {
 	const [
@@ -39,9 +37,8 @@ const RemovedConsumables = () => {
 		{ title: 'Manufacturer', dataIndex: 'manufacturer', key: 'manufacturer' },
 	];
 
-
 	return (
-		<>
+		<ArchiveContainer>
 			<TableHoc<MODELS.IConsumable>
 				title="Removed Consumables"
 				popupType="drawer"
@@ -67,7 +64,7 @@ const RemovedConsumables = () => {
 					},
 				}}
 			/>
-		</>
+		</ArchiveContainer>
 	);
 };
 

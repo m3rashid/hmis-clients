@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import ArchiveContainer from '.';
 import { TableProps } from 'antd';
 import { MODELS } from '@hmis/gatekeeper';
 import apiService from '../../api/service';
@@ -35,7 +36,7 @@ const RemovedNonConsumables = () => {
 	];
 
 	return (
-		<>
+		<ArchiveContainer>
 			<TableHoc<MODELS.INonConsumable>
 				title="Removed Non Consumables"
 				popupType="drawer"
@@ -61,7 +62,7 @@ const RemovedNonConsumables = () => {
 					},
 				}}
 			/>
-		</>
+		</ArchiveContainer>
 	);
 };
 
