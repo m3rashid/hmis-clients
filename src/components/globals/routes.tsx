@@ -10,6 +10,7 @@ import {
 	HeartOutlined,
 	HomeOutlined,
 	InfoCircleOutlined,
+	MedicineBoxOutlined,
 	NotificationOutlined,
 	PlusCircleOutlined,
 	SettingOutlined,
@@ -22,7 +23,6 @@ import {
 } from '@ant-design/icons';
 import React from 'react';
 import { IAuth } from '../../recoil/auth';
-
 
 const Home = React.lazy(() => import('../../pages/home'));
 const About = React.lazy(() => import('../../pages/about'));
@@ -41,12 +41,12 @@ const NonConsumables = React.lazy(() => import('../../pages/inventory/nonConsuma
 const AttendanceManagement = React.lazy(() => import('../../pages/services/attendance'));
 const Appointments = React.lazy(() => import('../../pages/patientManagement/appointment'));
 const PatientManagement = React.lazy(() => import('../../pages/patientManagement/patient'));
-const RemovedConsumables = React.lazy(() => import('../../pages/inventory/removedConsumables'));
+const RemovedConsumables = React.lazy(() => import('../../pages/archives/removedConsumables'));
 const InPatientDepartment = React.lazy(() => import('../../pages/patientManagement/inPatient'));
 const OutPatientDepartment = React.lazy(() => import('../../pages/patientManagement/outPatient'));
 const HealthInsuranceManagement = React.lazy(() => import('../../pages/services/healthInsurance'));
 const RemovedNonConsumables = React.lazy(
-	() => import('../../pages/inventory/removedNonConsumables')
+	() => import('../../pages/archives/removedNonConsumables')
 );
 
 export const resourceTypes = [
@@ -202,22 +202,6 @@ const routes: Array<IRoute> = [
 				Component: NonConsumables,
 				permission: { resource: 'NON_CONSUMABLES', action: 'READ' },
 			},
-			{
-				icon: <DeleteOutlined />,
-				label: 'Removed Consumables',
-				link: '/inventory/consumables-removed',
-				Component: RemovedConsumables,
-				permission: { resource: 'CONSUMABLES', action: 'READ' },
-				showInNav: false,
-			},
-			{
-				icon: <DeleteOutlined />,
-				label: 'Removed Non Consumables',
-				link: '/inventory/non-consumables-removed',
-				Component: RemovedNonConsumables,
-				permission: { resource: 'NON_CONSUMABLES', action: 'READ' },
-				showInNav: false,
-			},
 		],
 	},
 	{
@@ -268,6 +252,29 @@ const routes: Array<IRoute> = [
 		link: '/packages',
 		Component: HospitalPackage,
 		permission: { resource: 'USER', action: 'READ' },
+	},
+	{
+		icon: <MedicineBoxOutlined />,
+		label: 'Archives',
+		link: '/archives',
+		nestedLinks: [
+			{
+				icon: <DeleteOutlined />,
+				label: 'Consumables',
+				link: '/archives/consumables',
+				Component: RemovedConsumables,
+				permission: { resource: 'CONSUMABLES', action: 'READ' },
+				showInNav: true,
+			},
+			{
+				icon: <DeleteOutlined />,
+				label: 'Non Consumables',
+				link: '/archives/non-consumables',
+				Component: RemovedNonConsumables,
+				permission: { resource: 'NON_CONSUMABLES', action: 'READ' },
+				showInNav: true,
+			},
+		],
 	},
 	{
 		icon: <SettingOutlined />,

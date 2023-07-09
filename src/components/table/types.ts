@@ -28,6 +28,7 @@ export interface TableHocProps<RecordType> {
 	showSerialNo?: boolean;
 	modifyInfoDetails?: (data: Record<string, any>) => Record<string, string>;
 	notToShowInInfo?: string[];
+	recover?: boolean;
 	form?: ReactNode;
 	drawerProps?: DrawerProps;
 	popupType: 'modal' | 'drawer';

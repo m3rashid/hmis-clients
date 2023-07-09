@@ -9,11 +9,16 @@ import {
 	TableColumnsType,
 	Typography,
 } from 'antd';
+import {
+	CaretUpOutlined,
+	DeleteFilled,
+	EditFilled,
+	InfoCircleFilled,
+	PlusCircleOutlined,
+} from '@ant-design/icons';
 import dayjs from 'dayjs';
-import React, { Fragment } from 'react';
-import { DeleteFilled, EditFilled, InfoCircleFilled, PlusCircleOutlined } from '@ant-design/icons';
-
 import useTable from './useTable';
+import React, { Fragment } from 'react';
 import ObjectAsDetails from '../atoms/objectAsDetails';
 import { SelectedRowsAtom, TableHocProps } from './types';
 
@@ -98,29 +103,39 @@ const TableHoc = <RecordType extends Record<string, any> & { _id: string }>(
 
 					{props.routes?.delete && state.showDeleteAction && (
 						<Popconfirm
-							title={<Typography.Text className="text-lg">Delete item(s)</Typography.Text>}
+							title={
+								<Typography.Text className="text-lg">
+									{props.recover ? 'Recover' : 'Delete'} item(s)
+								</Typography.Text>
+							}
 							description={
 								<Typography.Text className="text-base">
-									Are you sure you want to delete item(s) ?
+									Are you sure you want to {props.recover ? 'recover' : 'delete'} item(s) ?
 								</Typography.Text>
 							}
 							onConfirm={actions.onClickDelete}
 							overlayInnerStyle={{ padding: 20 }}
-							okText="Delete"
+							okText={props.recover ? 'Recover' : 'Delete'}
 							okButtonProps={{
 								style: {
 									...popConfirmButtonStyles,
-									backgroundColor: state.config.theme.danger,
+									backgroundColor: props.recover
+										? state.config.theme.success
+										: state.config.theme.danger,
 								},
 							}}
 							cancelButtonProps={{ style: { ...popConfirmButtonStyles } }}
 						>
 							<Button
 								type="primary"
-								style={{ backgroundColor: state.config.theme.danger }}
-								icon={<DeleteFilled />}
+								style={{
+									backgroundColor: props.recover
+										? state.config.theme.success
+										: state.config.theme.danger,
+								}}
+								icon={props.recover ? <CaretUpOutlined /> : <DeleteFilled />}
 							>
-								Delete
+								{props.recover ? 'Recover' : 'Delete'}
 							</Button>
 						</Popconfirm>
 					)}

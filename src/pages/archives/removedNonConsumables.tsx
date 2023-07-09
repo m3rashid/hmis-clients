@@ -41,6 +41,7 @@ const RemovedNonConsumables = () => {
 				popupType="drawer"
 				selectedRowsAtom={selectedRowsAtom}
 				actionButtons={false}
+				recover
 				tableProps={{
 					columns: columns,
 					scroll: { x: 1000 },
@@ -50,7 +51,7 @@ const RemovedNonConsumables = () => {
 				}}
 				routes={{
 					list: apiService('/inventory/non-consumable/all'),
-					delete: apiService('/inventory/non-consumable/remove'),
+					delete: apiService('/inventory/non-consumable/recover'),
 				}}
 				listBody={{
 					query: { deleted: true },
