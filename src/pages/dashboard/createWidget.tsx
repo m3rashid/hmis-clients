@@ -8,7 +8,6 @@ const CreateWidget: React.FC<IProps> = () => {
 
 	return (
 		<>
-			<div>CreateWidget</div>
 			<AggregationWriter {...{ value, setValue }} />
 		</>
 	);

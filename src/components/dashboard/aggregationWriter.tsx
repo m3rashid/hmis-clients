@@ -1,5 +1,6 @@
 import React from 'react';
 import Editor from '@monaco-editor/react';
+import { useGetConfig } from '../../recoil/config';
 
 interface IProps {
 	value: string;
@@ -7,10 +8,12 @@ interface IProps {
 }
 
 const AggregationWriter: React.FC<IProps> = ({ setValue, value }) => {
+	const config = useGetConfig();
+
 	return (
 		<div className="flex mt-4 flex-row items-center justify-end space-x-2">
 			<Editor
-				theme="vs-dark"
+				theme={config.theme.mode === 'dark' ? 'vs-dark' : 'vs-light'}
 				height={600}
 				language="json"
 				value={value}
