@@ -1,30 +1,32 @@
 import React from 'react';
-import { Modal, Tabs, Typography, Upload } from 'antd';
-import useUploadSelector from './useUploadSelector';
 import ShowUploaded from './showUploaded';
+import useUploadSelector from './useUploadSelector';
+import { Button, Modal, Tabs, Typography, Upload } from 'antd';
 
 interface IProps {
 	// TODO
 }
 
 const UploadSelector: React.FC<IProps> = () => {
-	const { onModalCancel, handleImageChange, state } = useUploadSelector();
+	const { onModalCancel, handleImageChange, openModal, state, handleFileScopeChange } = useUploadSelector();
 
 	return (
 		<>
-			<Modal title="Select File" open={state.modalOpen} onCancel={onModalCancel} footer={null}>
+			<Button onClick={openModal}>Upload</Button>
+			<Modal open={state.modalOpen} onCancel={onModalCancel} footer={null} width={1000}>
 				<Tabs
 					defaultActiveKey="my-uploads"
+					onChange={handleFileScopeChange}
 					items={[
 						{
-							key: 'my-uploads',
+							key: 'mine',
 							label: 'My Uploads',
-							children: <ShowUploaded scope="mine" />,
+							children: <ShowUploaded scope={state.fileScope} />,
 						},
 						{
-							key: 'all-uploads',
+							key: 'all',
 							label: 'All Uploads',
-							children: <ShowUploaded scope="all" />,
+							children: <ShowUploaded scope={state.fileScope} />,
 						},
 						{
 							key: 'new-uploads',
@@ -49,7 +51,6 @@ const UploadSelector: React.FC<IProps> = () => {
 							),
 						},
 					]}
-					onChange={(...v) => console.log(v)}
 				/>
 			</Modal>
 		</>
