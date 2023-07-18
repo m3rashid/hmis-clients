@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 import { ENUMS } from '@hmis/gatekeeper';
-import { DatePicker, Form, Select } from 'antd';
-import { toSentenceCase } from '../helpers/strings';
-import { IFormProps } from './form/useTableForm';
+import { IFormProps } from './table/types';
 import DoctorSelector from './select/doctor';
 import PatientSelector from './select/patient';
+import { DatePicker, Form, Select } from 'antd';
+import { toSentenceCase } from '../helpers/strings';
 
 const AppointmentForm = ({ form, isEdit, editData }: IFormProps) => {
 	return (
