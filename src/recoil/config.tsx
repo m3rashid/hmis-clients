@@ -24,7 +24,7 @@ export const configDefaultState: IConfig = {
 		fullName: 'Hospital Management and Informatics System',
 	},
 	theme: {
-		mode: 'dark',
+		mode: 'light',
 		primaryColor: '#6366f1',
 		success: '#22C55E',
 		warning: '#F59E0B',

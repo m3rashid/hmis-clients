@@ -7,18 +7,31 @@ export type FileScope = 'all' | 'mine';
 
 const useUploadSelector = () => {
 	const getSignedUrlApi = apiService('/upload');
-	const addSignedUrlApi = apiService<object, { payload: { url: string } }>('/upload/add');
+	const addSignedUrlApi = apiService<object, { payload: { url: string; format: string } }>(
+		'/upload/add'
+	);
 
 	const [modalOpen, setModalOpen] = useState(false);
 	const [fileScope, setFileScope] = useState<FileScope>('mine');
 	const openModal = () => setModalOpen(true);
 
 	const handleFileScopeChange = (scope: string) => {
+		if (scope !== 'all' && scope !== 'mine') return;
 		setFileScope(scope as FileScope);
 	};
 
+	const onSelectUploadedFile = async (url: string) => {
+		console.log(url)
+	}
+
 	const uploadFile = async (file: File) => {
 		try {
+			const fileFormat = file.type.split('/')[1];
+			if (!fileFormat) {
+				message.error('Invalid file format');
+				return;
+			}
+
 			const { data: url } = await getSignedUrlApi();
 			await axios.put(url, file, {
 				headers: { 'Content-Type': 'multipart/form-data' },
@@ -26,7 +39,7 @@ const useUploadSelector = () => {
 			const imageUrl = url.split('?')[0];
 			console.log('imageUrl: ' + imageUrl, url);
 
-			await addSignedUrlApi({ data: { payload: { url: imageUrl } } });
+			await addSignedUrlApi({ data: { payload: { url: imageUrl, format: fileFormat } } });
 			return imageUrl;
 		} catch (err) {
 			message.error('Error in uploading file');
@@ -55,11 +68,10 @@ const useUploadSelector = () => {
 	return {
 		state: { fileScope, modalOpen },
 		onModalCancel,
-		uploadFile,
 		handleImageChange,
 		openModal,
-
 		handleFileScopeChange,
+		onSelectUploadedFile,
 	};
 };
 
