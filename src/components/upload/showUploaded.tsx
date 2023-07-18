@@ -19,10 +19,11 @@ const ShowUploaded: React.FC<IProps> = ({ scope, handleSelectUploaded }) => {
 		queryFn: async ({ pageParam = 1 }) => {
 			return apiService<
 				{ docs: MODELS.IUpload[]; hasNextPage: boolean },
-				{ options: { page: number; limit: number; sort: { createdAt: number } } }
+				{ options: object; query: object }
 			>(`/upload/${scope}`)({
 				data: {
 					options: { page: pageParam, limit: 12, sort: { createdAt: -1 } },
+					query: { deleted: false },
 				},
 			});
 		},
