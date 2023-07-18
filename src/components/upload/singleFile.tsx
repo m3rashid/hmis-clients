@@ -1,6 +1,8 @@
+import dayjs from 'dayjs';
 import React from 'react';
-import { MODELS } from '@hmis/gatekeeper';
 import { Typography } from 'antd';
+import { MODELS } from '@hmis/gatekeeper';
+import { UploadOutlined } from '@ant-design/icons';
 
 interface IProps {
 	file: MODELS.IUpload;
@@ -10,7 +12,7 @@ const imageFormats = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
 const videoFormats = ['mp4', 'mkv', 'avi', 'webm'];
 const audioFormats = ['mp3', 'wav', 'ogg'];
 const pdfFormats = ['pdf'];
-const docFormats = ['doc', 'docx'];
+const docFormats = ['doc', 'docx', 'plain', 'text'];
 const xlsFormats = ['xls', 'xlsx', 'sheet'];
 const pptFormats = ['ppt', 'pptx'];
 
@@ -22,17 +24,6 @@ const otherFormats = [
 	...xlsFormats,
 	...pptFormats,
 ];
-
-const getColorGradient = (format: string) => {
-	if (imageFormats.includes(format)) return 'bg-gradient-to-r from-blue-500 to-purple-500';
-	if (videoFormats.includes(format)) return 'bg-gradient-to-r from-red-500 to-yellow-500';
-	if (audioFormats.includes(format)) return 'bg-gradient-to-r from-green-500 to-blue-500';
-	if (pdfFormats.includes(format)) return 'bg-gradient-to-r from-red-500 to-yellow-500';
-	if (docFormats.includes(format)) return 'bg-gradient-to-r from-red-500 to-yellow-500';
-	if (xlsFormats.includes(format)) return 'bg-gradient-to-r from-red-500 to-yellow-500';
-	if (pptFormats.includes(format)) return 'bg-gradient-to-r from-red-500 to-yellow-500';
-	return 'bg-gradient-to-br from-gray-500 to-gray-700';
-};
 
 const RenderSingleFile: React.FC<IProps> = ({ file }) => {
 	if (!file) return null;
@@ -53,12 +44,22 @@ const RenderSingleFile: React.FC<IProps> = ({ file }) => {
 
 	if (otherFormat) {
 		return (
-			<div
-				className="hover:shadow-xl group rounded-md h-40 flex items-center justify-center bg-slate-400 text-white relative"
-				// style={{borderLeft: '50px solid #6366f1', borderRight: '50px solid #6366f1'}}
-			>
-				<div className="absolute h-10 w-10 bg-black top-0 left-0 rounded-br-[40px] rounded-tl-md group-hover:h-28 group-hover:w-28 group-hover:rounded-br-[112px] group-hover:opacity-20 group-hover:duration-150"></div>
-				<p className="mt-0 mb-0 font-bold text-lg">{otherFormat.toUpperCase()}</p>
+			<div className="hover:shadow-xl group rounded-md h-40 flex flex-col items-center justify-center bg-red-400 relative">
+				<div className="absolute h-10 w-10 bg-gray-600 top-0 left-0 rounded-br-[40px] rounded-tl-md group-hover:h-36 group-hover:w-36 group-hover:rounded-br-[144px] group-hover:opacity-20 group-hover:duration-150"></div>
+				<Typography.Text className="mt-0 mb-0 font-bold text-white text-lg">
+					{otherFormat.toUpperCase()}
+				</Typography.Text>
+				<br />
+
+				<div>
+					<Typography.Text type='secondary' className="text-center">
+						<UploadOutlined /> &nbsp; Uploaded on
+					</Typography.Text>
+					<br />
+					<Typography.Text type='secondary' className="text-center">
+						{dayjs(file.createdAt).format('ddd DD MMMM, YYYY')}
+					</Typography.Text>
+				</div>
 			</div>
 		);
 	}
