@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import { IFormProps } from './form/useTableForm';
-import { DatePicker, Form, Select } from 'antd';
 import { ENUMS } from '@hmis/gatekeeper';
+import { IFormProps } from './table/types';
+import { DatePicker, Form, Select } from 'antd';
 import { toSentenceCase } from '../helpers/strings';
 
 const OpdForm = ({ form, isEdit, editData }: IFormProps) => {

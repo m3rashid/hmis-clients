@@ -1,5 +1,5 @@
 import { Form, Input } from 'antd';
-import { IFormProps } from './form/useTableForm';
+import { IFormProps } from './table/types';
 
 const NoticeForm = ({ form, isEdit, editData }: IFormProps) => {
 	return (

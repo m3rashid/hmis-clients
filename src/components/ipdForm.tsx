@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { IFormProps } from './form/useTableForm';
 import { Form } from 'antd';
+import { IFormProps } from './table/types';
 
 const IpdForm = ({ form, isEdit, editData }: IFormProps) => {
 	return (

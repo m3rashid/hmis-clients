@@ -1,6 +1,6 @@
-import { DatePicker, Form, Input, InputNumber } from 'antd';
 import dayjs from 'dayjs';
-import { IFormProps } from './form/useTableForm';
+import { IFormProps } from './table/types';
+import { DatePicker, Form, Input, InputNumber } from 'antd';
 
 const NonConsumableForm = ({ form, isEdit, editData }: IFormProps) => {
 	return (

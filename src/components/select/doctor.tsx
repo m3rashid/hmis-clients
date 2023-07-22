@@ -11,6 +11,7 @@ type IProps = FormItemProps & {
 const DoctorSelector: React.FC<IProps> = (props) => {
 	const [doctors, setDoctors] = React.useState<MODELS.IUser[]>([]);
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const getDoctors = useCallback(
 		debounce(async (text) => {
 			if (!text) return setDoctors([]);
@@ -27,6 +28,8 @@ const DoctorSelector: React.FC<IProps> = (props) => {
 		}, 500),
 		[]
 	);
+
+	console.log(doctors)
 
 	return (
 		<Form.Item name="doctor" label="Select Doctor" {...props}>

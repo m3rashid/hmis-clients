@@ -1,5 +1,5 @@
+import { DragDropContext } from 'react-beautiful-dnd';
 import useTasks from '../../components/taskManagement/useTasks';
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 const TaskManagement = () => {
 	const { onDragEnd } = useTasks();
