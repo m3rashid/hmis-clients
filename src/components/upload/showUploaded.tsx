@@ -1,18 +1,22 @@
-import { Empty, Spin } from 'antd';
 import { MODELS } from '@hmis/gatekeeper';
 import apiService from '../../api/service';
 import RenderSingleFile from './singleFile';
+import { Button, Checkbox, Empty, Spin } from 'antd';
 import { useIntersection } from '@mantine/hooks';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { FileScope, SelectedFile } from './types';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import ShowFilePreview from './showFilePreview';
 
 interface IProps {
-	scope: 'all' | 'mine';
-	handleSelectUploaded: (url: string, format: string) => void;
+	scope: FileScope;
+	selectedFiles: Array<SelectedFile>;
+	handleSelectUploaded: (data: MODELS.IUpload) => void;
 }
 
-const ShowUploaded: React.FC<IProps> = ({ scope, handleSelectUploaded }) => {
+const ShowUploaded: React.FC<IProps> = ({ scope, handleSelectUploaded, selectedFiles }) => {
 	const lastPostRef = useRef<HTMLElement>(null);
+	const [filePreview, setFilePreview] = useState<MODELS.IUpload | null>(null);
 
 	const getDataQuery = useInfiniteQuery({
 		queryKey: [`uploads/${scope}`],
@@ -45,6 +49,10 @@ const ShowUploaded: React.FC<IProps> = ({ scope, handleSelectUploaded }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [entry]);
 
+	const handleShowPreview = (file: MODELS.IUpload) => {
+		setFilePreview(file);
+	};
+
 	if (getDataQuery.isFetching) {
 		return (
 			<div className="h-80 flex items-center justify-center">
@@ -55,15 +63,29 @@ const ShowUploaded: React.FC<IProps> = ({ scope, handleSelectUploaded }) => {
 
 	return (
 		<div className="flex flex-wrap gap-4">
+			<ShowFilePreview file={filePreview} setFilePreview={setFilePreview} />
+
 			{(files.length || 0) > 0 ? (
 				files.map((file, i) => {
+					const selected = selectedFiles.find((f) => f._id === file._id);
 					return (
 						<div
-							className="w-52 h-40 cursor-pointer"
 							key={file._id}
-							onClick={() => handleSelectUploaded(file.url, file.format)}
+							className="w-52 h-48 cursor-pointer relative"
+							onDoubleClick={() => handleSelectUploaded(file)}
 							{...(files.length === i + 1 ? { ref: ref } : {})}
 						>
+							<div className="absolute top-1 right-2 z-20 flex items-center justify-center gap-2">
+								<Button
+									size="small"
+									type="dashed"
+									className="border-none p-0 shadow-md"
+									onClick={() => handleShowPreview(file)}
+								>
+									Preview
+								</Button>
+								<Checkbox checked={!!selected} onChange={() => handleSelectUploaded(file)} />
+							</div>
 							<RenderSingleFile file={file} />
 						</div>
 					);

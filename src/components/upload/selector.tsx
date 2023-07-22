@@ -12,6 +12,7 @@ const UploadSelector: React.FC<IProps> = (props) => {
 		state,
 		handleFileScopeChange,
 		onSelectUploadedFile,
+		handleSelectedFiles,
 	} = useUploadSelector(props);
 
 	return (
@@ -36,7 +37,18 @@ const UploadSelector: React.FC<IProps> = (props) => {
 			>
 				<div className="max-h-[500px] h-auto overflow-auto shadow-inner">
 					{state.fileScope ? (
-						<ShowUploaded scope={state.fileScope} handleSelectUploaded={onSelectUploadedFile} />
+						<div>
+							{state.selectedFiles.length > 0 ? (
+								<div className="flex flex-wrap gap-4 my-2 items-center justify-end">
+									<Button onClick={handleSelectedFiles}>Use Selected Files</Button>
+								</div>
+							) : null}
+							<ShowUploaded
+								scope={state.fileScope}
+								handleSelectUploaded={onSelectUploadedFile}
+								selectedFiles={state.selectedFiles}
+							/>
+						</div>
 					) : (
 						<Uploader handleImageChange={handleImageChange} editImage={props.editImage ?? false} />
 					)}

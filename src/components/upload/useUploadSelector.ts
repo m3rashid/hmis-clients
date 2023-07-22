@@ -1,24 +1,23 @@
 import axios from 'axios';
 import { message } from 'antd';
 import { useState } from 'react';
-import { RcFile } from 'antd/es/upload';
+import { FileScope } from './types';
+import { MODELS } from '@hmis/gatekeeper';
 import apiService from '../../api/service';
+import { UploadFile } from 'antd/es/upload';
 
-export type FileScope = 'all' | 'mine';
 export interface IProps {
+	maxSelectFiles?: number;
 	activeKey?: FileScope | null;
-	handleSelectedFile?: (url: string, format: string) => Promise<void>;
+	handleSelectedFiles?: (files: MODELS.IUpload[]) => Promise<void>;
 	editImage?: boolean;
 }
 
 const useUploadSelector = (props: IProps) => {
-	const getSignedUrlApi = apiService('/upload');
-	const addSignedUrlApi = apiService<object, { payload: { url: string; format: string } }>(
-		'/upload/add'
-	);
-
 	const [modalOpen, setModalOpen] = useState(false);
+	const [selectedFiles, setSelectedFiles] = useState<MODELS.IUpload[]>([]);
 	const [fileScope, setFileScope] = useState<FileScope | null>(props.activeKey || 'mine');
+
 	const openModal = () => setModalOpen(true);
 
 	const handleFileScopeChange = (scope: string) => {
@@ -29,45 +28,47 @@ const useUploadSelector = (props: IProps) => {
 		setFileScope(null);
 	};
 
-	const onSelectUploadedFile = async (url: string, format: string) => {
-		console.log({ url, format });
-		if (props.handleSelectedFile) {
-			await props.handleSelectedFile(url, format);
+	const onSelectUploadedFile = async (data: MODELS.IUpload) => {
+		setSelectedFiles((prev) => {
+			const filtered = prev.filter((file) => file._id !== data._id);
+			return [...(filtered.length === prev.length ? [...filtered, data] : filtered)];
+		});
+	};
+
+	const handleSelectedFiles = async () => {
+		console.log(selectedFiles);
+		if (props.handleSelectedFiles) {
 		}
 	};
 
-	const uploadFile = async (file: File) => {
+	const handleImageChange = async (file: UploadFile) => {
+		if (!file || !file.originFileObj) {
+			message.error('No file selected');
+			return '';
+		}
+
 		try {
-			const fileFormat = file.type.split('/')[1];
-			if (!fileFormat) {
+			const fileFormat = file.originFileObj.type.split('/')[1];
+			const fileName = file.originFileObj.name;
+			if (!fileFormat || !fileName) {
 				message.error('Invalid file format');
 				return;
 			}
 
-			const { data: url } = await getSignedUrlApi();
+			// getting signed URL from backend server
+			const { data: url } = await apiService('/upload')();
+			// Uploading file to S3
 			await axios.put(url, file, {
 				headers: { 'Content-Type': 'multipart/form-data' },
 			});
 			const imageUrl = url.split('?')[0];
-			await addSignedUrlApi({ data: { payload: { url: imageUrl, format: fileFormat } } });
+			// Adding uploaded image to the database
+			await apiService<object, { payload: object }>('/upload/add')({
+				data: { payload: { url: imageUrl, format: fileFormat, name: fileName } },
+			});
 			return imageUrl;
 		} catch (err) {
 			message.error('Error in uploading file');
-		}
-	};
-
-	const handleImageChange = async (file: RcFile) => {
-		if (!file) {
-			message.error('No file selected');
-			return;
-		}
-
-		try {
-			const url = await uploadFile(file);
-			return url;
-		} catch (err: any) {
-			console.log(err);
-			message.error('Error uploading image');
 		}
 	};
 
@@ -76,12 +77,13 @@ const useUploadSelector = (props: IProps) => {
 	};
 
 	return {
-		state: { fileScope, modalOpen },
+		state: { fileScope, modalOpen, selectedFiles },
 		onModalCancel,
 		handleImageChange,
 		openModal,
 		handleFileScopeChange,
 		onSelectUploadedFile,
+		handleSelectedFiles,
 	};
 };
 

@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { Typography } from 'antd';
 import { MODELS } from '@hmis/gatekeeper';
-import { UploadOutlined } from '@ant-design/icons';
 
 interface IProps {
 	file: MODELS.IUpload;
@@ -27,12 +26,34 @@ const otherFormats = [
 
 const RenderSingleFile: React.FC<IProps> = ({ file }) => {
 	if (!file) return null;
+	const getFileName = (name: string) => {
+		const [fileName, fileExt] = name.split('.');
+		if (fileName.length > 30) {
+			return `${fileName.substring(0, 20)}...${fileExt}`;
+		}
+		return name;
+	};
+
+	const ShowMetaData = () => (
+		<div className="absolute bottom-0 p-1 w-full text-center bg-blue-200 rounded-b-md">
+			<Typography.Text className="text-gray-500" strong>
+				{getFileName(file.name)}
+			</Typography.Text>
+			<br />
+			<Typography.Text type="secondary">
+				{dayjs(file.createdAt).format('hh:mm A, ddd DD MMMM, YYYY')}
+			</Typography.Text>
+		</div>
+	);
+
 	if (imageFormats.includes(file.format)) {
 		return (
 			<div
-				className="justify-center bg-no-repeat bg-cover bg-center hover:shadow-xl rounded-md h-40 max-w-52"
+				className="justify-center bg-no-repeat bg-cover bg-center hover:shadow-xl rounded-md h-48 max-w-52 relative"
 				style={{ backgroundImage: `url(${file.url})` }}
-			/>
+			>
+				<ShowMetaData />
+			</div>
 		);
 	}
 
@@ -44,22 +65,12 @@ const RenderSingleFile: React.FC<IProps> = ({ file }) => {
 
 	if (otherFormat) {
 		return (
-			<div className="hover:shadow-xl group rounded-md h-40 flex flex-col items-center justify-center bg-red-400 relative">
+			<div className="hover:shadow-xl group rounded-md h-48 flex flex-col items-center bg-red-400 relative">
 				<div className="absolute h-10 w-10 bg-gray-600 top-0 left-0 rounded-br-[40px] rounded-tl-md group-hover:h-36 group-hover:w-36 group-hover:rounded-br-[144px] group-hover:opacity-20 group-hover:duration-150"></div>
-				<Typography.Text className="mt-0 mb-0 font-bold text-white text-lg">
+				<Typography.Text className="font-bold mt-16 text-white text-lg">
 					{otherFormat.toUpperCase()}
 				</Typography.Text>
-				<br />
-
-				<div>
-					<Typography.Text type='secondary' className="text-center">
-						<UploadOutlined /> &nbsp; Uploaded on
-					</Typography.Text>
-					<br />
-					<Typography.Text type='secondary' className="text-center">
-						{dayjs(file.createdAt).format('ddd DD MMMM, YYYY')}
-					</Typography.Text>
-				</div>
+				<ShowMetaData />
 			</div>
 		);
 	}
