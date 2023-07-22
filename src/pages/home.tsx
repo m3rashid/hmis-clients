@@ -2,7 +2,6 @@ import { Fragment } from 'react';
 import { Image, Typography } from 'antd';
 import { featuresData } from '../components/atoms/features';
 import { configDefaultState, useGetConfig } from '../recoil/config';
-import UploadSelector from '../components/upload/selector';
 
 const Home = () => {
 	const config = useGetConfig();
@@ -27,8 +26,6 @@ const Home = () => {
 					<Image preview={false} src="/images/hospital.png" />
 				</div>
 			</div>
-
-		<UploadSelector />
 
 			<div className={`${isDark ? '' : 'bg-white'} py-6 sm:py-16`}>
 				<div className="mx-auto max-w-7xl px-6 lg:px-8">
